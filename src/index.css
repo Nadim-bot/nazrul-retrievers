@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+
+  /* BRAND COLORS */
+  --brand-navy: #0F172A;
+  --brand-navy-mid: #1E293B;
+  --brand-navy-light: #334155;
+  --brand-gold: #D97706;
+  --brand-gold-light: #FEF3C7;
+  --brand-gold-mid: #F59E0B;
+  --brand-cream: #F8FAFC;
+  --brand-surface: #FFFFFF;
+  --brand-surface2: #F1F5F9;
+  --brand-border: #E2E8F0;
+  --brand-ink: #0F172A;
+  --brand-ink2: #475569;
+  --brand-ink3: #94A3B8;
+  
+  --grid-line-color: rgba(217, 119, 6, 0.06);
+}
+
+@theme {
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-navy-mid: var(--brand-navy-mid);
+  --color-brand-navy-light: var(--brand-navy-light);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-gold-light: var(--brand-gold-light);
+  --color-brand-gold-mid: var(--brand-gold-mid);
+  --color-brand-cream: var(--brand-cream);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-surface2: var(--brand-surface2);
+  --color-brand-border: var(--brand-border);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-ink2: var(--brand-ink2);
+  --color-brand-ink3: var(--brand-ink3);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-brand-cream);
+  color: var(--color-brand-ink);
+}
+
+.dark body {
+  background-color: #0A0F1D;
+  color: #F8FAFC;
+}
+
+/* Background grid pattern */
+.hero-grid-lines {
+  background-image: linear-gradient(var(--grid-line-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line-color) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Ensure browser autofill maintains proper text visibility and contrast */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #0F172A !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active {
+  -webkit-text-fill-color: #F8FAFC !important;
+  -webkit-box-shadow: 0 0 0px 1000px #0F172A inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Global Selection Highlight styling */
+::selection {
+  background-color: #FDE68A !important; /* Soft warm amber highlight */
+  color: #0F172A !important;            /* Deep slate text for maximum legibility */
+  text-shadow: none !important;
+}
+
+::-moz-selection {
+  background-color: #FDE68A !important;
+  color: #0F172A !important;
+  text-shadow: none !important;
+}
+
+/* Ensure placeholder text remains highly legible */
+input::placeholder,
+textarea::placeholder {
+  color: #94A3B8 !important;
+  opacity: 1 !important;
+}
+
+/* Recharts axis tick text readability */
+.recharts-cartesian-axis-tick text {
+  fill: #334155 !important;
+  font-weight: 600 !important;
+}
+
+@keyframes floatY {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.animate-float-slow {
+  animation: floatY 6s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: floatY 5s ease-in-out infinite;
+}
+
+.animate-float-fast {
+  animation: floatY 4s ease-in-out infinite;
+}
+
+/* Custom Scrollbar for Modal and Panels */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.7);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.6);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 0.9);
+}
+
+/* Select options readability in dark/light mode */
+select option {
+  background-color: #FFFFFF;
+  color: #0F172A;
+}
+
+.dark select option {
+  background-color: #162232;
+  color: #F8FAFC;
+}
+
+/* No-scrollbar utility for clean horizontal tab scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Smooth mobile touch scrolling */
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+

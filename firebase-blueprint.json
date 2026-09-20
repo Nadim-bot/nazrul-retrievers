@@ -1,0 +1,115 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Student or Admin user account information",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "firebaseUid": { "type": "string" },
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["student", "admin", "moderator"] },
+        "phone": { "type": "string" },
+        "studentId": { "type": "string" },
+        "department": { "type": "string" },
+        "faculty": { "type": "string" },
+        "academicSession": { "type": "string" },
+        "profilePhoto": { "type": "string" },
+        "isVerified": { "type": "boolean" },
+        "status": { "type": "string" },
+        "profileCompletion": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "fullName", "email"]
+    },
+    "Item": {
+      "title": "Lost/Found Item",
+      "description": "Lost or found item report with multiple image support",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["lost", "found"] },
+        "location": { "type": "string" },
+        "specificSpot": { "type": "string" },
+        "rewardOffered": { "type": "string" },
+        "image": { "type": "string" },
+        "images": { "type": "array" },
+        "status": { "type": "string" },
+        "userId": { "type": "string" },
+        "isApproved": { "type": "boolean" },
+        "isRejected": { "type": "boolean" },
+        "isDeleted": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "title", "category", "type", "location", "userId"]
+    },
+    "Claim": {
+      "title": "Item Claim",
+      "description": "Claim requested by a student for a found item",
+      "type": "object",
+      "properties": {
+        "claim_id": { "type": "string" },
+        "item_id": { "type": "string" },
+        "user_id": { "type": "string" },
+        "proof_description": { "type": "string" },
+        "contact_details": { "type": "string" },
+        "status": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["claim_id", "item_id", "user_id", "proof_description"]
+    },
+    "ChatThread": {
+      "title": "Chat Thread",
+      "description": "Messaging thread between finder and owner",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "itemTitle": { "type": "string" },
+        "preview": { "type": "string" },
+        "unreadCount": { "type": "number" },
+        "messages": { "type": "array" }
+      },
+      "required": ["id"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "User notifications regarding lost & found events",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "user_id": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "type": { "type": "string" },
+        "is_read": { "type": "boolean" }
+      },
+      "required": ["id", "user_id", "title", "message"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Collection of user profiles keyed by their authentication user ID"
+    },
+    "/items/{itemId}": {
+      "schema": "Item",
+      "description": "Collection of reported lost and found items"
+    },
+    "/claims/{claimId}": {
+      "schema": "Claim",
+      "description": "Collection of claims submitted for found items"
+    },
+    "/chat_threads/{threadId}": {
+      "schema": "ChatThread",
+      "description": "Collection of chat threads with messages subcollection or embedded lists"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Collection of real-time notifications for users"
+    }
+  }
+}

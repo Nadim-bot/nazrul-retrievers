@@ -1,0 +1,6 @@
+{
+  "name": "Nazrul Retrievers: Campus Lost and Found",
+  "description": "Campus Lost and Found system connecting JKKNIU students to report missing items and discover found ones.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Campus Lost and Found system connecting JKKNIU students to report missing items and discover found ones." />
+    <meta property="og:title" content="Nazrul Retrievers: Campus Lost and Found" />
+    <meta property="og:description" content="Campus Lost and Found system connecting JKKNIU students to report missing items and discover found ones." />
+    <script>
+      (function() {
+        try {
+          const theme = localStorage.getItem('jkkniu_theme') || 'system';
+          const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <title>Nazrul Retrievers: Campus Lost and Found</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
