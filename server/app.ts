@@ -49,17 +49,16 @@ app.use('/api/', limiter);
 // Serve uploaded files statically
 app.use('/server-uploads', express.static(path.join(process.cwd(), 'server-uploads')));
 
-// Ensure MongoDB is connected for API requests
-app.use('/api', async (req, res, next) => {
-  try {
-    if (!isMongoDBActive()) {
-      const connected = await connectMongoDB();
+// Ensure MongoDB is connected asynchronously in the background without hanging requests
+app.use('/api', (req, res, next) => {
+  if (!isMongoDBActive()) {
+    connectMongoDB().then(async (connected) => {
       if (connected) {
         await reloadFallbackStoreFromMongoDB(true);
       }
-    }
-  } catch (err) {
-    console.warn('MongoDB lazy connection notice in API middleware:', err);
+    }).catch(err => {
+      console.warn('MongoDB lazy background connection notice:', err?.message || err);
+    });
   }
   next();
 });
