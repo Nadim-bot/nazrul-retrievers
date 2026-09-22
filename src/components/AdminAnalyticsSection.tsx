@@ -398,7 +398,7 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
           <button
             onClick={fetchAnalytics}
             disabled={loading}
-            className="px-3.5 py-2 bg-brand-cream hover:bg-slate-100 text-brand-navy border border-brand-border rounded-xl font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-xs active:scale-95 disabled:opacity-50"
+            className="px-3.5 py-2 bg-brand-cream hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-brand-navy dark:text-white border border-brand-border dark:border-slate-700 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-xs active:scale-95 disabled:opacity-50"
             title="Refresh analytics directly from database"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-brand-gold' : ''}`} />
@@ -406,7 +406,7 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
           </button>
           <button
             onClick={exportFullReportCSV}
-            className="px-3.5 py-2 bg-brand-navy hover:bg-brand-navy/90 text-brand-gold border border-brand-gold/30 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-xs shadow-xs active:scale-95"
+            className="px-3.5 py-2 bg-brand-navy hover:bg-brand-navy/90 dark:bg-brand-gold dark:text-brand-navy dark:hover:bg-amber-400 text-brand-gold border border-brand-gold/30 rounded-xl font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer text-xs shadow-xs active:scale-95"
             title="Download consolidated CSV report with real database metrics"
           >
             <FileSpreadsheet className="w-3.5 h-3.5" />
@@ -423,102 +423,102 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
         {/* Card 1: Total Listings */}
         <motion.div 
           variants={itemVariants}
-          className="bg-white border border-brand-border rounded-2xl p-5 shadow-sm hover:border-brand-gold/50 transition-all flex flex-col justify-between"
+          className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:border-brand-gold/50 transition-all flex flex-col justify-between"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Total Campus Listings
             </span>
-            <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
               <Inbox className="w-4 h-4" />
             </div>
           </div>
           <div className="my-2">
-            <div className="font-serif text-3xl font-extrabold text-brand-navy">
+            <div className="font-serif text-3xl font-extrabold text-brand-navy dark:text-white">
               {totalPosts}
             </div>
           </div>
-          <div className="flex items-center gap-2 pt-2 border-t border-brand-border/40 text-[11px] font-semibold">
-            <span className="text-red-600 font-bold">{lostCount} Lost</span>
-            <span className="text-slate-300">•</span>
-            <span className="text-brand-gold-mid font-bold">{foundCount} Found</span>
+          <div className="flex items-center gap-2 pt-2 border-t border-brand-border/40 dark:border-slate-800 text-[11px] font-semibold">
+            <span className="text-red-600 dark:text-red-400 font-bold">{lostCount} Lost</span>
+            <span className="text-slate-300 dark:text-slate-600">•</span>
+            <span className="text-brand-gold-mid dark:text-amber-300 font-bold">{foundCount} Found</span>
           </div>
         </motion.div>
 
         {/* Card 2: Registered Accounts */}
         <motion.div 
           variants={itemVariants}
-          className="bg-white border border-brand-border rounded-2xl p-5 shadow-sm hover:border-brand-gold/50 transition-all flex flex-col justify-between"
+          className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:border-brand-gold/50 transition-all flex flex-col justify-between"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Registered Users
             </span>
-            <div className="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
               <Users className="w-4 h-4" />
             </div>
           </div>
           <div className="my-2">
-            <div className="font-serif text-3xl font-extrabold text-brand-navy">
+            <div className="font-serif text-3xl font-extrabold text-brand-navy dark:text-white">
               {totalUsers}
             </div>
           </div>
-          <div className="flex items-center gap-2 pt-2 border-t border-brand-border/40 text-[11px] font-semibold">
-            <span className="text-blue-600 font-bold">{studentUsers || totalUsers} Students</span>
-            <span className="text-slate-300">•</span>
-            <span className="text-slate-500">{staffUsers} Staff/Mods</span>
+          <div className="flex items-center gap-2 pt-2 border-t border-brand-border/40 dark:border-slate-800 text-[11px] font-semibold">
+            <span className="text-blue-600 dark:text-blue-400 font-bold">{studentUsers || totalUsers} Students</span>
+            <span className="text-slate-300 dark:text-slate-600">•</span>
+            <span className="text-slate-500 dark:text-slate-400">{staffUsers} Staff/Mods</span>
           </div>
         </motion.div>
 
         {/* Card 3: Successfully Returned Items */}
         <motion.div 
           variants={itemVariants}
-          className="bg-white border border-brand-border rounded-2xl p-5 shadow-sm hover:border-brand-gold/50 transition-all flex flex-col justify-between"
+          className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:border-brand-gold/50 transition-all flex flex-col justify-between"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Recovered &amp; Returned
             </span>
-            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
               <CheckCircle2 className="w-4 h-4" />
             </div>
           </div>
           <div className="my-2 flex items-baseline gap-2">
-            <div className="font-serif text-3xl font-extrabold text-brand-navy">
+            <div className="font-serif text-3xl font-extrabold text-brand-navy dark:text-white">
               {returnedCount}
             </div>
-            <span className="text-xs font-bold text-emerald-600">
+            <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
               ({returnRate}% rate)
             </span>
           </div>
-          <div className="flex items-center gap-1.5 pt-2 border-t border-brand-border/40 text-[11px] text-slate-500 font-medium truncate">
+          <div className="flex items-center gap-1.5 pt-2 border-t border-brand-border/40 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate">
             <Clock4 className="w-3.5 h-3.5 text-brand-gold flex-shrink-0" />
-            <span>Avg resolution: <strong className="text-brand-navy">{avgResolutionHours !== "0" ? `${avgResolutionHours}h` : 'Quick'}</strong></span>
+            <span>Avg resolution: <strong className="text-brand-navy dark:text-white">{avgResolutionHours !== "0" ? `${avgResolutionHours}h` : 'Quick'}</strong></span>
           </div>
         </motion.div>
 
         {/* Card 4: Actionable Queue Backlog */}
         <motion.div 
           variants={itemVariants}
-          className="bg-white border border-brand-border rounded-2xl p-5 shadow-sm hover:border-brand-gold/50 transition-all flex flex-col justify-between"
+          className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:border-brand-gold/50 transition-all flex flex-col justify-between"
         >
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Pending Review Queue
             </span>
-            <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-600 flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center">
               <Clock className="w-4 h-4" />
             </div>
           </div>
           <div className="my-2">
-            <div className="font-serif text-3xl font-extrabold text-brand-navy">
+            <div className="font-serif text-3xl font-extrabold text-brand-navy dark:text-white">
               {pendingCount + pendingVerificationsCount}
             </div>
           </div>
-          <div className="flex items-center gap-2 pt-2 border-t border-brand-border/40 text-[11px] font-semibold">
-            <span className="text-amber-600 font-bold">{pendingCount} Item Posts</span>
-            <span className="text-slate-300">•</span>
-            <span className="text-blue-600 font-bold">{pendingVerificationsCount} ID Reviews</span>
+          <div className="flex items-center gap-2 pt-2 border-t border-brand-border/40 dark:border-slate-800 text-[11px] font-semibold">
+            <span className="text-amber-600 dark:text-amber-400 font-bold">{pendingCount} Item Posts</span>
+            <span className="text-slate-300 dark:text-slate-600">•</span>
+            <span className="text-blue-600 dark:text-blue-400 font-bold">{pendingVerificationsCount} ID Reviews</span>
           </div>
         </motion.div>
       </motion.div>
@@ -531,23 +531,23 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
         {/* Daily Post Volume (7 Days Real Comparison) */}
         <motion.div 
           variants={itemVariants}
-          className="lg:col-span-2 bg-white border border-brand-border p-5 rounded-2xl shadow-sm flex flex-col justify-between"
+          className="lg:col-span-2 bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col justify-between"
         >
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-brand-border/40 pb-4 mb-4 gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-brand-border/40 dark:border-slate-800 pb-4 mb-4 gap-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-brand-navy text-brand-gold flex items-center justify-center shadow-xs">
+              <div className="w-8 h-8 rounded-xl bg-brand-navy dark:bg-slate-800 text-brand-gold flex items-center justify-center shadow-xs">
                 <TrendingUp className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="font-serif text-sm font-bold text-brand-navy">Daily Intake Activity (Last 7 Days)</h4>
-                <p className="text-[11px] text-brand-ink2 font-light">Real-time breakdown of newly posted Lost vs. Found items</p>
+                <h4 className="font-serif text-sm font-bold text-brand-navy dark:text-white">Daily Intake Activity (Last 7 Days)</h4>
+                <p className="text-[11px] text-brand-ink2 dark:text-slate-400 font-light">Real-time breakdown of newly posted Lost vs. Found items</p>
               </div>
             </div>
             <div className="flex items-center gap-4 text-xs font-bold self-end sm:self-auto">
-              <span className="flex items-center gap-1.5 text-red-600">
+              <span className="flex items-center gap-1.5 text-red-600 dark:text-red-400">
                 <span className="w-2.5 h-2.5 rounded-sm bg-red-600" /> Lost
               </span>
-              <span className="flex items-center gap-1.5 text-brand-gold">
+              <span className="flex items-center gap-1.5 text-brand-gold dark:text-amber-400">
                 <span className="w-2.5 h-2.5 rounded-sm bg-brand-gold" /> Found
               </span>
             </div>
@@ -564,16 +564,16 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                   data={dailyVolume}
                   margin={{ top: 10, right: 10, left: -20, bottom: 5 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" opacity={0.4} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" opacity={0.2} />
                   <XAxis 
                     dataKey="day" 
-                    stroke="#64748B" 
+                    stroke="#94A3B8" 
                     fontSize={11} 
                     fontWeight={600}
                     tickLine={false}
                   />
                   <YAxis 
-                    stroke="#64748B" 
+                    stroke="#94A3B8" 
                     fontSize={11} 
                     fontWeight={600}
                     tickLine={false}
@@ -582,7 +582,7 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                   />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: '#1E293B', 
+                      backgroundColor: '#0F172A', 
                       borderRadius: '12px', 
                       border: '1px solid #334155',
                       color: '#F8FAFC' 
@@ -615,16 +615,16 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
         {/* Item Classification Categories */}
         <motion.div 
           variants={itemVariants}
-          className="bg-white border border-brand-border p-5 rounded-2xl shadow-sm flex flex-col justify-between"
+          className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between border-b border-brand-border/40 pb-4 mb-4">
+          <div className="flex items-center justify-between border-b border-brand-border/40 dark:border-slate-800 pb-4 mb-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-brand-navy text-brand-gold flex items-center justify-center shadow-xs">
+              <div className="w-8 h-8 rounded-xl bg-brand-navy dark:bg-slate-800 text-brand-gold flex items-center justify-center shadow-xs">
                 <PieIcon className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="font-serif text-sm font-bold text-brand-navy">Classification Categories</h4>
-                <p className="text-[11px] text-brand-ink2 font-light">Real-time database volume by category</p>
+                <h4 className="font-serif text-sm font-bold text-brand-navy dark:text-white">Classification Categories</h4>
+                <p className="text-[11px] text-brand-ink2 dark:text-slate-400 font-light">Real-time database volume by category</p>
               </div>
             </div>
           </div>
@@ -656,7 +656,7 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                     </Pie>
                     <Tooltip 
                       contentStyle={{ 
-                        backgroundColor: '#1E293B', 
+                        backgroundColor: '#0F172A', 
                         borderRadius: '12px', 
                         border: '1px solid #334155',
                         color: '#F8FAFC' 
@@ -670,7 +670,7 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                   <span className="text-[10px] font-bold uppercase text-slate-400 tracking-wider">
                     {activeSegment ? 'Selected' : 'Total'}
                   </span>
-                  <span className="text-base font-black text-brand-navy">
+                  <span className="text-base font-black text-brand-navy dark:text-white">
                     {activeSegment 
                       ? categories.find(c => c.name === activeSegment)?.value 
                       : categories.reduce((sum, c) => sum + c.value, 0)
@@ -683,15 +683,15 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
 
           {/* Category Legends list */}
           {categories.length > 0 && (
-            <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 mt-3 text-[11px] font-medium flex-1 overflow-y-auto max-h-[100px] pr-1">
+            <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 mt-3 text-[11px] font-medium flex-1 overflow-y-auto max-h-[100px] pr-1 custom-scrollbar">
               {categories.map(c => (
                 <div 
                   key={c.name} 
-                  className={`flex items-center gap-1.5 px-2 py-1 rounded-lg transition-all ${activeSegment === c.name ? 'bg-brand-cream font-bold' : ''}`}
+                  className={`flex items-center gap-1.5 px-2 py-1 rounded-lg transition-all ${activeSegment === c.name ? 'bg-brand-cream dark:bg-slate-800 font-bold' : ''}`}
                 >
                   <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: c.color }} />
-                  <span className="truncate text-slate-700">{c.name}</span>
-                  <span className="text-slate-400 ml-auto font-semibold">{c.value}</span>
+                  <span className="truncate text-slate-700 dark:text-slate-300">{c.name}</span>
+                  <span className="text-slate-400 dark:text-slate-400 ml-auto font-semibold">{c.value}</span>
                 </div>
               ))}
             </div>
@@ -707,16 +707,16 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
         {/* Posts By Department */}
         <motion.div 
           variants={itemVariants}
-          className="bg-white border border-brand-border p-5 rounded-2xl shadow-sm flex flex-col justify-between"
+          className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between border-b border-brand-border/40 pb-4 mb-4">
+          <div className="flex items-center justify-between border-b border-brand-border/40 dark:border-slate-800 pb-4 mb-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-brand-navy text-brand-gold flex items-center justify-center shadow-xs">
+              <div className="w-8 h-8 rounded-xl bg-brand-navy dark:bg-slate-800 text-brand-gold flex items-center justify-center shadow-xs">
                 <Building2 className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="font-serif text-sm font-bold text-brand-navy">Academic Departments</h4>
-                <p className="text-[11px] text-brand-ink2 font-light">Logged listings grouped by campus department</p>
+                <h4 className="font-serif text-sm font-bold text-brand-navy dark:text-white">Academic Departments</h4>
+                <p className="text-[11px] text-brand-ink2 dark:text-slate-400 font-light">Logged listings grouped by campus department</p>
               </div>
             </div>
           </div>
@@ -733,12 +733,12 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                   layout="vertical"
                   margin={{ top: 5, right: 20, left: -10, bottom: 5 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" opacity={0.4} />
-                  <XAxis type="number" stroke="#64748B" fontSize={10} fontWeight={600} tickLine={false} allowDecimals={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" opacity={0.2} />
+                  <XAxis type="number" stroke="#94A3B8" fontSize={10} fontWeight={600} tickLine={false} allowDecimals={false} />
                   <YAxis 
                     dataKey="department" 
                     type="category" 
-                    stroke="#64748B" 
+                    stroke="#94A3B8" 
                     fontSize={10} 
                     fontWeight={600} 
                     tickLine={false}
@@ -746,7 +746,7 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                   />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: '#1E293B', 
+                      backgroundColor: '#0F172A', 
                       borderRadius: '12px', 
                       border: '1px solid #334155',
                       color: '#F8FAFC' 
@@ -770,16 +770,16 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
         {/* User Growth Trajectory */}
         <motion.div 
           variants={itemVariants}
-          className="bg-white border border-brand-border p-5 rounded-2xl shadow-sm flex flex-col justify-between"
+          className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between border-b border-brand-border/40 pb-4 mb-4">
+          <div className="flex items-center justify-between border-b border-brand-border/40 dark:border-slate-800 pb-4 mb-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-brand-navy text-brand-gold flex items-center justify-center shadow-xs">
+              <div className="w-8 h-8 rounded-xl bg-brand-navy dark:bg-slate-800 text-brand-gold flex items-center justify-center shadow-xs">
                 <Users className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="font-serif text-sm font-bold text-brand-navy">User Growth Trajectory</h4>
-                <p className="text-[11px] text-brand-ink2 font-light">Monthly registration counts of students &amp; faculty</p>
+                <h4 className="font-serif text-sm font-bold text-brand-navy dark:text-white">User Growth Trajectory</h4>
+                <p className="text-[11px] text-brand-ink2 dark:text-slate-400 font-light">Monthly registration counts of students &amp; faculty</p>
               </div>
             </div>
           </div>
@@ -801,16 +801,16 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                       <stop offset="95%" stopColor="#C9963F" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" opacity={0.4} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" opacity={0.2} />
                   <XAxis 
                     dataKey="month" 
-                    stroke="#64748B" 
+                    stroke="#94A3B8" 
                     fontSize={10} 
                     fontWeight={600}
                     tickLine={false}
                   />
                   <YAxis 
-                    stroke="#64748B" 
+                    stroke="#94A3B8" 
                     fontSize={10} 
                     fontWeight={600} 
                     tickLine={false}
@@ -819,7 +819,7 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                   />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: '#1E293B', 
+                      backgroundColor: '#0F172A', 
                       borderRadius: '12px', 
                       border: '1px solid #334155',
                       color: '#F8FAFC' 
@@ -845,16 +845,16 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
         {/* Top Subcategories Breakdown */}
         <motion.div 
           variants={itemVariants}
-          className="bg-white border border-brand-border p-5 rounded-2xl shadow-sm flex flex-col justify-between"
+          className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between border-b border-brand-border/40 pb-4 mb-4">
+          <div className="flex items-center justify-between border-b border-brand-border/40 dark:border-slate-800 pb-4 mb-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-brand-navy text-brand-gold flex items-center justify-center shadow-xs">
+              <div className="w-8 h-8 rounded-xl bg-brand-navy dark:bg-slate-800 text-brand-gold flex items-center justify-center shadow-xs">
                 <Layers className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="font-serif text-sm font-bold text-brand-navy">Top Subcategories</h4>
-                <p className="text-[11px] text-brand-ink2 font-light">Specific item classifications reported</p>
+                <h4 className="font-serif text-sm font-bold text-brand-navy dark:text-white">Top Subcategories</h4>
+                <p className="text-[11px] text-brand-ink2 dark:text-slate-400 font-light">Specific item classifications reported</p>
               </div>
             </div>
           </div>
@@ -871,12 +871,12 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                   layout="vertical"
                   margin={{ top: 5, right: 15, left: -10, bottom: 5 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" opacity={0.4} />
-                  <XAxis type="number" stroke="#64748B" fontSize={10} fontWeight={600} tickLine={false} allowDecimals={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#CBD5E1" opacity={0.2} />
+                  <XAxis type="number" stroke="#94A3B8" fontSize={10} fontWeight={600} tickLine={false} allowDecimals={false} />
                   <YAxis 
                     dataKey="name" 
                     type="category" 
-                    stroke="#64748B" 
+                    stroke="#94A3B8" 
                     fontSize={10} 
                     fontWeight={600} 
                     tickLine={false}
@@ -884,7 +884,7 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                   />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: '#1E293B', 
+                      backgroundColor: '#0F172A', 
                       borderRadius: '12px', 
                       border: '1px solid #334155',
                       color: '#F8FAFC' 
@@ -906,39 +906,40 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
         </motion.div>
       </motion.div>
 
-      {/* Row 3: RECENT REGISTERED USERS (Real Database Table) */}
+      {/* Row 3: RECENT REGISTERED USERS (Real Database Table with Scrollbar) */}
       <motion.div 
         variants={itemVariants}
-        className="bg-white border border-brand-border p-5 rounded-2xl shadow-sm"
+        className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-sm"
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-brand-border/40 pb-4 mb-4 gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-brand-border/40 dark:border-slate-800 pb-4 mb-4 gap-2">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
               <UserCheck className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h4 className="font-serif text-sm font-bold text-brand-navy">Recent Registered Users</h4>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600 border border-blue-100">
+                <h4 className="font-serif text-sm font-bold text-brand-navy dark:text-white">Recent Registered Users</h4>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900/60">
                   {recentUsers.length} Logged
                 </span>
               </div>
-              <p className="text-[11px] text-brand-ink2 font-light">
-                Live database log of students and faculty members registered on Nazrul Retrievers
+              <p className="text-[11px] text-brand-ink2 dark:text-slate-400 font-light">
+                Live database log of students and faculty members registered on Nazrul Retrievers (Scrollable)
               </p>
             </div>
           </div>
         </div>
 
-        <div className="overflow-x-auto custom-scrollbar touch-scroll">
+        {/* Scrollable Container with Max Height & Sticky Table Header */}
+        <div className="overflow-x-auto max-h-[380px] overflow-y-auto custom-scrollbar touch-scroll border border-brand-border/40 dark:border-slate-800/80 rounded-xl">
           {recentUsers.length === 0 ? (
             <div className="py-8 text-center text-slate-400 text-xs font-semibold">
               No registered user records found in the database.
             </div>
           ) : (
             <table className="w-full text-left border-collapse text-xs whitespace-nowrap">
-              <thead>
-                <tr className="border-b border-brand-border/60 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+              <thead className="sticky top-0 z-10">
+                <tr className="bg-slate-50/95 dark:bg-[#0F1829]/95 backdrop-blur-xs border-b border-brand-border/60 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
                   <th className="py-2.5 px-3">User / ID</th>
                   <th className="py-2.5 px-3">Name</th>
                   <th className="py-2.5 px-3">Email</th>
@@ -947,26 +948,26 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                   <th className="py-2.5 px-3 text-right">Registered At</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-brand-border/30 font-medium text-slate-700">
+              <tbody className="divide-y divide-brand-border/30 dark:divide-slate-800/60 font-medium text-slate-700 dark:text-slate-200">
                 {recentUsers.map((user, idx) => (
-                  <tr key={user.id || idx} className="hover:bg-brand-cream/40 transition-colors">
+                  <tr key={user.id || idx} className="hover:bg-brand-cream/40 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="py-3 px-3">
-                      <span className="font-mono text-[11px] font-bold text-brand-navy bg-brand-cream px-2 py-0.5 rounded border border-brand-border">
+                      <span className="font-mono text-[11px] font-bold text-brand-navy dark:text-amber-300 bg-brand-cream dark:bg-slate-800/80 px-2 py-0.5 rounded border border-brand-border dark:border-slate-700">
                         {user.studentId && user.studentId !== '-' ? user.studentId : (user.id ? (user.id.length > 12 ? `${user.id.substring(0, 10)}...` : user.id) : `USR-${idx + 1}`)}
                       </span>
                     </td>
-                    <td className="py-3 px-3 font-semibold text-brand-navy">
+                    <td className="py-3 px-3 font-semibold text-brand-navy dark:text-white">
                       {user.name}
                     </td>
-                    <td className="py-3 px-3 text-slate-500 text-[11px]">
+                    <td className="py-3 px-3 text-slate-500 dark:text-slate-400 text-[11px]">
                       {user.email}
                     </td>
                     <td className="py-3 px-3">
                       <div className="flex flex-col">
-                        <span className="font-semibold capitalize text-slate-800 text-[11px]">
+                        <span className="font-semibold capitalize text-slate-800 dark:text-slate-200 text-[11px]">
                           {user.role}
                         </span>
-                        <span className="text-[10px] text-slate-400 truncate max-w-[140px]">
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 truncate max-w-[140px]">
                           {user.department || 'Campus Member'}
                         </span>
                       </div>
@@ -980,7 +981,7 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                         if (isAdmin) {
                           return (
                             <span 
-                              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-600 border border-rose-200"
+                              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900/60"
                               title="System Administrator (Official Institutional Authority)"
                             >
                               <Shield className="w-3 h-3 text-rose-500 shrink-0" />
@@ -992,7 +993,7 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                         if (isModerator) {
                           return (
                             <span 
-                              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200"
+                              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/60"
                               title="Staff Moderator / Coordinator (Official Institutional Authority)"
                             >
                               <ShieldCheck className="w-3 h-3 text-amber-600 shrink-0" />
@@ -1007,7 +1008,7 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                         if (isVerified) {
                           return (
                             <span 
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/60"
                               title="Verified JKKNIU Student ID"
                             >
                               <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />
@@ -1018,7 +1019,7 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                         if (isPending) {
                           return (
                             <span 
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600 border border-blue-200"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900/60"
                               title="Student ID Submitted — Pending Admin Review"
                             >
                               <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
@@ -1028,7 +1029,7 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                         }
                         return (
                           <span 
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-600 border border-slate-200"
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700"
                             title="Student ID Not Submitted Yet"
                           >
                             <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
@@ -1037,7 +1038,7 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
                         );
                       })()}
                     </td>
-                    <td className="py-3 px-3 text-right text-[11px] text-slate-500 font-mono">
+                    <td className="py-3 px-3 text-right text-[11px] text-slate-500 dark:text-slate-400 font-mono">
                       <span className="inline-flex items-center gap-1.5 justify-end" title={user.createdAt ? new Date(user.createdAt).toLocaleString() : undefined}>
                         <Calendar className="w-3 h-3 text-slate-400 shrink-0" />
                         <span>{formatRegistrationDate(user.createdAt)}</span>
@@ -1059,53 +1060,53 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
         {/* Top 10 Most Viewed Items */}
         <motion.div 
           variants={itemVariants}
-          className="lg:col-span-2 bg-white border border-brand-border p-5 rounded-2xl shadow-sm flex flex-col"
+          className="lg:col-span-2 bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col"
         >
-          <div className="flex items-center justify-between border-b border-brand-border/40 pb-4 mb-4">
+          <div className="flex items-center justify-between border-b border-brand-border/40 dark:border-slate-800 pb-4 mb-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-brand-navy text-brand-gold flex items-center justify-center shadow-xs">
+              <div className="w-8 h-8 rounded-xl bg-brand-navy dark:bg-slate-800 text-brand-gold flex items-center justify-center shadow-xs">
                 <Eye className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="font-serif text-sm font-bold text-brand-navy">Most Viewed Listings (Top 10)</h4>
-                <p className="text-[11px] text-brand-ink2 font-light">Real-time visitor views tracked across verified posts</p>
+                <h4 className="font-serif text-sm font-bold text-brand-navy dark:text-white">Most Viewed Listings (Top 10)</h4>
+                <p className="text-[11px] text-brand-ink2 dark:text-slate-400 font-light">Real-time visitor views tracked across verified posts</p>
               </div>
             </div>
           </div>
 
-          <div className="flex-1 overflow-x-auto overflow-y-auto max-h-[260px] pr-1 custom-scrollbar touch-scroll">
+          <div className="flex-1 overflow-x-auto overflow-y-auto max-h-[260px] pr-1 custom-scrollbar touch-scroll border border-brand-border/30 dark:border-slate-800/80 rounded-xl">
             {getTopViewedItems().length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-slate-400 py-10 text-xs font-semibold">
                 No active listings recorded yet.
               </div>
             ) : (
               <table className="w-full text-left border-collapse text-xs whitespace-nowrap">
-                <thead>
-                  <tr className="border-b border-brand-border/60 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
-                    <th className="py-2.5 pr-2">Item</th>
+                <thead className="sticky top-0 z-10">
+                  <tr className="bg-slate-50/95 dark:bg-[#0F1829]/95 backdrop-blur-xs border-b border-brand-border/60 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                    <th className="py-2.5 px-3">Item</th>
                     <th className="py-2.5 px-2">Category</th>
                     <th className="py-2.5 px-2">Type</th>
-                    <th className="py-2.5 pl-2 text-right">Views</th>
+                    <th className="py-2.5 px-3 text-right">Views</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-brand-border/30 font-medium text-slate-700">
+                <tbody className="divide-y divide-brand-border/30 dark:divide-slate-800/60 font-medium text-slate-700 dark:text-slate-200">
                   {getTopViewedItems().map((item, idx) => (
-                    <tr key={item.id || idx} className="hover:bg-brand-cream/40 transition-colors">
-                      <td className="py-2.5 pr-2 flex items-center gap-2 max-w-[200px] truncate">
+                    <tr key={item.id || idx} className="hover:bg-brand-cream/40 dark:hover:bg-slate-800/40 transition-colors">
+                      <td className="py-2.5 px-3 flex items-center gap-2 max-w-[200px] truncate">
                         <span className="text-sm">{item.emoji || '📦'}</span>
-                        <span className="truncate font-semibold text-brand-navy" title={item.title}>{item.title}</span>
+                        <span className="truncate font-semibold text-brand-navy dark:text-white" title={item.title}>{item.title}</span>
                       </td>
-                      <td className="py-2.5 px-2 text-[11px] text-slate-500">{item.category}</td>
+                      <td className="py-2.5 px-2 text-[11px] text-slate-500 dark:text-slate-400">{item.category}</td>
                       <td className="py-2.5 px-2">
                         <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${
                           item.type === 'lost' 
-                            ? 'bg-red-50 text-red-600 border border-red-200' 
-                            : 'bg-emerald-50 text-emerald-600 border border-emerald-200'
+                            ? 'bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/60' 
+                            : 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/60'
                         }`}>
                           {item.type}
                         </span>
                       </td>
-                      <td className="py-2.5 pl-2 text-right font-bold text-brand-gold-dark">
+                      <td className="py-2.5 px-3 text-right font-bold text-amber-600 dark:text-amber-400 font-mono">
                         👁 {item.views || 0}
                       </td>
                     </tr>
@@ -1119,65 +1120,65 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
         {/* Recovery & Resolution Pipeline Summary */}
         <motion.div 
           variants={itemVariants}
-          className="bg-white border border-brand-border p-5 rounded-2xl shadow-sm flex flex-col justify-between"
+          className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col justify-between"
         >
-          <div className="flex items-center justify-between border-b border-brand-border/40 pb-3 mb-4">
+          <div className="flex items-center justify-between border-b border-brand-border/40 dark:border-slate-800 pb-3 mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
                 <CheckCircle2 className="w-4 h-4" />
               </div>
-              <h4 className="font-serif text-sm font-bold text-brand-navy">Recovery &amp; Resolution</h4>
+              <h4 className="font-serif text-sm font-bold text-brand-navy dark:text-white">Recovery &amp; Resolution</h4>
             </div>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/60">
               Live Database
             </span>
           </div>
           
           <div className="space-y-2.5 flex-1 text-xs">
             <div className="flex justify-between items-center py-1">
-              <span className="text-slate-500 font-medium">Reunited &amp; Returned</span>
-              <span className="text-emerald-600 font-bold font-serif text-sm">{returnedCount} Items</span>
+              <span className="text-slate-500 dark:text-slate-400 font-medium">Reunited &amp; Returned</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-bold font-serif text-sm">{returnedCount} Items</span>
             </div>
             <div className="flex justify-between items-center py-1">
-              <span className="text-slate-500 font-medium">Active Lost Searches</span>
-              <span className="text-red-500 font-bold font-serif text-sm">{lostCount}</span>
+              <span className="text-slate-500 dark:text-slate-400 font-medium">Active Lost Searches</span>
+              <span className="text-red-500 dark:text-red-400 font-bold font-serif text-sm">{lostCount}</span>
             </div>
             <div className="flex justify-between items-center py-1">
-              <span className="text-slate-500 font-medium">Active Found Notices</span>
-              <span className="text-brand-gold-mid font-bold font-serif text-sm">{foundCount}</span>
+              <span className="text-slate-500 dark:text-slate-400 font-medium">Active Found Notices</span>
+              <span className="text-brand-gold-mid dark:text-amber-400 font-bold font-serif text-sm">{foundCount}</span>
             </div>
             <div className="flex justify-between items-center py-1">
-              <span className="text-slate-500 font-medium">Student ID Status</span>
-              <span className="text-blue-600 font-bold font-serif text-xs">
+              <span className="text-slate-500 dark:text-slate-400 font-medium">Student ID Status</span>
+              <span className="text-blue-600 dark:text-blue-400 font-bold font-serif text-xs">
                 {verifiedUsersCount} Verified {pendingVerificationsCount > 0 && `(${pendingVerificationsCount} Pending)`}
               </span>
             </div>
-            <div className="flex justify-between items-center pt-2.5 border-t border-brand-border/40 font-bold">
-              <span className="text-slate-700">Overall Recovery Rate</span>
-              <span className="text-emerald-600 font-serif text-sm">{returnRate}%</span>
+            <div className="flex justify-between items-center pt-2.5 border-t border-brand-border/40 dark:border-slate-800 font-bold">
+              <span className="text-slate-700 dark:text-slate-300">Overall Recovery Rate</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-serif text-sm">{returnRate}%</span>
             </div>
           </div>
 
           {/* Top Search Keywords Preview */}
-          <div className="mt-4 pt-3 border-t border-brand-border/40">
-            <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 mb-2">
+          <div className="mt-4 pt-3 border-t border-brand-border/40 dark:border-slate-800">
+            <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-2">
               <div className="flex items-center gap-1.5">
                 <Search className="w-3.5 h-3.5 text-brand-gold" />
                 <span>Top Campus Searches:</span>
               </div>
               <span className="text-[10px] text-slate-400 font-normal">Real Queries</span>
             </div>
-            <div className="flex flex-wrap gap-1.5 max-h-[85px] overflow-y-auto pr-1">
+            <div className="flex flex-wrap gap-1.5 max-h-[85px] overflow-y-auto pr-1 custom-scrollbar">
               {(!rawAnalytics?.topSearchKeywords || rawAnalytics.topSearchKeywords.length === 0) ? (
-                <span className="text-[11px] text-slate-400 italic">No search queries logged yet</span>
+                <span className="text-[11px] text-slate-400 dark:text-slate-500 italic">No search queries logged yet</span>
               ) : (
                 rawAnalytics.topSearchKeywords.slice(0, 6).map((k: any, idx: number) => (
                   <span 
                     key={idx}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-brand-cream text-[11px] font-semibold text-brand-navy border border-brand-border shadow-2xs"
+                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-brand-cream dark:bg-slate-800 text-[11px] font-semibold text-brand-navy dark:text-slate-200 border border-brand-border dark:border-slate-700 shadow-2xs"
                   >
                     <span>{k.keyword}</span>
-                    <span className="text-[10px] text-brand-gold font-bold">({k.count})</span>
+                    <span className="text-[10px] text-brand-gold dark:text-amber-400 font-bold">({k.count})</span>
                   </span>
                 ))
               )}
@@ -1189,21 +1190,21 @@ export default function AdminAnalyticsSection({ items = [] }: { items?: Item[] }
       {/* Dynamic Data-Driven Insights Banner */}
       <motion.div 
         variants={itemVariants}
-        className="bg-brand-cream/80 border border-brand-border rounded-2xl p-5 shadow-sm"
+        className="bg-brand-cream/80 dark:bg-slate-800/40 border border-brand-border dark:border-slate-800 rounded-2xl p-5 shadow-sm"
       >
         <div className="flex items-center gap-2 mb-3">
           <Sparkles className="w-4 h-4 text-brand-gold" />
-          <h4 className="font-serif text-xs font-black uppercase tracking-wider text-brand-navy">
+          <h4 className="font-serif text-xs font-black uppercase tracking-wider text-brand-navy dark:text-white">
             Live Automated System Insights
           </h4>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-medium text-slate-700">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-medium text-slate-700 dark:text-slate-300">
           {dynamicInsights.map((insight, idx) => (
-            <div key={idx} className="bg-white p-3.5 rounded-xl border border-brand-border shadow-xs">
-              <span className="font-bold text-brand-navy block mb-1">
+            <div key={idx} className="bg-white dark:bg-[#0C1322] p-3.5 rounded-xl border border-brand-border dark:border-slate-800 shadow-xs">
+              <span className="font-bold text-brand-navy dark:text-white block mb-1">
                 {insight.title}
               </span>
-              <p className="text-[11px] text-brand-ink2 leading-relaxed font-light">
+              <p className="text-[11px] text-brand-ink2 dark:text-slate-400 leading-relaxed font-light">
                 {insight.description}
               </p>
             </div>

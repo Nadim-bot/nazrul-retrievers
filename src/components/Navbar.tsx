@@ -5,7 +5,7 @@ import {
   User, Shield, PlusCircle, Database, Folder, Lock,
   Users, ListCheck, Settings, FileText, Check, Navigation,
   GraduationCap, Heart, Sparkles, CheckCircle2, Compass,
-  Sun, Moon
+  Sun, Moon, Trash2
 } from 'lucide-react';
 import { NotificationItem, Item } from '../types';
 import { handleNotificationClick, getNotificationIconAndColor, formatNotificationContent, isNotificationUnread } from '../utils/notificationNavigation';
@@ -17,6 +17,8 @@ interface NavbarProps {
   notifications: NotificationItem[];
   onMarkAllNotificationsRead: () => void;
   onMarkNotificationRead?: (id: string) => void;
+  onDeleteNotification?: (id: string | number) => void;
+  onClearAllNotifications?: () => void;
   onShowNotificationToast?: (msg: string) => void;
   isLoggedIn: boolean;
   onLogout: () => void;
@@ -47,6 +49,8 @@ export default function Navbar({
   notifications,
   onMarkAllNotificationsRead,
   onMarkNotificationRead,
+  onDeleteNotification,
+  onClearAllNotifications,
   onShowNotificationToast,
   isLoggedIn,
   onLogout,
@@ -145,7 +149,7 @@ export default function Navbar({
         { id: 'listing', label: 'Browse Items', icon: Search },
         { id: 'post', label: 'Report Item', icon: PlusCircle },
         { id: 'chat', label: 'Messages', icon: MessageSquare },
-        { id: 'admin', label: 'Admin Dashboard', icon: Shield },
+        { id: 'admin', label: 'Moderator Dashboard', icon: Shield },
       ];
     }
 
@@ -287,30 +291,46 @@ export default function Navbar({
                 id="notifications-dropdown-menu"
                 role="region"
                 aria-label="Campus Notifications Panel"
-                className="fixed sm:absolute top-[68px] sm:top-auto sm:mt-3 left-3 sm:left-auto right-3 sm:right-0 w-[calc(100vw-24px)] sm:w-[390px] max-w-[390px] bg-white dark:bg-[#111A2E] border border-slate-200 dark:border-slate-800 rounded-[20px] shadow-[0_20px_50px_rgba(0,0,0,0.25)] z-50 animate-in fade-in slide-in-from-top-2 duration-200 overflow-hidden"
+                className="fixed sm:absolute top-[68px] sm:top-auto sm:mt-3 left-3 sm:left-auto right-3 sm:right-0 w-[calc(100vw-24px)] sm:w-[410px] max-w-[410px] bg-white dark:bg-[#111A2E] border border-slate-200 dark:border-slate-800 rounded-[20px] shadow-[0_20px_50px_rgba(0,0,0,0.25)] z-50 animate-in fade-in slide-in-from-top-2 duration-200 overflow-hidden"
               >
-                <div className="p-4 sm:p-4.5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/90 dark:bg-[#162232] rounded-t-[20px]">
-                  <div className="flex items-center gap-2">
-                    <span className="font-serif text-base font-extrabold text-slate-900 dark:text-white tracking-wide flex items-center gap-2">
-                      <Bell aria-hidden="true" className="w-4 h-4 text-amber-600 dark:text-amber-400" /> Notifications
+                <div className="p-3.5 sm:p-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/90 dark:bg-[#162232] rounded-t-[20px] gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="font-serif text-sm sm:text-base font-extrabold text-slate-900 dark:text-white tracking-wide flex items-center gap-1.5 truncate">
+                      <Bell aria-hidden="true" className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" /> Notifications
                     </span>
                     {unreadCount > 0 && (
-                      <span className="bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900 text-[10px] font-black px-2 py-0.5 rounded-full shadow-2xs">
+                      <span className="bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900 text-[10px] font-black px-2 py-0.5 rounded-full shadow-2xs shrink-0">
                         {unreadCount} new
                       </span>
                     )}
                   </div>
-                  {unreadCount > 0 && (
-                    <button 
-                      onClick={() => {
-                        onMarkAllNotificationsRead();
-                        setShowNotifications(false);
-                      }}
-                      aria-label="Mark all notifications as read"
-                      className="text-[11px] font-black bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-600 text-slate-950 px-3.5 py-1.5 rounded-full transition-all duration-200 cursor-pointer shadow-xs hover:scale-105 active:scale-95 flex items-center gap-1 focus:outline-none focus:ring-2 focus:ring-amber-400"
-                    >
-                      Mark all read
-                    </button>
+                  
+                  {notifications.length > 0 && (
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {unreadCount > 0 && (
+                        <button 
+                          onClick={() => {
+                            onMarkAllNotificationsRead();
+                          }}
+                          aria-label="Mark all notifications as read"
+                          className="text-[10.5px] font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 hover:bg-amber-100 border border-amber-200 dark:border-amber-900/50 px-2.5 py-1 rounded-lg transition-all cursor-pointer shadow-2xs"
+                        >
+                          Mark read
+                        </button>
+                      )}
+
+                      <button 
+                        onClick={() => {
+                          onClearAllNotifications?.();
+                        }}
+                        aria-label="Clear all notifications"
+                        className="text-[10.5px] font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-400 hover:bg-rose-100 border border-rose-200 dark:border-rose-900/50 px-2.5 py-1 rounded-lg transition-all cursor-pointer shadow-2xs flex items-center gap-1"
+                        title="Clear all alerts"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                        <span>Clear all</span>
+                      </button>
+                    </div>
                   )}
                 </div>
                 <div className="max-h-[380px] overflow-y-auto p-2.5 space-y-2 bg-white dark:bg-[#111A2E] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-300 dark:[&::-webkit-scrollbar-thumb]:bg-slate-700 [&::-webkit-scrollbar-thumb]:rounded-full scrollbar-thin">
@@ -350,7 +370,7 @@ export default function Navbar({
                               });
                             }
                           }}
-                          className={`group p-3.5 rounded-[14px] flex items-start gap-3.5 transition-all duration-200 cursor-pointer border focus:outline-none focus:ring-2 focus:ring-amber-500 ${
+                          className={`group p-3 rounded-[14px] flex items-start justify-between gap-2.5 transition-all duration-200 cursor-pointer border focus:outline-none focus:ring-2 focus:ring-amber-500 ${
                             formatted.isUnread 
                               ? 'border-amber-300 dark:border-amber-700/80 border-l-4 border-l-amber-500 bg-amber-50/90 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-950/60 shadow-2xs' 
                               : 'border-slate-200 dark:border-slate-700/80 border-l-4 border-l-slate-300 dark:border-l-slate-600 bg-slate-50/80 dark:bg-[#162232] hover:bg-slate-100 dark:hover:bg-[#1c2b3e]'
@@ -369,34 +389,49 @@ export default function Navbar({
                             });
                           }}
                         >
-                          {/* Icon wrapper */}
-                          <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs ${colorClass}`}>
-                            <NotifIcon aria-hidden="true" className="w-4 h-4" />
+                          <div className="flex items-start gap-2.5 flex-1 min-w-0">
+                            {/* Icon wrapper */}
+                            <div className={`w-7.5 h-7.5 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs ${colorClass}`}>
+                              <NotifIcon aria-hidden="true" className="w-3.5 h-3.5" />
+                            </div>
+
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-start justify-between gap-1.5">
+                                <p 
+                                  className={`text-xs leading-relaxed break-words ${
+                                    formatted.isUnread 
+                                      ? 'text-slate-950 dark:text-white font-bold [&_strong]:text-amber-900 dark:[&_strong]:text-amber-300 [&_strong]:font-black' 
+                                      : 'text-slate-800 dark:text-slate-200 font-medium [&_strong]:text-slate-950 dark:[&_strong]:text-white [&_strong]:font-bold'
+                                  }`} 
+                                  dangerouslySetInnerHTML={{ __html: formatted.html }} 
+                                />
+                                {formatted.isUnread && (
+                                  <span className="w-2 h-2 rounded-full bg-amber-500 flex-shrink-0 mt-1 shadow-[0_0_8px_rgba(245,158,11,0.6)]" aria-label="Unread notification marker" />
+                                )}
+                              </div>
+                              <div className="flex items-center gap-1.5 mt-1">
+                                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold">{formatted.time}</span>
+                                {formatted.category && (
+                                  <span className="text-[8.5px] font-bold uppercase tracking-wider px-1.5 py-0.2 bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-md">
+                                    {formatted.category}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
                           </div>
 
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between gap-2">
-                              <p 
-                                className={`text-[13px] leading-relaxed break-words ${
-                                  formatted.isUnread 
-                                    ? 'text-slate-950 dark:text-white font-bold [&_strong]:text-amber-900 dark:[&_strong]:text-amber-300 [&_strong]:font-black' 
-                                    : 'text-slate-800 dark:text-slate-200 font-medium [&_strong]:text-slate-950 dark:[&_strong]:text-white [&_strong]:font-bold'
-                                }`} 
-                                dangerouslySetInnerHTML={{ __html: formatted.html }} 
-                              />
-                              {formatted.isUnread && (
-                                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 flex-shrink-0 mt-1.5 shadow-[0_0_8px_rgba(245,158,11,0.6)]" aria-label="Unread notification marker" />
-                              )}
-                            </div>
-                            <div className="flex items-center gap-2 mt-1.5">
-                              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">{formatted.time}</span>
-                              {formatted.category && (
-                                <span className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.2 bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-md">
-                                  {formatted.category}
-                                </span>
-                              )}
-                            </div>
-                          </div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onDeleteNotification?.(String(notif.id));
+                            }}
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-all cursor-pointer shrink-0 mt-0.5"
+                            title="Delete notification"
+                            aria-label="Delete notification"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
                         </div>
                       );
                     })

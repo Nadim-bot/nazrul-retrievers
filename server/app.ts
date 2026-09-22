@@ -49,16 +49,17 @@ app.use('/api/', limiter);
 // Serve uploaded files statically
 app.use('/server-uploads', express.static(path.join(process.cwd(), 'server-uploads')));
 
-// Ensure MongoDB is connected asynchronously in the background without hanging requests
-app.use('/api', (req, res, next) => {
+// Ensure MongoDB is connected before handling API requests (critical for Vercel Serverless Functions)
+app.use('/api', async (req, res, next) => {
   if (!isMongoDBActive()) {
-    connectMongoDB().then(async (connected) => {
+    try {
+      const connected = await connectMongoDB();
       if (connected) {
         await reloadFallbackStoreFromMongoDB(true);
       }
-    }).catch(err => {
-      console.warn('MongoDB lazy background connection notice:', err?.message || err);
-    });
+    } catch (err: any) {
+      console.warn('MongoDB lazy connection notice:', err?.message || err);
+    }
   }
   next();
 });
@@ -97,26 +98,39 @@ app.use('/api', (req, res, next) => {
   next();
 });
 
-// 2. MOUNT MODULAR REST API ROUTES
+// 2. MOUNT MODULAR REST API ROUTES (Supports both /api/* and direct /* paths for Vercel serverless compatibility)
 app.use('/api/auth', authRoutes);
-app.use('/api/items', itemsRoutes);
-app.use('/api/chats', chatsRoutes);
-app.use('/api/notifications', notificationsRoutes);
-app.use('/api/admin', adminRoutes);
+app.use('/auth', authRoutes);
 
-app.get('/api/faculties', (req, res) => {
+app.use('/api/items', itemsRoutes);
+app.use('/items', itemsRoutes);
+
+app.use('/api/chats', chatsRoutes);
+app.use('/chats', chatsRoutes);
+
+app.use('/api/notifications', notificationsRoutes);
+app.use('/notifications', notificationsRoutes);
+
+app.use('/api/admin', adminRoutes);
+app.use('/admin', adminRoutes);
+
+const getFacultiesHandler = (req: any, res: any) => {
   const { store } = getFallbackData();
   res.json(store.faculties || []);
-});
+};
+app.get('/api/faculties', getFacultiesHandler);
+app.get('/faculties', getFacultiesHandler);
 
-app.get('/api/faculties/:id/departments', (req, res) => {
+const getDepartmentsHandler = (req: any, res: any) => {
   const { store } = getFallbackData();
   const facultyId = req.params.id;
   const depts = (store.departments || []).filter((d: any) => d.faculty_id === facultyId);
   res.json(depts);
-});
+};
+app.get('/api/faculties/:id/departments', getDepartmentsHandler);
+app.get('/faculties/:id/departments', getDepartmentsHandler);
 
-app.get('/api/departments/search', (req, res) => {
+const searchDepartmentsHandler = (req: any, res: any) => {
   const { store } = getFallbackData();
   const q = String(req.query.q || '').toLowerCase();
   if (!q) {
@@ -129,10 +143,12 @@ app.get('/api/departments/search', (req, res) => {
     return deptNameMatches || facultyNameMatches;
   });
   res.json(matchingDepts);
-});
+};
+app.get('/api/departments/search', searchDepartmentsHandler);
+app.get('/departments/search', searchDepartmentsHandler);
 
 // Diagnostic endpoint to check MongoDB status
-app.get('/api/db-status', async (req, res) => {
+const dbStatusHandler = async (req: any, res: any) => {
   try {
     let active = isMongoDBActive();
     if (!active) {
@@ -159,14 +175,25 @@ app.get('/api/db-status', async (req, res) => {
       timestamp: new Date().toISOString()
     });
   }
-});
+};
+app.get('/api/db-status', dbStatusHandler);
+app.get('/db-status', dbStatusHandler);
 
 // Alias top-level routes to sub-routers
 app.use('/api/my-items', (req, res, next) => {
   req.url = '/my-items';
   itemsRoutes(req, res, next);
 });
+app.use('/my-items', (req, res, next) => {
+  req.url = '/my-items';
+  itemsRoutes(req, res, next);
+});
+
 app.use('/api/admin/items', (req, res, next) => {
+  req.url = '/admin/items';
+  itemsRoutes(req, res, next);
+});
+app.use('/admin/items', (req, res, next) => {
   req.url = '/admin/items';
   itemsRoutes(req, res, next);
 });

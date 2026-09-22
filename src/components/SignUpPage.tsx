@@ -398,45 +398,46 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[0.8fr_1.2fr] min-h-[calc(100vh-68px)] bg-slate-50 dark:bg-[#0a0f1d] transition-colors duration-300">
+    <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] min-h-[calc(100vh-68px)] bg-slate-50 dark:bg-[#0B132B] transition-colors duration-300">
       
       {/* LEFT COLUMN: Premium Dark Navy Hero Panel (Matching Sign In) */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#0D1B2A] via-[#132235] to-[#0A121D] p-12 md:p-16 flex flex-col justify-center hidden lg:flex border-r border-brand-border/10 dark:border-slate-800">
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#0B132B] via-[#0E1A38] to-[#0B132B] p-10 sm:p-12 md:p-16 flex flex-col justify-center hidden lg:flex border-r border-slate-200/80 dark:border-slate-800/80">
         {/* Ambient background decoration */}
         <div className="absolute inset-0 bg-[radial-gradient(rgba(244,196,114,0.08)_1px,transparent_1px)] bg-[size:28px_28px] pointer-events-none" />
-        <div className="absolute -top-[120px] -left-[120px] w-64 h-64 rounded-full bg-brand-gold/10 blur-[80px]" />
+        <div className="absolute -top-[100px] -left-[100px] w-72 h-72 rounded-full bg-amber-500/10 blur-[90px] pointer-events-none" />
+        <div className="absolute -bottom-[80px] -right-[80px] w-64 h-64 rounded-full bg-emerald-500/10 blur-[90px] pointer-events-none" />
 
-        <div className="relative z-10">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/5 border border-white/10 mb-6">
-            <GraduationCap className="w-10 h-10 text-brand-gold" />
+        <div className="relative z-10 max-w-md">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/10 dark:bg-white/5 border border-white/15 backdrop-blur-md mb-6 shadow-sm">
+            <GraduationCap className="w-8 h-8 text-amber-400" />
           </div>
           
-          <h2 className="font-serif text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight mb-4">
-            Join JKKNIU
+          <h2 className="font-serif text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight mb-3">
+            Join JKKNIU Hub
           </h2>
           
-          <p className="text-slate-300 font-light text-sm md:text-base leading-relaxed mb-10">
+          <p className="text-slate-300 font-light text-sm leading-relaxed mb-8">
             Create your secure student or faculty profile to report lost belongings, verify found items, and coordinate returns safely on campus.
           </p>
 
-          {/* Golden checkpoints (Cohesive checklist) */}
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-3 text-slate-200 text-sm font-semibold">
-              <div className="w-6 h-6 rounded-full bg-brand-gold/20 text-[#FADC9E] flex items-center justify-center text-xs shadow-sm ring-1 ring-brand-gold/25">
+          {/* Golden checkpoints (Cohesive checklist matching Sign In) */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-3 text-slate-200 text-xs sm:text-sm font-semibold p-2.5 rounded-xl bg-white/[0.04] border border-white/10 backdrop-blur-xs">
+              <div className="w-6 h-6 rounded-full bg-amber-400/20 text-amber-300 flex items-center justify-center text-xs shadow-xs ring-1 ring-amber-400/30 flex-shrink-0">
                 <Check className="w-3.5 h-3.5 stroke-[2.5]" />
               </div>
-              <span>Open to students, faculty and staff members</span>
+              <span>Open to all JKKNIU students, faculty &amp; staff</span>
             </div>
             
-            <div className="flex items-center gap-3 text-slate-200 text-sm font-semibold">
-              <div className="w-6 h-6 rounded-full bg-brand-gold/20 text-[#FADC9E] flex items-center justify-center text-xs shadow-sm ring-1 ring-brand-gold/25">
+            <div className="flex items-center gap-3 text-slate-200 text-xs sm:text-sm font-semibold p-2.5 rounded-xl bg-white/[0.04] border border-white/10 backdrop-blur-xs">
+              <div className="w-6 h-6 rounded-full bg-amber-400/20 text-amber-300 flex items-center justify-center text-xs shadow-xs ring-1 ring-amber-400/30 flex-shrink-0">
                 <Check className="w-3.5 h-3.5 stroke-[2.5]" />
               </div>
-              <span>Direct departmental integration</span>
+              <span>Direct departmental integration &amp; verification</span>
             </div>
             
-            <div className="flex items-center gap-3 text-slate-200 text-sm font-semibold">
-              <div className="w-6 h-6 rounded-full bg-brand-gold/20 text-[#FADC9E] flex items-center justify-center text-xs shadow-sm ring-1 ring-brand-gold/25">
+            <div className="flex items-center gap-3 text-slate-200 text-xs sm:text-sm font-semibold p-2.5 rounded-xl bg-white/[0.04] border border-white/10 backdrop-blur-xs">
+              <div className="w-6 h-6 rounded-full bg-amber-400/20 text-amber-300 flex items-center justify-center text-xs shadow-xs ring-1 ring-amber-400/30 flex-shrink-0">
                 <Check className="w-3.5 h-3.5 stroke-[2.5]" />
               </div>
               <span>Verified profiles for maximum item security</span>
@@ -446,29 +447,29 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
       </div>
 
       {/* RIGHT COLUMN: Premium Sign Up Form Panel (Matching Sign In Style) */}
-      <div className="bg-brand-surface dark:bg-[#0c1322] flex flex-col justify-center px-4 py-8 sm:px-8 sm:py-12 md:px-16 md:py-16 lg:px-24 transition-colors duration-300">
+      <div className="bg-white dark:bg-[#0B132B] flex flex-col justify-center px-5 py-8 sm:px-10 sm:py-12 md:px-16 md:py-14 lg:px-20 transition-colors duration-300">
         <div className="max-w-xl w-full mx-auto">
           
           {/* Back to sign in utility navigation */}
           <button 
             onClick={() => onTabChange('login')}
-            className="inline-flex items-center gap-1 text-xs text-brand-ink3 dark:text-slate-400 hover:text-brand-gold dark:hover:text-amber-400 font-bold mb-6 transition-all cursor-pointer group"
+            className="inline-flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 font-bold mb-5 transition-all cursor-pointer group"
           >
             <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
             Back to Sign In
           </button>
 
           {/* Form Headers */}
-          <div className="mb-8">
-            <h3 className="font-serif text-2xl font-bold text-brand-navy dark:text-white mb-2 tracking-tight">
+          <div className="mb-6">
+            <h3 className="font-serif text-2xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">
               Create Account
             </h3>
-            <p className="text-sm text-brand-ink2 dark:text-slate-400 font-light">
+            <p className="text-sm text-slate-500 dark:text-slate-400 font-light">
               Register your student or faculty profile for Lost &amp; Found services.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:gap-5">
             
             {/* ROW 1: Full Name */}
             <div className="flex flex-col gap-1.5">
@@ -480,15 +481,15 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder=" "
                   required
-                  className="peer w-full pl-4 pr-11 pt-5 pb-2 bg-brand-cream dark:bg-slate-900/90 border border-brand-border dark:border-slate-800 rounded-xl text-brand-ink dark:text-slate-100 text-sm outline-none transition-all focus:border-brand-gold focus:bg-white dark:focus:bg-slate-900 dark:focus:border-amber-400 focus:ring-4 focus:ring-brand-gold/10 dark:focus:ring-amber-400/10"
+                  className="peer w-full pl-4 pr-11 pt-5 pb-2 bg-slate-50 hover:bg-white dark:bg-[#111C30] dark:hover:bg-[#14223A] border border-slate-200 dark:border-slate-700/80 rounded-xl text-slate-900 dark:text-white text-sm outline-none transition-all focus:border-amber-500 focus:bg-white dark:focus:bg-[#162642] dark:focus:border-amber-400 focus:ring-4 focus:ring-amber-500/15 dark:focus:ring-amber-400/15"
                 />
                 <label 
                   htmlFor="fullName"
-                  className="absolute left-4 top-3.5 text-xs text-brand-ink3 dark:text-slate-400 font-bold uppercase tracking-wider transition-all pointer-events-none peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-placeholder-shown:top-4.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider peer-focus:text-brand-gold dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-wider peer-[:not(:placeholder-shown)]:text-brand-gold dark:peer-[:not(:placeholder-shown)]:text-amber-400"
+                  className="absolute left-4 top-3.5 text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider transition-all pointer-events-none peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-placeholder-shown:top-4.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider peer-focus:text-amber-600 dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-wider peer-[:not(:placeholder-shown)]:text-amber-600 dark:peer-[:not(:placeholder-shown)]:text-amber-400"
                 >
                   Full Name
                 </label>
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-brand-ink3 dark:text-slate-500 group-focus-within:text-brand-gold dark:group-focus-within:text-amber-400 transition-colors flex items-center justify-center">
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-slate-500 group-focus-within:text-amber-600 dark:group-focus-within:text-amber-400 transition-colors flex items-center justify-center">
                   <User className="w-4.5 h-4.5" />
                 </div>
               </div>
@@ -506,12 +507,12 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
                     placeholder=" "
                     required
                     maxLength={5}
-                    className={`peer w-full pl-4 pr-11 pt-5 pb-2 bg-brand-cream dark:bg-slate-900/90 border rounded-xl text-brand-ink dark:text-slate-100 text-sm outline-none transition-all ${
+                    className={`peer w-full pl-4 pr-11 pt-5 pb-2 bg-slate-50 hover:bg-white dark:bg-[#111C30] dark:hover:bg-[#14223A] border rounded-xl text-slate-900 dark:text-white text-sm outline-none transition-all ${
                       regCheckState === 'taken'
                         ? 'border-rose-400 dark:border-rose-700 bg-rose-50/20 dark:bg-rose-950/30 text-rose-950 dark:text-rose-200 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/15'
                         : regCheckState === 'available'
-                        ? 'border-emerald-500/60 dark:border-emerald-600/60 bg-emerald-50/10 dark:bg-emerald-950/30 text-brand-ink dark:text-slate-100 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10'
-                        : 'border-brand-border dark:border-slate-800 focus:border-brand-gold focus:bg-white dark:focus:bg-slate-900 dark:focus:border-amber-400 focus:ring-4 focus:ring-brand-gold/10 dark:focus:ring-amber-400/10'
+                        ? 'border-emerald-500/60 dark:border-emerald-600/60 bg-emerald-50/10 dark:bg-emerald-950/30 text-slate-900 dark:text-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10'
+                        : 'border-slate-200 dark:border-slate-700/80 focus:border-amber-500 focus:bg-white dark:focus:bg-[#162642] dark:focus:border-amber-400 focus:ring-4 focus:ring-amber-500/15 dark:focus:ring-amber-400/15'
                     }`}
                   />
                   <label 
@@ -521,20 +522,20 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
                         ? 'text-rose-500 peer-focus:text-rose-500 peer-[:not(:placeholder-shown)]:text-rose-500'
                         : regCheckState === 'available'
                         ? 'text-emerald-600 dark:text-emerald-400 peer-focus:text-emerald-600 dark:peer-focus:text-emerald-400 peer-[:not(:placeholder-shown)]:text-emerald-600 dark:peer-[:not(:placeholder-shown)]:text-emerald-400'
-                        : 'text-brand-ink3 dark:text-slate-400 peer-focus:text-brand-gold dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:text-brand-gold dark:peer-[:not(:placeholder-shown)]:text-amber-400'
+                        : 'text-slate-500 dark:text-slate-400 peer-focus:text-amber-600 dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:text-amber-600 dark:peer-[:not(:placeholder-shown)]:text-amber-400'
                     }`}
                   >
                     Registration No (5 Digits)
                   </label>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center">
                     {regCheckState === 'checking' ? (
-                      <Loader2 className="w-4.5 h-4.5 text-brand-gold dark:text-amber-400 animate-spin" />
+                      <Loader2 className="w-4.5 h-4.5 text-amber-500 dark:text-amber-400 animate-spin" />
                     ) : regCheckState === 'taken' ? (
                       <ShieldAlert className="w-4.5 h-4.5 text-rose-500" />
                     ) : regCheckState === 'available' ? (
                       <CheckCircle2 className="w-4.5 h-4.5 text-emerald-600 dark:text-emerald-400" />
                     ) : (
-                      <GraduationCap className="w-4.5 h-4.5 text-brand-ink3 dark:text-slate-500 group-focus-within:text-brand-gold dark:group-focus-within:text-amber-400 transition-colors" />
+                      <GraduationCap className="w-4.5 h-4.5 text-slate-400 dark:text-slate-500 group-focus-within:text-amber-600 dark:group-focus-within:text-amber-400 transition-colors" />
                     )}
                   </div>
                 </div>
@@ -561,26 +562,26 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
                     value={academicSession}
                     onChange={(e) => setAcademicSession(e.target.value)}
                     required
-                    className="peer w-full pl-4 pr-11 pt-5 pb-2 bg-brand-cream dark:bg-slate-900/90 border border-brand-border dark:border-slate-800 rounded-xl text-brand-ink dark:text-slate-100 text-sm outline-none transition-all focus:border-brand-gold focus:bg-white dark:focus:bg-slate-900 dark:focus:border-amber-400 focus:ring-4 focus:ring-brand-gold/10 dark:focus:ring-amber-400/10 appearance-none cursor-pointer"
+                    className="peer w-full pl-4 pr-11 pt-5 pb-2 bg-slate-50 hover:bg-white dark:bg-[#111C30] dark:hover:bg-[#14223A] border border-slate-200 dark:border-slate-700/80 rounded-xl text-slate-900 dark:text-white text-sm outline-none transition-all focus:border-amber-500 focus:bg-white dark:focus:bg-[#162642] dark:focus:border-amber-400 focus:ring-4 focus:ring-amber-500/15 dark:focus:ring-amber-400/15 appearance-none cursor-pointer"
                   >
-                    <option value="" disabled hidden className="dark:bg-slate-900 dark:text-slate-100"></option>
-                    <option value="2021-22" className="dark:bg-slate-900 dark:text-slate-100">2021-22</option>
-                    <option value="2022-23" className="dark:bg-slate-900 dark:text-slate-100">2022-23</option>
-                    <option value="2023-24" className="dark:bg-slate-900 dark:text-slate-100">2023-24</option>
-                    <option value="2024-25" className="dark:bg-slate-900 dark:text-slate-100">2024-25</option>
-                    <option value="2025-26" className="dark:bg-slate-900 dark:text-slate-100">2025-26</option>
+                    <option value="" disabled hidden className="dark:bg-[#111C30] dark:text-white"></option>
+                    <option value="2021-22" className="dark:bg-[#111C30] dark:text-white">2021-22</option>
+                    <option value="2022-23" className="dark:bg-[#111C30] dark:text-white">2022-23</option>
+                    <option value="2023-24" className="dark:bg-[#111C30] dark:text-white">2023-24</option>
+                    <option value="2024-25" className="dark:bg-[#111C30] dark:text-white">2024-25</option>
+                    <option value="2025-26" className="dark:bg-[#111C30] dark:text-white">2025-26</option>
                   </select>
                   <label 
                     htmlFor="academicSession"
                     className={`absolute left-4 transition-all pointer-events-none font-bold uppercase tracking-wider ${
                       academicSession !== "" 
-                        ? 'top-1.5 text-[10px] text-brand-gold dark:text-amber-400' 
-                        : 'top-4 text-sm font-normal normal-case tracking-normal text-brand-ink3 dark:text-slate-400'
-                    } group-focus-within:top-1.5 group-focus-within:text-[10px] group-focus-within:font-bold group-focus-within:uppercase group-focus-within:tracking-wider group-focus-within:text-brand-gold dark:group-focus-within:text-amber-400`}
+                        ? 'top-1.5 text-[10px] text-amber-600 dark:text-amber-400' 
+                        : 'top-4 text-sm font-normal normal-case tracking-normal text-slate-500 dark:text-slate-400'
+                    } group-focus-within:top-1.5 group-focus-within:text-[10px] group-focus-within:font-bold group-focus-within:uppercase group-focus-within:tracking-wider group-focus-within:text-amber-600 dark:group-focus-within:text-amber-400`}
                   >
                     Academic Session
                   </label>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-brand-ink3 dark:text-slate-500 group-focus-within:text-brand-gold dark:group-focus-within:text-amber-400 transition-colors flex items-center justify-center">
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-slate-500 group-focus-within:text-amber-600 dark:group-focus-within:text-amber-400 transition-colors flex items-center justify-center">
                     <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
                       <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                     </svg>
@@ -600,12 +601,12 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder=" "
                     required
-                    className={`peer w-full pl-4 pr-11 pt-5 pb-2 bg-brand-cream dark:bg-slate-900/90 border rounded-xl text-brand-ink dark:text-slate-100 text-sm outline-none transition-all ${
+                    className={`peer w-full pl-4 pr-11 pt-5 pb-2 bg-slate-50 hover:bg-white dark:bg-[#111C30] dark:hover:bg-[#14223A] border rounded-xl text-slate-900 dark:text-white text-sm outline-none transition-all ${
                       emailCheckState === 'taken'
                         ? 'border-rose-400 dark:border-rose-700 bg-rose-50/20 dark:bg-rose-950/30 text-rose-950 dark:text-rose-200 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/15'
                         : emailCheckState === 'available'
-                        ? 'border-emerald-500/60 dark:border-emerald-600/60 bg-emerald-50/10 dark:bg-emerald-950/30 text-brand-ink dark:text-slate-100 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10'
-                        : 'border-brand-border dark:border-slate-800 focus:border-brand-gold focus:bg-white dark:focus:bg-slate-900 dark:focus:border-amber-400 focus:ring-4 focus:ring-brand-gold/10 dark:focus:ring-amber-400/10'
+                        ? 'border-emerald-500/60 dark:border-emerald-600/60 bg-emerald-50/10 dark:bg-emerald-950/30 text-slate-900 dark:text-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10'
+                        : 'border-slate-200 dark:border-slate-700/80 focus:border-amber-500 focus:bg-white dark:focus:bg-[#162642] dark:focus:border-amber-400 focus:ring-4 focus:ring-amber-500/15 dark:focus:ring-amber-400/15'
                     }`}
                   />
                   <label 
@@ -615,20 +616,20 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
                         ? 'text-rose-500 peer-focus:text-rose-500 peer-[:not(:placeholder-shown)]:text-rose-500'
                         : emailCheckState === 'available'
                         ? 'text-emerald-600 dark:text-emerald-400 peer-focus:text-emerald-600 dark:peer-focus:text-emerald-400 peer-[:not(:placeholder-shown)]:text-emerald-600 dark:peer-[:not(:placeholder-shown)]:text-emerald-400'
-                        : 'text-brand-ink3 dark:text-slate-400 peer-focus:text-brand-gold dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:text-brand-gold dark:peer-[:not(:placeholder-shown)]:text-amber-400'
+                        : 'text-slate-500 dark:text-slate-400 peer-focus:text-amber-600 dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:text-amber-600 dark:peer-[:not(:placeholder-shown)]:text-amber-400'
                     }`}
                   >
                     Email Address
                   </label>
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center">
                     {emailCheckState === 'checking' ? (
-                      <Loader2 className="w-4.5 h-4.5 text-brand-gold dark:text-amber-400 animate-spin" />
+                      <Loader2 className="w-4.5 h-4.5 text-amber-500 dark:text-amber-400 animate-spin" />
                     ) : emailCheckState === 'taken' ? (
                       <ShieldAlert className="w-4.5 h-4.5 text-rose-500" />
                     ) : emailCheckState === 'available' ? (
                       <CheckCircle2 className="w-4.5 h-4.5 text-emerald-600 dark:text-emerald-400" />
                     ) : (
-                      <Mail className="w-4.5 h-4.5 text-brand-ink3 dark:text-slate-500 group-focus-within:text-brand-gold dark:group-focus-within:text-amber-400 transition-colors" />
+                      <Mail className="w-4.5 h-4.5 text-slate-400 dark:text-slate-500 group-focus-within:text-amber-600 dark:group-focus-within:text-amber-400 transition-colors" />
                     )}
                   </div>
                 </div>
@@ -700,15 +701,15 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     placeholder=" "
                     required
-                    className="peer w-full pl-4 pr-11 pt-5 pb-2 bg-brand-cream dark:bg-slate-900/90 border border-brand-border dark:border-slate-800 rounded-xl text-brand-ink dark:text-slate-100 text-sm outline-none transition-all focus:border-brand-gold focus:bg-white dark:focus:bg-slate-900 dark:focus:border-amber-400 focus:ring-4 focus:ring-brand-gold/10 dark:focus:ring-amber-400/10"
+                    className="peer w-full pl-4 pr-11 pt-5 pb-2 bg-slate-50 hover:bg-white dark:bg-[#111C30] dark:hover:bg-[#14223A] border border-slate-200 dark:border-slate-700/80 rounded-xl text-slate-900 dark:text-white text-sm outline-none transition-all focus:border-amber-500 focus:bg-white dark:focus:bg-[#162642] dark:focus:border-amber-400 focus:ring-4 focus:ring-amber-500/15 dark:focus:ring-amber-400/15"
                   />
                   <label 
                     htmlFor="phoneNumber"
-                    className="absolute left-4 top-3.5 text-xs text-brand-ink3 dark:text-slate-400 font-bold uppercase tracking-wider transition-all pointer-events-none peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-placeholder-shown:top-4.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider peer-focus:text-brand-gold dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-wider peer-[:not(:placeholder-shown)]:text-brand-gold dark:peer-[:not(:placeholder-shown)]:text-amber-400"
+                    className="absolute left-4 top-3.5 text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider transition-all pointer-events-none peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-placeholder-shown:top-4.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider peer-focus:text-amber-600 dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-wider peer-[:not(:placeholder-shown)]:text-amber-600 dark:peer-[:not(:placeholder-shown)]:text-amber-400"
                   >
                     Phone Number
                   </label>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-brand-ink3 dark:text-slate-500 group-focus-within:text-brand-gold dark:group-focus-within:text-amber-400 transition-colors flex items-center justify-center">
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-slate-500 group-focus-within:text-amber-600 dark:group-focus-within:text-amber-400 transition-colors flex items-center justify-center">
                     <Phone className="w-4.5 h-4.5" />
                   </div>
                 </div>
@@ -731,13 +732,13 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
                   htmlFor="department"
                   className={`absolute left-4 transition-all pointer-events-none font-bold uppercase tracking-wider ${
                     department !== "" 
-                      ? 'top-1.5 text-[10px] text-brand-gold dark:text-amber-400' 
-                      : 'top-4 text-sm font-normal normal-case tracking-normal text-brand-ink3 dark:text-slate-400'
-                  } group-focus-within:top-1.5 group-focus-within:text-[10px] group-focus-within:font-bold group-focus-within:uppercase group-focus-within:tracking-wider group-focus-within:text-brand-gold dark:group-focus-within:text-amber-400`}
+                      ? 'top-1.5 text-[10px] text-amber-600 dark:text-amber-400' 
+                      : 'top-4 text-sm font-normal normal-case tracking-normal text-slate-500 dark:text-slate-400'
+                  } group-focus-within:top-1.5 group-focus-within:text-[10px] group-focus-within:font-bold group-focus-within:uppercase group-focus-within:tracking-wider group-focus-within:text-amber-600 dark:group-focus-within:text-amber-400`}
                 >
                   Department
                 </label>
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-brand-ink3 dark:text-slate-500 group-focus-within:text-brand-gold dark:group-focus-within:text-amber-400 transition-colors flex items-center justify-center">
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-slate-500 group-focus-within:text-amber-600 dark:group-focus-within:text-amber-400 transition-colors flex items-center justify-center">
                   <Building2 className="w-4.5 h-4.5" />
                 </div>
               </div>
@@ -754,23 +755,23 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder=" "
                     required
-                    className="peer w-full pl-4 pr-16 pt-5 pb-2 bg-brand-cream dark:bg-slate-900/90 border border-brand-border dark:border-slate-800 rounded-xl text-brand-ink dark:text-slate-100 text-sm outline-none transition-all focus:border-brand-gold focus:bg-white dark:focus:bg-slate-900 dark:focus:border-amber-400 focus:ring-4 focus:ring-brand-gold/10 dark:focus:ring-amber-400/10"
+                    className="peer w-full pl-4 pr-16 pt-5 pb-2 bg-slate-50 hover:bg-white dark:bg-[#111C30] dark:hover:bg-[#14223A] border border-slate-200 dark:border-slate-700/80 rounded-xl text-slate-900 dark:text-white text-sm outline-none transition-all focus:border-amber-500 focus:bg-white dark:focus:bg-[#162642] dark:focus:border-amber-400 focus:ring-4 focus:ring-amber-500/15 dark:focus:ring-amber-400/15"
                   />
                   <label 
                     htmlFor="password"
-                    className="absolute left-4 top-3.5 text-xs text-brand-ink3 dark:text-slate-400 font-bold uppercase tracking-wider transition-all pointer-events-none peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-placeholder-shown:top-4.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider peer-focus:text-brand-gold dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-wider peer-[:not(:placeholder-shown)]:text-brand-gold dark:peer-[:not(:placeholder-shown)]:text-amber-400"
+                    className="absolute left-4 top-3.5 text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider transition-all pointer-events-none peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-placeholder-shown:top-4.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider peer-focus:text-amber-600 dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-wider peer-[:not(:placeholder-shown)]:text-amber-600 dark:peer-[:not(:placeholder-shown)]:text-amber-400"
                   >
                     Password
                   </label>
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-11 top-1/2 -translate-y-1/2 text-brand-ink3 dark:text-slate-400 hover:text-brand-gold dark:hover:text-amber-400 transition-colors focus:outline-none cursor-pointer p-1"
+                    className="absolute right-11 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors focus:outline-none cursor-pointer p-1"
                     title={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
                   </button>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-brand-ink3 dark:text-slate-500 group-focus-within:text-brand-gold dark:group-focus-within:text-amber-400 transition-colors flex items-center justify-center">
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-slate-500 group-focus-within:text-amber-600 dark:group-focus-within:text-amber-400 transition-colors flex items-center justify-center">
                     <Lock className="w-4.5 h-4.5" />
                   </div>
                 </div>
@@ -785,23 +786,23 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder=" "
                     required
-                    className="peer w-full pl-4 pr-16 pt-5 pb-2 bg-brand-cream dark:bg-slate-900/90 border border-brand-border dark:border-slate-800 rounded-xl text-brand-ink dark:text-slate-100 text-sm outline-none transition-all focus:border-brand-gold focus:bg-white dark:focus:bg-slate-900 dark:focus:border-amber-400 focus:ring-4 focus:ring-brand-gold/10 dark:focus:ring-amber-400/10"
+                    className="peer w-full pl-4 pr-16 pt-5 pb-2 bg-slate-50 hover:bg-white dark:bg-[#111C30] dark:hover:bg-[#14223A] border border-slate-200 dark:border-slate-700/80 rounded-xl text-slate-900 dark:text-white text-sm outline-none transition-all focus:border-amber-500 focus:bg-white dark:focus:bg-[#162642] dark:focus:border-amber-400 focus:ring-4 focus:ring-amber-500/15 dark:focus:ring-amber-400/15"
                   />
                   <label 
                     htmlFor="confirmPassword"
-                    className="absolute left-4 top-3.5 text-xs text-brand-ink3 dark:text-slate-400 font-bold uppercase tracking-wider transition-all pointer-events-none peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-placeholder-shown:top-4.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider peer-focus:text-brand-gold dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-wider peer-[:not(:placeholder-shown)]:text-brand-gold dark:peer-[:not(:placeholder-shown)]:text-amber-400"
+                    className="absolute left-4 top-3.5 text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider transition-all pointer-events-none peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-placeholder-shown:top-4.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider peer-focus:text-amber-600 dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-wider peer-[:not(:placeholder-shown)]:text-amber-600 dark:peer-[:not(:placeholder-shown)]:text-amber-400"
                   >
                     Confirm Password
                   </label>
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-11 top-1/2 -translate-y-1/2 text-brand-ink3 dark:text-slate-400 hover:text-brand-gold dark:hover:text-amber-400 transition-colors focus:outline-none cursor-pointer p-1"
+                    className="absolute right-11 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors focus:outline-none cursor-pointer p-1"
                     title={showConfirmPassword ? "Hide password" : "Show password"}
                   >
                     {showConfirmPassword ? <EyeOff className="w-4.5 h-4.5" /> : <Eye className="w-4.5 h-4.5" />}
                   </button>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-brand-ink3 dark:text-slate-500 group-focus-within:text-brand-gold dark:group-focus-within:text-amber-400 transition-colors flex items-center justify-center">
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 dark:text-slate-500 group-focus-within:text-amber-600 dark:group-focus-within:text-amber-400 transition-colors flex items-center justify-center">
                     <Lock className="w-4.5 h-4.5" />
                   </div>
                 </div>
@@ -810,8 +811,8 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
 
             {/* Interactive Password Strength Indicator with Strongest suggestions */}
             {password.length > 0 && (
-              <div className="p-4 bg-brand-cream/40 dark:bg-slate-900/60 border border-brand-border/60 dark:border-slate-800 rounded-xl space-y-3 animate-in fade-in duration-200">
-                <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-brand-ink2 dark:text-slate-400">
+              <div className="p-4 bg-slate-50 dark:bg-[#111C30] border border-slate-200 dark:border-slate-700/80 rounded-xl space-y-3 animate-in fade-in duration-200">
+                <div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
                   <span>Password Security Strength</span>
                   <span className={`font-extrabold ${score === 5 ? "text-emerald-600 dark:text-emerald-400" : score >= 3 ? "text-amber-600 dark:text-amber-400" : "text-rose-600 dark:text-rose-400"}`}>
                     {score === 5 ? '🛡️ Strongest' : score >= 3 ? '⚠️ Medium' : '❌ Weak'}
@@ -825,49 +826,49 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
                   <div className={`rounded-full h-full transition-all duration-300 ${score === 5 ? 'bg-emerald-500' : 'bg-slate-200 dark:bg-slate-800'}`} />
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-xs text-brand-ink2 dark:text-slate-300 font-medium">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-xs text-slate-600 dark:text-slate-300 font-medium">
                   <div className="flex items-center gap-2">
-                    <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all ${hasMinLength ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-600'}`}>
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all ${hasMinLength ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-600'}`}>
                       {hasMinLength ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : <div className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-600" />}
                     </div>
-                    <span className={hasMinLength ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-brand-ink3 dark:text-slate-500'}>At least 8 characters</span>
+                    <span className={hasMinLength ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-500'}>At least 8 characters</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all ${hasUppercase ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-600'}`}>
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all ${hasUppercase ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-600'}`}>
                       {hasUppercase ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : <div className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-600" />}
                     </div>
-                    <span className={hasUppercase ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-brand-ink3 dark:text-slate-500'}>Uppercase letter (A-Z)</span>
+                    <span className={hasUppercase ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-500'}>Uppercase letter (A-Z)</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all ${hasLowercase ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-600'}`}>
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all ${hasLowercase ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-600'}`}>
                       {hasLowercase ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : <div className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-600" />}
                     </div>
-                    <span className={hasLowercase ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-brand-ink3 dark:text-slate-500'}>Lowercase letter (a-z)</span>
+                    <span className={hasLowercase ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-500'}>Lowercase letter (a-z)</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all ${hasNumber ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-600'}`}>
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all ${hasNumber ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-600'}`}>
                       {hasNumber ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : <div className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-600" />}
                     </div>
-                    <span className={hasNumber ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-brand-ink3 dark:text-slate-500'}>At least 1 number (0-9)</span>
+                    <span className={hasNumber ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-500'}>At least 1 number (0-9)</span>
                   </div>
                   <div className="flex items-center gap-2 sm:col-span-2">
-                    <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all ${hasSpecialChar ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-600'}`}>
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all ${hasSpecialChar ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-200 text-slate-400 dark:bg-slate-800 dark:text-slate-600'}`}>
                       {hasSpecialChar ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : <div className="w-1.5 h-1.5 rounded-full bg-slate-400 dark:bg-slate-600" />}
                     </div>
-                    <span className={hasSpecialChar ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-brand-ink3 dark:text-slate-500'}>Special character (!@#$ etc.)</span>
+                    <span className={hasSpecialChar ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-500 dark:text-slate-500'}>Special character (!@#$ etc.)</span>
                   </div>
                 </div>
               </div>
             )}
 
             {/* Terms and Privacy Checkbox */}
-            <div className="pt-2">
-              <label className="inline-flex items-start gap-3 text-xs sm:text-sm text-brand-ink2 dark:text-slate-300 cursor-pointer select-none font-medium leading-normal">
+            <div className="pt-1">
+              <label className="inline-flex items-start gap-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 cursor-pointer select-none font-medium leading-normal">
                 <input 
                   type="checkbox"
                   checked={agreeTerms}
                   onChange={(e) => setAgreeTerms(e.target.checked)}
-                  className="rounded border-brand-border dark:border-slate-700 dark:bg-slate-800 text-brand-gold focus:ring-brand-gold/20 mt-1 cursor-pointer w-4 h-4 shrink-0"
+                  className="rounded border-slate-300 dark:border-slate-700 dark:bg-slate-800 text-amber-500 focus:ring-amber-400/30 mt-1 cursor-pointer w-4 h-4 shrink-0"
                 />
                 <span>
                   I agree to the{' '}
@@ -877,7 +878,7 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
                       title: 'Terms of Service',
                       body: 'By registering on Nazrul Retrievers: Campus Lost and Found, you agree to use this platform with integrity and care. Any attempt to abuse registration, claim items falsely, or engage in suspicious administrative or coordinating role violations is subject to strict review, logs reveal, and account suspensions by JKKNIU Administrators.'
                     })}
-                    className="text-brand-gold dark:text-amber-400 hover:underline font-bold transition-all cursor-pointer focus:outline-none"
+                    className="text-amber-600 dark:text-amber-400 hover:underline font-bold transition-all cursor-pointer focus:outline-none"
                   >
                     Terms of Service
                   </button>{' '}
@@ -888,7 +889,7 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
                       title: 'Privacy Policy',
                       body: 'Your student profile verification details (Registration, Full Name, Email, Department, and Phone) are encrypted and stored safely. We trace interactions, message histories, and claims to prevent security breaches and identity impersonation inside Jatiya Kabi Kazi Nazrul Islam University.'
                     })}
-                    className="text-brand-gold dark:text-amber-400 hover:underline font-bold transition-all cursor-pointer focus:outline-none"
+                    className="text-amber-600 dark:text-amber-400 hover:underline font-bold transition-all cursor-pointer focus:outline-none"
                   >
                     Privacy Policy
                   </button>.
@@ -929,7 +930,7 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-extrabold rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-[1.01] active:scale-[0.98] transition-all text-sm mt-4 cursor-pointer disabled:opacity-50 border border-amber-300/30"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black rounded-xl shadow-md hover:shadow-lg shadow-amber-500/25 hover:scale-[1.01] active:scale-[0.98] transition-all text-sm mt-3 cursor-pointer disabled:opacity-50 border border-amber-300/40"
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin text-slate-950" />
@@ -942,13 +943,13 @@ export default function RegisterPage({ onRegisterSuccess, onTabChange }: Registe
           </form>
 
           {/* Already Registered Bottom Redirection */}
-          <div className="text-center text-xs sm:text-sm text-brand-ink2 dark:text-slate-400 mt-8 font-light">
+          <div className="text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-8 font-light">
             Already registered?{' '}
             <button 
               onClick={() => onTabChange('login')}
-              className="text-brand-gold dark:text-amber-400 hover:text-brand-gold-mid dark:hover:text-amber-300 font-bold transition-colors cursor-pointer"
+              className="text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 font-bold transition-colors cursor-pointer"
             >
-              Sign In
+              Sign In to your account
             </button>
           </div>
 

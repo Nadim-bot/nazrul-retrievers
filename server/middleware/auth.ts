@@ -74,9 +74,21 @@ export async function authenticateToken(req: AuthenticatedRequest, res: Response
       return res.status(403).json({ error: 'Access Denied: This account is locked for security reasons.' });
     }
 
-    // Ensure req.user has the absolute latest role from the database
-    if (req.user) {
+    // Ensure req.user has the absolute latest role, verification status, and profile details from the database
+    if (req.user && dbUser) {
       req.user.role = dbUser.role;
+      (req.user as any).isVerified = Boolean(
+        dbUser.isVerified === true ||
+        dbUser.is_verified === true ||
+        dbUser.idVerificationStatus === 'verified' ||
+        dbUser.verified === true
+      );
+      (req.user as any).idVerificationStatus = dbUser.idVerificationStatus || ((req.user as any).isVerified ? 'verified' : 'unverified');
+      (req.user as any).verified = (req.user as any).isVerified;
+      if (dbUser.department && !req.user.department) req.user.department = dbUser.department;
+      if ((dbUser.studentId || dbUser.rollNumber) && !req.user.studentId) req.user.studentId = dbUser.studentId || dbUser.rollNumber;
+      if ((dbUser.fullName || dbUser.name) && !req.user.fullName) req.user.fullName = dbUser.fullName || dbUser.name;
+      if (dbUser.avatar && !req.user.avatar) req.user.avatar = dbUser.avatar;
     }
 
     next();

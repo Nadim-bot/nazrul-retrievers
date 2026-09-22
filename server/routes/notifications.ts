@@ -244,28 +244,32 @@ router.post('/read-all', authenticateToken, async (req: AuthenticatedRequest, re
 router.delete('/:id', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params;
   const userId = req.user?.id;
+  const idStr = String(id).trim();
 
   try {
     const { store, save } = getFallbackData();
-    const idx = (store.notifications || []).findIndex((n: any) => 
-      String(n.id) === String(id) && 
-      (!n.user_id && !n.userId || String(n.user_id) === String(userId) || String(n.userId) === String(userId))
-    );
-    if (idx !== -1) {
-      store.notifications.splice(idx, 1);
+    if (store.notifications) {
+      store.notifications = store.notifications.filter((n: any) => {
+        const matchesId = String(n.id) === idStr || String((n as any)._id) === idStr;
+        if (!matchesId) return true;
+        // If it matches ID, only delete if it belongs to user or is general
+        if (!n.user_id && !n.userId) return false;
+        if (String(n.user_id) === String(userId) || String(n.userId) === String(userId)) return false;
+        return true;
+      });
       save();
     }
 
     if (isMongoDBActive()) {
       try {
-        const queryConds: any[] = [{ id: String(id) }];
-        if (mongoose.Types.ObjectId.isValid(String(id))) {
-          queryConds.push({ _id: String(id) });
+        const queryConds: any[] = [{ id: idStr }];
+        if (mongoose.Types.ObjectId.isValid(idStr)) {
+          queryConds.push({ _id: idStr });
         }
         await MNotification.deleteMany({
           $and: [
             { $or: queryConds },
-            { $or: [{ userId: String(userId) }, { user_id: String(userId) }] }
+            { $or: [{ userId: String(userId) }, { user_id: String(userId) }, { userId: { $exists: false } }] }
           ]
         });
       } catch (mErr: any) {
@@ -273,7 +277,7 @@ router.delete('/:id', authenticateToken, async (req: AuthenticatedRequest, res: 
       }
     }
 
-    return res.json({ success: true, message: 'Notification deleted.' });
+    return res.json({ success: true, message: 'Notification deleted successfully.' });
   } catch (err: any) {
     console.error('Error deleting notification:', err);
     return res.status(500).json({ error: 'Internal server error: ' + err.message });
@@ -281,31 +285,39 @@ router.delete('/:id', authenticateToken, async (req: AuthenticatedRequest, res: 
 });
 
 // 5. CLEAR ALL USER NOTIFICATIONS
-router.delete('/', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+const clearAllNotificationsHandler = async (req: AuthenticatedRequest, res: Response) => {
   const userId = req.user?.id;
 
   try {
     const { store, save } = getFallbackData();
-    store.notifications = (store.notifications || []).filter((n: any) => 
-      Boolean(n.user_id && n.userId && String(n.user_id) !== String(userId) && String(n.userId) !== String(userId))
-    );
-    save();
+    if (store.notifications) {
+      store.notifications = store.notifications.filter((n: any) => {
+        const notifUserId = String(n.userId || n.user_id || '');
+        if (!notifUserId) return false; // Clear broadcast/general
+        return notifUserId !== String(userId);
+      });
+      save();
+    }
 
     if (isMongoDBActive() && userId) {
       try {
         await MNotification.deleteMany({
-          $or: [{ userId: String(userId) }, { user_id: String(userId) }]
+          $or: [{ userId: String(userId) }, { user_id: String(userId) }, { userId: { $exists: false } }]
         });
       } catch (mErr: any) {
         console.warn('⚠️ Error clearing user MNotification in MongoDB:', mErr.message);
       }
     }
 
-    return res.json({ success: true, message: 'All notifications cleared.' });
+    return res.json({ success: true, message: 'All notifications cleared successfully.' });
   } catch (err: any) {
     console.error('Error clearing notifications:', err);
     return res.status(500).json({ error: 'Internal server error: ' + err.message });
   }
-});
+};
+
+router.delete('/', authenticateToken, clearAllNotificationsHandler);
+router.delete('/clear-all', authenticateToken, clearAllNotificationsHandler);
+router.post('/clear-all', authenticateToken, clearAllNotificationsHandler);
 
 export default router;

@@ -2164,6 +2164,30 @@ router.delete('/notifications/:id', async (req: AuthenticatedRequest, res: Respo
   }
 });
 
+// 7b. CLEAR ALL ADMIN NOTIFICATIONS
+const clearAllAdminNotificationsHandler = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (isMongoDBActive()) {
+      try {
+        await MAdminNotification.deleteMany({});
+      } catch (mErr: any) {
+        console.warn('MongoDB clear admin notifications warning:', mErr.message);
+      }
+    }
+    const { store, save } = getFallbackData();
+    store.admin_notifications = [];
+    save();
+    return res.json({ success: true, message: 'All admin notifications cleared successfully.' });
+  } catch (err: any) {
+    console.error('Error clearing all admin notifications:', err);
+    return res.status(500).json({ error: 'Internal server error: ' + err.message });
+  }
+};
+
+router.delete('/notifications', clearAllAdminNotificationsHandler);
+router.delete('/notifications/clear-all', clearAllAdminNotificationsHandler);
+router.post('/notifications/clear-all', clearAllAdminNotificationsHandler);
+
 
 // --- CONVERSATION REPORTS & MODERATION ---
 
@@ -3844,6 +3868,15 @@ router.post('/settings', async (req: AuthenticatedRequest, res: Response) => {
       maxImageSize: maxImageSize || '5 MB per image',
       archiveDuration: archiveDuration || '30 Days Active'
     };
+
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const STORE_FILE = path.join(process.cwd(), 'server-data-store.json');
+      fs.writeFileSync(STORE_FILE, JSON.stringify(store, null, 2), 'utf-8');
+    } catch (fsErr) {
+      console.warn('[Admin Settings] Could not write system_settings to server-data-store.json:', fsErr);
+    }
 
     await logAdminActivity(
       req.user?.id || 'System',

@@ -1181,10 +1181,10 @@ export default function PrintFlyerModal({
           </div>
 
           {/* Actions Footer */}
-          <div className="p-4 sm:p-5 border-t border-slate-200 dark:border-slate-800 bg-slate-50/90 dark:bg-[#162137] flex items-center justify-between gap-4">
+          <div className="p-4 sm:p-5 border-t border-slate-200 dark:border-slate-800 bg-slate-50/90 dark:bg-[#162137] flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <button
               onClick={onClose}
-              className="px-5 py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 hover:text-slate-900 dark:text-white text-xs sm:text-sm font-bold rounded-xl border border-slate-300 dark:border-slate-700 transition-colors cursor-pointer shadow-xs flex items-center gap-1.5"
+              className="w-full sm:w-auto justify-center px-5 py-2.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 hover:text-slate-900 dark:text-white text-xs sm:text-sm font-bold rounded-xl border border-slate-300 dark:border-slate-700 transition-colors cursor-pointer shadow-xs flex items-center gap-1.5"
             >
               <X className="w-4 h-4" />
               <span>Close</span>
@@ -1192,7 +1192,7 @@ export default function PrintFlyerModal({
             
             <button
               onClick={handlePrint}
-              className="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs sm:text-sm font-black rounded-xl shadow-md transition-all cursor-pointer flex items-center gap-2 active:scale-95"
+              className="w-full sm:w-auto justify-center px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs sm:text-sm font-black rounded-xl shadow-md transition-all cursor-pointer flex items-center gap-2 active:scale-95"
             >
               <Printer className="w-4 h-4 stroke-[2.5]" />
               <span>Print / Save A4 Poster (PDF)</span>

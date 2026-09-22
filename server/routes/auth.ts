@@ -2318,51 +2318,66 @@ router.delete(['/account', '/delete-account'], authenticateToken, async (req: Au
   }
 });
 
-// Retain general Proxy Endpoint for compatibility
+// Retain general Proxy Endpoint for fast, reliable image upload
 router.post('/upload-imgbb', async (req: any, res: Response) => {
   const { image } = req.body;
   if (!image) return res.status(400).json({ error: 'Image content is required.' });
 
   try {
-    const imgbbApiKey = process.env.IMGBB_API_KEY || process.env.VITE_IMGBB_API_KEY || 'eeae5ac8abaf61efd5cadc10b0fd0922';
     let cleanBase64 = image;
     if (image.startsWith('data:')) {
       cleanBase64 = image.split(',')[1];
     }
     cleanBase64 = cleanBase64.replace(/\s/g, '');
 
-    const form = new URLSearchParams();
-    form.append('image', cleanBase64);
-
-    const response = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: form.toString()
-    });
-    const data: any = await response.json();
-    if (data && data.success) {
-      return res.json({
-        url: data.data.url,
-        display_url: data.data.display_url,
-        thumb_url: data.data.thumb?.url
-      });
-    }
-
-    // Fallback save locally
+    // 1. Instant local write for high-performance zero-delay availability
     const UPLOADS_DIR = path.join(process.cwd(), 'server-uploads');
     if (!fs.existsSync(UPLOADS_DIR)) {
       fs.mkdirSync(UPLOADS_DIR, { recursive: true });
     }
-    const filename = `img-${Date.now()}.png`;
-    fs.writeFileSync(path.join(UPLOADS_DIR, filename), Buffer.from(cleanBase64, 'base64'));
+    const filename = `img-${Date.now()}-${Math.random().toString(36).substring(2, 7)}.jpg`;
+    const localFilePath = path.join(UPLOADS_DIR, filename);
+    fs.writeFileSync(localFilePath, Buffer.from(cleanBase64, 'base64'));
     const localUrl = `/server-uploads/${filename}`;
+
+    // 2. Fast ImgBB attempt with 2.5s AbortController timeout
+    const imgbbApiKey = process.env.IMGBB_API_KEY || process.env.VITE_IMGBB_API_KEY || 'eeae5ac8abaf61efd5cadc10b0fd0922';
+    
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2500);
+
+      const form = new URLSearchParams();
+      form.append('image', cleanBase64);
+
+      const response = await fetch(`https://api.imgbb.com/1/upload?key=${imgbbApiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: form.toString(),
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      const data: any = await response.json();
+      if (data && data.success && data.data && data.data.url) {
+        return res.json({
+          url: data.data.url,
+          display_url: data.data.display_url || data.data.url,
+          thumb_url: data.data.thumb?.url || data.data.url
+        });
+      }
+    } catch (imgbbErr) {
+      // If ImgBB timed out or failed, silently proceed with local storage URL with 0s latency
+      console.log('[Upload] ImgBB bypassed or timed out, serving fast local URL:', localUrl);
+    }
 
     return res.json({
       url: localUrl,
-      display_url: localUrl
+      display_url: localUrl,
+      thumb_url: localUrl
     });
   } catch (err: any) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message || 'Image processing failed.' });
   }
 });
 

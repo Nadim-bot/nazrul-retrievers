@@ -6,7 +6,7 @@ import {
   Camera, CheckCheck, Check, Clock, ArrowDown
 } from 'lucide-react';
 import { ChatThread, Message, MessageAttachment, Item, User as UserType } from '../types';
-import { apiFetch } from '../utils/api';
+import { apiFetch, getAuthToken } from '../utils/api';
 import PublicProfileModal from './PublicProfileModal';
 import CameraCaptureModal from './CameraCaptureModal';
 
@@ -546,7 +546,7 @@ export default function ChatPage({
   // Upload photo attachment helper
   const uploadAttachmentToServer = async (draft: { file?: File; name: string; url: string; type: 'image'; size?: string }): Promise<MessageAttachment> => {
     try {
-      const token = localStorage.getItem('token');
+      const token = getAuthToken();
       const headers: Record<string, string> = {};
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;

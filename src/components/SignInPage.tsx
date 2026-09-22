@@ -211,51 +211,54 @@ export default function SignInPage({ onLoginSuccess, onTabChange }: SignInPagePr
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[0.8fr_1.2fr] min-h-[calc(100vh-68px)] bg-slate-50 dark:bg-[#0a0f1d] transition-colors duration-300">
-      {/* Decorative panel */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#0D1B2A] via-[#132235] to-[#0A121D] p-12 md:p-16 flex flex-col justify-center hidden lg:flex border-r border-brand-border/10 dark:border-slate-800">
+    <div className="grid grid-cols-1 lg:grid-cols-[0.85fr_1.15fr] min-h-[calc(100vh-68px)] bg-slate-50 dark:bg-[#0B132B] transition-colors duration-300">
+      {/* Decorative branding panel */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#0B132B] via-[#0E1A38] to-[#0B132B] p-10 sm:p-12 md:p-16 flex flex-col justify-center hidden lg:flex border-r border-slate-200/80 dark:border-slate-800/80">
         {/* Ambient background decoration */}
         <div className="absolute inset-0 bg-[radial-gradient(rgba(244,196,114,0.08)_1px,transparent_1px)] bg-[size:28px_28px] pointer-events-none" />
-        <div className="absolute -top-[120px] -left-[120px] w-64 h-64 rounded-full bg-brand-gold/10 blur-[80px]" />
+        <div className="absolute -top-[100px] -left-[100px] w-72 h-72 rounded-full bg-amber-500/10 blur-[90px] pointer-events-none" />
+        <div className="absolute -bottom-[80px] -right-[80px] w-64 h-64 rounded-full bg-emerald-500/10 blur-[90px] pointer-events-none" />
 
-        <div className="relative z-10">
-          <div className="text-4xl mb-6">🔍</div>
-          <h2 className="font-serif text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight mb-4">Welcome Back!</h2>
-          <p className="text-slate-300 font-light text-sm md:text-base leading-relaxed mb-10">
-            Sign in to manage your reports, chat with finders instantly, and track your active missing items across campus.
+        <div className="relative z-10 max-w-md">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/10 dark:bg-white/5 border border-white/15 backdrop-blur-md mb-6 shadow-sm">
+            <ShieldCheck className="w-8 h-8 text-amber-400" />
+          </div>
+          <h2 className="font-serif text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-tight mb-3">Welcome Back!</h2>
+          <p className="text-slate-300 font-light text-sm leading-relaxed mb-8">
+            Sign in to manage your reports, chat with finders securely, and track your active missing belongings across campus.
           </p>
 
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-3 text-slate-200 text-sm font-semibold">
-              <div className="w-6 h-6 rounded-full bg-brand-gold/20 text-[#FADC9E] flex items-center justify-center text-xs shadow-sm ring-1 ring-brand-gold/25">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-3 text-slate-200 text-xs sm:text-sm font-semibold p-2.5 rounded-xl bg-white/[0.04] border border-white/10 backdrop-blur-xs">
+              <div className="w-6 h-6 rounded-full bg-amber-400/20 text-amber-300 flex items-center justify-center text-xs shadow-xs ring-1 ring-amber-400/30 flex-shrink-0">
                 <Check className="w-3.5 h-3.5 stroke-[2.5]" />
               </div>
-              <span>View your active posts</span>
+              <span>Manage your active lost &amp; found listings</span>
             </div>
-            <div className="flex items-center gap-3 text-slate-200 text-sm font-semibold">
-              <div className="w-6 h-6 rounded-full bg-brand-gold/20 text-[#FADC9E] flex items-center justify-center text-xs shadow-sm ring-1 ring-brand-gold/25">
+            <div className="flex items-center gap-3 text-slate-200 text-xs sm:text-sm font-semibold p-2.5 rounded-xl bg-white/[0.04] border border-white/10 backdrop-blur-xs">
+              <div className="w-6 h-6 rounded-full bg-amber-400/20 text-amber-300 flex items-center justify-center text-xs shadow-xs ring-1 ring-amber-400/30 flex-shrink-0">
                 <Check className="w-3.5 h-3.5 stroke-[2.5]" />
               </div>
-              <span>Chat with reporters &amp; finders</span>
+              <span>Chat directly with reporters &amp; claimants</span>
             </div>
-            <div className="flex items-center gap-3 text-slate-200 text-sm font-semibold">
-              <div className="w-6 h-6 rounded-full bg-brand-gold/20 text-[#FADC9E] flex items-center justify-center text-xs shadow-sm ring-1 ring-brand-gold/25">
+            <div className="flex items-center gap-3 text-slate-200 text-xs sm:text-sm font-semibold p-2.5 rounded-xl bg-white/[0.04] border border-white/10 backdrop-blur-xs">
+              <div className="w-6 h-6 rounded-full bg-amber-400/20 text-amber-300 flex items-center justify-center text-xs shadow-xs ring-1 ring-amber-400/30 flex-shrink-0">
                 <Check className="w-3.5 h-3.5 stroke-[2.5]" />
               </div>
-              <span>Get real-time notification alerts</span>
+              <span>Instant alerts &amp; match notifications</span>
             </div>
-            <div className="flex items-center gap-3 text-slate-200 text-sm font-semibold">
-              <div className="w-6 h-6 rounded-full bg-brand-gold/20 text-[#FADC9E] flex items-center justify-center text-xs shadow-sm ring-1 ring-brand-gold/25">
+            <div className="flex items-center gap-3 text-slate-200 text-xs sm:text-sm font-semibold p-2.5 rounded-xl bg-white/[0.04] border border-white/10 backdrop-blur-xs">
+              <div className="w-6 h-6 rounded-full bg-amber-400/20 text-amber-300 flex items-center justify-center text-xs shadow-xs ring-1 ring-amber-400/30 flex-shrink-0">
                 <Check className="w-3.5 h-3.5 stroke-[2.5]" />
               </div>
-              <span>Mark items as returned safely</span>
+              <span>Mark items as safely reunited</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Form panel */}
-      <div className="bg-brand-surface dark:bg-[#0c1322] flex flex-col justify-center px-4 py-8 sm:px-8 sm:py-12 md:px-16 md:py-20 lg:px-24 transition-colors duration-300">
+      <div className="bg-white dark:bg-[#0B132B] flex flex-col justify-center px-5 py-10 sm:px-10 sm:py-14 md:px-16 md:py-20 lg:px-20 transition-colors duration-300">
         <div className="max-w-md w-full mx-auto">
           {/* Error Banner */}
           {errorMsg && (
@@ -293,10 +296,10 @@ export default function SignInPage({ onLoginSuccess, onTabChange }: SignInPagePr
 
           {mode === 'login' && (
             <>
-              <h3 className="font-serif text-2xl font-bold text-brand-navy dark:text-white mb-2 tracking-tight">Sign In</h3>
-              <p className="text-sm text-brand-ink2 dark:text-slate-400 font-light mb-10">Enter your JKKNIU student or staff credentials to continue</p>
+              <h3 className="font-serif text-2xl font-bold text-slate-900 dark:text-white mb-2 tracking-tight">Sign In</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 font-light mb-8">Enter your JKKNIU student or staff credentials to continue</p>
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                 {/* Email or Student ID Input */}
                 <div className="relative group">
                   <input 
@@ -306,15 +309,15 @@ export default function SignInPage({ onLoginSuccess, onTabChange }: SignInPagePr
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder=" "
                     required
-                    className="peer w-full px-4 pt-5 pb-2 bg-brand-cream dark:bg-slate-900/90 border border-brand-border dark:border-slate-800 rounded-xl text-brand-ink dark:text-slate-100 text-sm outline-none transition-all focus:border-brand-gold focus:bg-white dark:focus:bg-slate-900 dark:focus:border-amber-400 focus:ring-4 focus:ring-brand-gold/10 dark:focus:ring-amber-400/10"
+                    className="peer w-full px-4 pt-5 pb-2 bg-slate-50 hover:bg-white dark:bg-[#111C30] dark:hover:bg-[#14223A] border border-slate-200 dark:border-slate-700/80 rounded-xl text-slate-900 dark:text-white text-sm outline-none transition-all focus:border-amber-500 focus:bg-white dark:focus:bg-[#162642] dark:focus:border-amber-400 focus:ring-4 focus:ring-amber-500/15 dark:focus:ring-amber-400/15"
                   />
                   <label 
                     htmlFor="email"
-                    className="absolute left-4 top-3.5 text-xs text-brand-ink3 dark:text-slate-400 font-bold uppercase tracking-wider transition-all pointer-events-none peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-placeholder-shown:top-4.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider peer-focus:text-brand-gold dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-wider peer-[:not(:placeholder-shown)]:text-brand-gold dark:peer-[:not(:placeholder-shown)]:text-amber-400"
+                    className="absolute left-4 top-3.5 text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider transition-all pointer-events-none peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-placeholder-shown:top-4.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider peer-focus:text-amber-600 dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-wider peer-[:not(:placeholder-shown)]:text-amber-600 dark:peer-[:not(:placeholder-shown)]:text-amber-400"
                   >
                     Email or Registration Number
                   </label>
-                  <Mail className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-brand-ink3 dark:text-slate-500 group-focus-within:text-brand-gold dark:group-focus-within:text-amber-400 transition-colors" />
+                  <Mail className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-400 dark:text-slate-500 group-focus-within:text-amber-600 dark:group-focus-within:text-amber-400 transition-colors" />
                 </div>
 
                 {/* Password Input */}
@@ -326,39 +329,39 @@ export default function SignInPage({ onLoginSuccess, onTabChange }: SignInPagePr
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder=" "
                     required
-                    className="peer w-full pl-4 pr-16 pt-5 pb-2 bg-brand-cream dark:bg-slate-900/90 border border-brand-border dark:border-slate-800 rounded-xl text-brand-ink dark:text-slate-100 text-sm outline-none transition-all focus:border-brand-gold focus:bg-white dark:focus:bg-slate-900 dark:focus:border-amber-400 focus:ring-4 focus:ring-brand-gold/10 dark:focus:ring-amber-400/10"
+                    className="peer w-full pl-4 pr-16 pt-5 pb-2 bg-slate-50 hover:bg-white dark:bg-[#111C30] dark:hover:bg-[#14223A] border border-slate-200 dark:border-slate-700/80 rounded-xl text-slate-900 dark:text-white text-sm outline-none transition-all focus:border-amber-500 focus:bg-white dark:focus:bg-[#162642] dark:focus:border-amber-400 focus:ring-4 focus:ring-amber-500/15 dark:focus:ring-amber-400/15"
                   />
                   <label 
                     htmlFor="password"
-                    className="absolute left-4 top-3.5 text-xs text-brand-ink3 dark:text-slate-400 font-bold uppercase tracking-wider transition-all pointer-events-none peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-placeholder-shown:top-4.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider peer-focus:text-brand-gold dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-wider peer-[:not(:placeholder-shown)]:text-brand-gold dark:peer-[:not(:placeholder-shown)]:text-amber-400"
+                    className="absolute left-4 top-3.5 text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider transition-all pointer-events-none peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-placeholder-shown:normal-case peer-placeholder-shown:tracking-normal peer-placeholder-shown:top-4.5 peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:font-bold peer-focus:uppercase peer-focus:tracking-wider peer-focus:text-amber-600 dark:peer-focus:text-amber-400 peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[10px] peer-[:not(:placeholder-shown)]:font-bold peer-[:not(:placeholder-shown)]:uppercase peer-[:not(:placeholder-shown)]:tracking-wider peer-[:not(:placeholder-shown)]:text-amber-600 dark:peer-[:not(:placeholder-shown)]:text-amber-400"
                   >
                     Password
                   </label>
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-11 top-1/2 -translate-y-1/2 text-brand-ink3 dark:text-slate-400 hover:text-brand-gold dark:hover:text-amber-400 transition-colors focus:outline-none cursor-pointer p-1"
+                    className="absolute right-11 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors focus:outline-none cursor-pointer p-1"
                     title={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
-                  <Lock className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-brand-ink3 dark:text-slate-500 group-focus-within:text-brand-gold dark:group-focus-within:text-amber-400 transition-colors" />
+                  <Lock className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-400 dark:text-slate-500 group-focus-within:text-amber-600 dark:group-focus-within:text-amber-400 transition-colors" />
                 </div>
 
                 {/* Remember Me & Forgot Password */}
-                <div className="flex items-center justify-between mt-2">
-                  <label className="inline-flex items-center gap-2 text-xs sm:text-sm text-brand-ink2 dark:text-slate-300 cursor-pointer font-medium select-none">
+                <div className="flex items-center justify-between mt-1">
+                  <label className="inline-flex items-center gap-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300 cursor-pointer font-medium select-none">
                     <input 
                       type="checkbox" 
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
-                      className="rounded border-brand-border dark:border-slate-700 dark:bg-slate-800 text-brand-gold focus:ring-brand-gold/20"
+                      className="rounded border-slate-300 dark:border-slate-700 dark:bg-slate-800 text-amber-500 focus:ring-amber-400/30"
                     />
                     Remember me
                   </label>
                   <button 
                     type="button" 
-                    className="text-xs sm:text-sm text-brand-navy dark:text-amber-400 hover:text-brand-gold dark:hover:text-amber-300 font-bold transition-colors cursor-pointer"
+                    className="text-xs sm:text-sm text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 font-bold transition-colors cursor-pointer"
                     onClick={() => { setMode('forgot_request'); setErrorMsg(''); setSuccessMsg(''); }}
                   >
                     Forgot password?
@@ -369,7 +372,7 @@ export default function SignInPage({ onLoginSuccess, onTabChange }: SignInPagePr
                 <button 
                   type="submit"
                   disabled={loading}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 text-slate-950 font-extrabold rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-[1.01] active:scale-[0.98] transition-all text-sm mt-4 cursor-pointer disabled:opacity-50 border border-amber-300/30"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-amber-500 via-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black rounded-xl shadow-md hover:shadow-lg shadow-amber-500/25 hover:scale-[1.01] active:scale-[0.98] transition-all text-sm mt-3 cursor-pointer disabled:opacity-50 border border-amber-300/40"
                 >
                   {loading ? (
                     <RefreshCw className="w-4 h-4 animate-spin text-slate-950" />
@@ -406,11 +409,11 @@ export default function SignInPage({ onLoginSuccess, onTabChange }: SignInPagePr
 
           {mode === 'login' && (
             <>
-              <div className="text-center text-xs sm:text-sm text-brand-ink2 dark:text-slate-400 mt-8 font-light">
+              <div className="text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-8 font-light">
                 Don't have an account?{' '}
                 <button 
                   onClick={() => onTabChange('register')}
-                  className="text-brand-gold dark:text-amber-400 hover:text-brand-gold-mid dark:hover:text-amber-300 font-bold transition-colors cursor-pointer"
+                  className="text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 font-bold transition-colors cursor-pointer"
                 >
                   Create one free
                 </button>

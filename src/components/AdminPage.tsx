@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Shield, ListCheck, Users, Trash2, BarChart3, Settings, LogOut, Check, CheckCircle2, X, Eye, FileText, Hourglass, RefreshCw, RotateCcw, TrendingUp, Bell, ShieldAlert, ClipboardList, ShieldCheck, Inbox, Mail, Phone, MapPin, Calendar, Heart, Award, Clock, Facebook, Linkedin, User, GraduationCap, Building, Info, ArrowLeft, ArrowRight, Search, AlertTriangle, CheckSquare, Square, UserX, MessageSquare } from 'lucide-react';
+import { Shield, ListCheck, Users, Trash2, BarChart3, Settings, LogOut, Check, CheckCircle2, X, Eye, FileText, Hourglass, RefreshCw, RotateCcw, TrendingUp, Bell, ShieldAlert, ClipboardList, ShieldCheck, Inbox, Mail, Phone, MapPin, Calendar, Heart, Award, Clock, Facebook, Linkedin, User, GraduationCap, Building, Info, ArrowLeft, ArrowRight, Search, AlertTriangle, CheckSquare, Square, UserX, MessageSquare, Database, Server, HardDrive, Activity, SlidersHorizontal, Layers, Radio, Sparkles, Save } from 'lucide-react';
 import { Item } from '../types';
 import { formatPostTime } from '../utils/date';
 import SearchHistoryChart from './SearchHistoryChart';
@@ -11,6 +11,7 @@ import ModeratorManagement from './ModeratorManagement';
 import ProfilePage from './ProfilePage';
 import { apiFetch, testMongoConnectivity, MongoDiagnosticResult } from '../utils/api';
 import { DEPARTMENT_GROUPS } from '../data';
+import { formatCaseId } from '../utils/caseFormat';
 
 const resolveFaculty = (user: any) => {
   if (!user) return 'Not Specified';
@@ -1147,9 +1148,9 @@ export default function AdminPage({
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] min-h-[calc(100vh-68px)]">
+    <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] min-h-[calc(100vh-68px)] bg-brand-cream dark:bg-[#070C14] transition-colors duration-300">
       {/* Sidebar Admin options */}
-      <aside className="bg-brand-navy p-6 flex flex-col hidden lg:block border-r border-brand-gold/10">
+      <aside className="bg-brand-navy dark:bg-[#090E1A] p-6 flex flex-col hidden lg:block border-r border-brand-gold/10 dark:border-slate-800/80">
         {/* Admin Card */}
         <div 
           onClick={() => setActiveSubTab('MyProfile')}
@@ -1388,19 +1389,19 @@ export default function AdminPage({
       </aside>
 
       {/* Admin Content Area */}
-      <main className="p-4 sm:p-6 md:p-10 bg-brand-cream overflow-y-auto min-w-0 flex-1">
+      <main className="p-4 sm:p-6 md:p-10 bg-brand-cream dark:bg-[#070C14] overflow-y-auto min-w-0 flex-1 transition-colors duration-300">
         <div className="mb-6 sm:mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">
-              <h2 className="font-serif text-xl sm:text-2xl md:text-2.5xl font-bold tracking-tight text-brand-navy">
+              <h2 className="font-serif text-xl sm:text-2xl md:text-2.5xl font-bold tracking-tight text-brand-navy dark:text-white">
                 {role === 'moderator' ? 'Moderator Control Panel' : 'System Administration Console'}
               </h2>
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-brand-gold/20 text-brand-gold-mid border border-brand-gold/30">
                 {role === 'moderator' ? 'Coordinator' : 'Admin'}
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-brand-ink2 font-light mt-1">
-              Campus lost &amp; found administrative overview — <span className="text-amber-700 font-bold">{pendingItems.length} items awaiting coordinator review</span>
+            <p className="text-xs sm:text-sm text-brand-ink2 dark:text-slate-400 font-light mt-1">
+              Campus lost &amp; found administrative overview — <span className="text-amber-700 dark:text-amber-400 font-bold">{pendingItems.length} items awaiting coordinator review</span>
             </p>
           </div>
           <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
@@ -1408,10 +1409,10 @@ export default function AdminPage({
               <button
                 type="button"
                 onClick={onRefresh}
-                className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-2 bg-white hover:bg-brand-cream text-brand-navy border border-brand-border rounded-xl text-xs font-bold shadow-2xs transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-2 bg-white dark:bg-[#0C1322] hover:bg-brand-cream dark:hover:bg-slate-800 text-brand-navy dark:text-white border border-brand-border dark:border-slate-800 rounded-xl text-xs font-bold shadow-2xs transition-all cursor-pointer"
                 title="Synchronize all admin data"
               >
-                <RefreshCw className="w-3.5 h-3.5 text-brand-navy" />
+                <RefreshCw className="w-3.5 h-3.5 text-brand-navy dark:text-amber-400" />
                 <span>Sync System</span>
               </button>
             )}
@@ -1427,14 +1428,14 @@ export default function AdminPage({
         </div>
 
         {/* Mobile/Responsive Sub-tabs Navigation */}
-        <div className="flex lg:hidden bg-white p-1.5 rounded-2xl mb-6 border border-brand-border shadow-xs gap-1.5 overflow-x-auto no-scrollbar touch-scroll">
+        <div className="flex lg:hidden bg-white dark:bg-[#0C1322] p-1.5 rounded-2xl mb-6 border border-brand-border dark:border-slate-800 shadow-xs gap-1.5 overflow-x-auto no-scrollbar touch-scroll">
           <button
             type="button"
             onClick={() => setActiveSubTab('MyProfile')}
             className={`flex-shrink-0 whitespace-nowrap flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeSubTab === 'MyProfile'
                 ? 'bg-brand-navy text-white shadow-xs'
-                : 'text-slate-600 hover:text-brand-navy hover:bg-slate-100'
+                : 'text-slate-600 dark:text-slate-300 hover:text-brand-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
             <User className={`w-3.5 h-3.5 ${activeSubTab === 'MyProfile' ? 'text-brand-gold' : ''}`} />
@@ -1446,7 +1447,7 @@ export default function AdminPage({
             className={`flex-shrink-0 whitespace-nowrap flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeSubTab === 'Overview'
                 ? 'bg-brand-navy text-white shadow-xs'
-                : 'text-slate-600 hover:text-brand-navy hover:bg-slate-100'
+                : 'text-slate-600 dark:text-slate-300 hover:text-brand-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
             <BarChart3 className={`w-3.5 h-3.5 ${activeSubTab === 'Overview' ? 'text-brand-gold' : ''}`} />
@@ -1457,11 +1458,11 @@ export default function AdminPage({
             onClick={() => setActiveSubTab('Analytics')}
             className={`flex-shrink-0 whitespace-nowrap flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               activeSubTab === 'Analytics'
-                ? 'bg-brand-navy text-white shadow-xs'
-                : 'text-slate-600 hover:text-brand-navy hover:bg-slate-100'
+                ? 'bg-brand-navy dark:bg-amber-500 text-white dark:text-slate-950 shadow-xs'
+                : 'text-slate-600 dark:text-slate-300 hover:text-brand-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
-            <TrendingUp className={`w-3.5 h-3.5 ${activeSubTab === 'Analytics' ? 'text-brand-gold' : ''}`} />
+            <TrendingUp className={`w-3.5 h-3.5 ${activeSubTab === 'Analytics' ? 'text-brand-gold dark:text-slate-950' : ''}`} />
             Analytics
           </button>
           <button
@@ -1469,11 +1470,11 @@ export default function AdminPage({
             onClick={() => setActiveSubTab('Pending')}
             className={`flex-shrink-0 whitespace-nowrap flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer relative ${
               activeSubTab === 'Pending'
-                ? 'bg-brand-navy text-white shadow-xs'
-                : 'text-slate-600 hover:text-brand-navy hover:bg-slate-100'
+                ? 'bg-brand-navy dark:bg-amber-500 text-white dark:text-slate-950 shadow-xs'
+                : 'text-slate-600 dark:text-slate-300 hover:text-brand-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
-            <ListCheck className={`w-3.5 h-3.5 ${activeSubTab === 'Pending' ? 'text-brand-gold' : ''}`} />
+            <ListCheck className={`w-3.5 h-3.5 ${activeSubTab === 'Pending' ? 'text-brand-gold dark:text-slate-950' : ''}`} />
             Item Management ({allItems.filter(i => !i.isDeleted && i.status !== 'deleted').length})
             {pendingItems.length > 0 && (
               <span className="ml-1 px-1.5 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-bold animate-pulse">
@@ -1486,11 +1487,11 @@ export default function AdminPage({
             onClick={() => setActiveSubTab('Users')}
             className={`flex-shrink-0 whitespace-nowrap flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer relative ${
               activeSubTab === 'Users'
-                ? 'bg-brand-navy text-brand-gold shadow-xs border border-brand-gold/30'
-                : 'text-slate-600 hover:text-brand-navy hover:bg-brand-cream/60 border border-transparent'
+                ? 'bg-brand-navy dark:bg-amber-500 text-white dark:text-slate-950 shadow-xs'
+                : 'text-slate-600 dark:text-slate-300 hover:text-brand-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
-            <Users className={`w-3.5 h-3.5 ${activeSubTab === 'Users' ? 'text-brand-gold' : ''}`} />
+            <Users className={`w-3.5 h-3.5 ${activeSubTab === 'Users' ? 'text-brand-gold dark:text-slate-950' : ''}`} />
             Users
           </button>
           <button
@@ -1498,11 +1499,11 @@ export default function AdminPage({
             onClick={() => setActiveSubTab('Reports')}
             className={`flex-shrink-0 whitespace-nowrap flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer relative ${
               activeSubTab === 'Reports'
-                ? 'bg-brand-navy text-brand-gold shadow-xs border border-brand-gold/30'
-                : 'text-slate-600 hover:text-brand-navy hover:bg-brand-cream/60 border border-transparent'
+                ? 'bg-brand-navy dark:bg-amber-500 text-white dark:text-slate-950 shadow-xs'
+                : 'text-slate-600 dark:text-slate-300 hover:text-brand-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
-            <Trash2 className={`w-3.5 h-3.5 ${activeSubTab === 'Reports' ? 'text-brand-gold' : ''}`} />
+            <Trash2 className={`w-3.5 h-3.5 ${activeSubTab === 'Reports' ? 'text-brand-gold dark:text-slate-950' : ''}`} />
             Reports
             {pendingReportsCount > 0 && (
               <span className="ml-1 px-1.5 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-bold">
@@ -1515,8 +1516,8 @@ export default function AdminPage({
             onClick={() => setActiveSubTab('Deleted')}
             className={`flex-shrink-0 whitespace-nowrap flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer relative ${
               activeSubTab === 'Deleted'
-                ? 'bg-brand-navy text-brand-gold shadow-xs border border-brand-gold/30'
-                : 'text-slate-600 hover:text-brand-navy hover:bg-brand-cream/60 border border-transparent'
+                ? 'bg-brand-navy dark:bg-amber-500 text-white dark:text-slate-950 shadow-xs'
+                : 'text-slate-600 dark:text-slate-300 hover:text-brand-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
             <Trash2 className="w-3.5 h-3.5 text-rose-500" />
@@ -1527,11 +1528,11 @@ export default function AdminPage({
             onClick={() => setActiveSubTab('AdminNotifications')}
             className={`flex-shrink-0 whitespace-nowrap flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer relative ${
               activeSubTab === 'AdminNotifications'
-                ? 'bg-brand-navy text-brand-gold shadow-xs border border-brand-gold/30'
-                : 'text-slate-600 hover:text-brand-navy hover:bg-brand-cream/60 border border-transparent'
+                ? 'bg-brand-navy dark:bg-amber-500 text-white dark:text-slate-950 shadow-xs'
+                : 'text-slate-600 dark:text-slate-300 hover:text-brand-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
-            <Bell className={`w-3.5 h-3.5 ${activeSubTab === 'AdminNotifications' ? 'text-brand-gold' : ''}`} />
+            <Bell className={`w-3.5 h-3.5 ${activeSubTab === 'AdminNotifications' ? 'text-brand-gold dark:text-slate-950' : ''}`} />
             Notifications
             {unreadAdminNotifsCount > 0 && (
               <span className="ml-1 px-1.5 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-bold animate-pulse">
@@ -1544,11 +1545,11 @@ export default function AdminPage({
             onClick={() => setActiveSubTab('ChatsModeration')}
             className={`flex-shrink-0 whitespace-nowrap flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer relative ${
               activeSubTab === 'ChatsModeration'
-                ? 'bg-brand-navy text-brand-gold shadow-xs border border-brand-gold/30'
-                : 'text-slate-600 hover:text-brand-navy hover:bg-brand-cream/60 border border-transparent'
+                ? 'bg-brand-navy dark:bg-amber-500 text-white dark:text-slate-950 shadow-xs'
+                : 'text-slate-600 dark:text-slate-300 hover:text-brand-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
-            <ShieldAlert className={`w-3.5 h-3.5 ${activeSubTab === 'ChatsModeration' ? 'text-brand-gold' : ''}`} />
+            <ShieldAlert className={`w-3.5 h-3.5 ${activeSubTab === 'ChatsModeration' ? 'text-brand-gold dark:text-slate-950' : ''}`} />
             Conversation Review
             {pendingReportsCount > 0 && (
               <span className="ml-1 px-1.5 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-bold animate-pulse">
@@ -1561,11 +1562,11 @@ export default function AdminPage({
             onClick={() => setActiveSubTab('ActivityLogs')}
             className={`flex-shrink-0 whitespace-nowrap flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer relative ${
               activeSubTab === 'ActivityLogs'
-                ? 'bg-brand-navy text-brand-gold shadow-xs border border-brand-gold/30'
-                : 'text-slate-600 hover:text-brand-navy hover:bg-brand-cream/60 border border-transparent'
+                ? 'bg-brand-navy dark:bg-amber-500 text-white dark:text-slate-950 shadow-xs'
+                : 'text-slate-600 dark:text-slate-300 hover:text-brand-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
-            <ClipboardList className={`w-3.5 h-3.5 ${activeSubTab === 'ActivityLogs' ? 'text-brand-gold' : ''}`} />
+            <ClipboardList className={`w-3.5 h-3.5 ${activeSubTab === 'ActivityLogs' ? 'text-brand-gold dark:text-slate-950' : ''}`} />
             Audit Logs
           </button>
           <button
@@ -1573,11 +1574,11 @@ export default function AdminPage({
             onClick={() => setActiveSubTab('Verifications')}
             className={`flex-shrink-0 whitespace-nowrap flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer relative ${
               activeSubTab === 'Verifications'
-                ? 'bg-brand-navy text-brand-gold shadow-xs border border-brand-gold/30'
-                : 'text-slate-600 hover:text-brand-navy hover:bg-brand-cream/60 border border-transparent'
+                ? 'bg-brand-navy dark:bg-amber-500 text-white dark:text-slate-950 shadow-xs'
+                : 'text-slate-600 dark:text-slate-300 hover:text-brand-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
-            <ShieldCheck className={`w-3.5 h-3.5 ${activeSubTab === 'Verifications' ? 'text-brand-gold' : ''}`} />
+            <ShieldCheck className={`w-3.5 h-3.5 ${activeSubTab === 'Verifications' ? 'text-brand-gold dark:text-slate-950' : ''}`} />
             Verifications
             {actualPendingCount > 0 && (
               <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-600 animate-pulse"></span>
@@ -1590,11 +1591,11 @@ export default function AdminPage({
                 onClick={() => setActiveSubTab('ModeratorManagement')}
                 className={`flex-shrink-0 whitespace-nowrap flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer relative ${
                   activeSubTab === 'ModeratorManagement'
-                    ? 'bg-brand-navy text-brand-gold shadow-xs border border-brand-gold/30'
-                    : 'text-slate-600 hover:text-brand-navy hover:bg-brand-cream/60 border border-transparent'
+                    ? 'bg-brand-navy dark:bg-amber-500 text-white dark:text-slate-950 shadow-xs'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-brand-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
-                <ShieldCheck className={`w-3.5 h-3.5 ${activeSubTab === 'ModeratorManagement' ? 'text-brand-gold' : ''}`} />
+                <ShieldCheck className={`w-3.5 h-3.5 ${activeSubTab === 'ModeratorManagement' ? 'text-brand-gold dark:text-slate-950' : ''}`} />
                 Moderators
               </button>
               <button
@@ -1602,12 +1603,12 @@ export default function AdminPage({
                 onClick={() => setActiveSubTab('AdminPanel')}
                 className={`flex-shrink-0 whitespace-nowrap flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer relative ${
                   activeSubTab === 'AdminPanel'
-                    ? 'bg-brand-navy text-brand-gold shadow-xs border border-brand-gold/30'
-                    : 'text-slate-600 hover:text-brand-navy hover:bg-brand-cream/60 border border-transparent'
+                    ? 'bg-brand-navy dark:bg-amber-500 text-white dark:text-slate-950 shadow-xs'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-brand-navy dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
-                <Settings className={`w-3.5 h-3.5 ${activeSubTab === 'AdminPanel' ? 'text-brand-gold' : ''}`} />
-                Admin Panel
+                <Settings className={`w-3.5 h-3.5 ${activeSubTab === 'AdminPanel' ? 'text-brand-gold dark:text-slate-950' : ''}`} />
+                Settings &amp; Database
               </button>
             </>
           )}
@@ -1622,25 +1623,25 @@ export default function AdminPage({
                 tabIndex={0}
                 onClick={() => setActiveSubTab('Users')}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveSubTab('Users'); } }}
-                className="bg-white border border-brand-border p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer hover:border-brand-navy/30 group active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-brand-gold"
+                className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer hover:border-brand-navy/30 dark:hover:border-slate-700 group active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-brand-gold"
                 title="Click to view User Registry"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-brand-cream border border-brand-border text-brand-navy flex items-center justify-center group-hover:bg-brand-navy group-hover:text-white transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-brand-cream dark:bg-slate-800 border border-brand-border dark:border-slate-700 text-brand-navy dark:text-amber-400 flex items-center justify-center group-hover:bg-brand-navy group-hover:text-white dark:group-hover:bg-amber-400 dark:group-hover:text-slate-950 transition-colors">
                     <Users className="w-5 h-5" />
                   </div>
                   <span className="text-[10px] font-bold text-brand-gold-mid uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
                     View Registry &rarr;
                   </span>
                 </div>
-                <div className="font-serif text-3xl font-black text-brand-navy tracking-tight">
+                <div className="font-serif text-3xl font-black text-brand-navy dark:text-white tracking-tight">
                   {loadingStats ? <span className="text-sm font-sans font-medium text-slate-400">Loading...</span> : (stats?.totalUsers ?? '0')}
                 </div>
-                <p className="text-xs text-brand-ink2 font-bold uppercase tracking-wider mt-1.5 flex items-center justify-between">
+                <p className="text-xs text-brand-ink2 dark:text-slate-400 font-bold uppercase tracking-wider mt-1.5 flex items-center justify-between">
                   <span>Total Users</span>
                 </p>
                 {stats?.totalStaff !== undefined && (
-                  <p className="text-[11px] font-medium text-slate-500 mt-1">
+                  <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">
                     {stats.totalStudents || 0} Students · {stats.totalStaff || 0} Staff
                   </p>
                 )}
@@ -1651,24 +1652,24 @@ export default function AdminPage({
                 tabIndex={0}
                 onClick={() => setActiveSubTab('Analytics')}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveSubTab('Analytics'); } }}
-                className="bg-white border border-brand-border p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer hover:border-amber-400/60 group active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer hover:border-amber-400/60 dark:hover:border-amber-500/50 group active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-amber-500"
                 title="Click to view Posts Analytics"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-700 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-900/50 text-amber-700 dark:text-amber-400 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white dark:group-hover:bg-amber-400 dark:group-hover:text-slate-950 transition-colors">
                     <FileText className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-bold text-amber-600 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
+                  <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
                     Analytics &rarr;
                   </span>
                 </div>
-                <div className="font-serif text-3xl font-black text-amber-700 tracking-tight transition-colors">
+                <div className="font-serif text-3xl font-black text-amber-700 dark:text-amber-400 tracking-tight transition-colors">
                   {loadingStats ? <span className="text-sm font-sans font-medium text-slate-400">Loading...</span> : (stats?.totalItems ?? '0')}
                 </div>
-                <p className="text-xs text-brand-ink2 font-bold uppercase tracking-wider mt-1.5">
+                <p className="text-xs text-brand-ink2 dark:text-slate-400 font-bold uppercase tracking-wider mt-1.5">
                   Total Posts
                 </p>
-                <p className="text-[11px] font-medium text-slate-500 mt-1">
+                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">
                   Active listings &amp; archived
                 </p>
               </div>
@@ -1678,24 +1679,24 @@ export default function AdminPage({
                 tabIndex={0}
                 onClick={() => setActiveSubTab('Pending')}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveSubTab('Pending'); } }}
-                className="bg-white border border-brand-border p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer hover:border-rose-400/60 group active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer hover:border-rose-400/60 dark:hover:border-rose-500/50 group active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-rose-500"
                 title="Click to review Pending Approvals"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-rose-50 border border-rose-200/80 text-rose-700 flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200/80 dark:border-rose-900/50 text-rose-700 dark:text-rose-400 flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition-colors">
                     <Hourglass className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-bold text-rose-600 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
+                  <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
                     Review &rarr;
                   </span>
                 </div>
-                <div className="font-serif text-3xl font-black text-rose-600 tracking-tight transition-colors">
+                <div className="font-serif text-3xl font-black text-rose-600 dark:text-rose-400 tracking-tight transition-colors">
                   {pendingItems.length}
                 </div>
-                <p className="text-xs text-brand-ink2 font-bold uppercase tracking-wider mt-1.5">
+                <p className="text-xs text-brand-ink2 dark:text-slate-400 font-bold uppercase tracking-wider mt-1.5">
                   Pending Approval
                 </p>
-                <p className="text-[11px] font-medium text-rose-600/90 mt-1 font-semibold">
+                <p className="text-[11px] font-medium text-rose-600/90 dark:text-rose-400/90 mt-1 font-semibold">
                   Awaiting coordinator verification
                 </p>
               </div>
@@ -1705,24 +1706,24 @@ export default function AdminPage({
                 tabIndex={0}
                 onClick={() => setActiveSubTab('Analytics')}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveSubTab('Analytics'); } }}
-                className="bg-white border border-brand-border p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer hover:border-emerald-400/60 group active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer hover:border-emerald-400/60 dark:hover:border-emerald-500/50 group active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 title="Click to view Reunited & Returned Analytics"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200/80 text-emerald-700 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-900/50 text-emerald-700 dark:text-emerald-400 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">
                     <Check className="w-5 h-5 stroke-[2.5]" />
                   </div>
-                  <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
+                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
                     Stats &rarr;
                   </span>
                 </div>
-                <div className="font-serif text-3xl font-black text-emerald-700 tracking-tight transition-colors">
+                <div className="font-serif text-3xl font-black text-emerald-700 dark:text-emerald-400 tracking-tight transition-colors">
                   {loadingStats ? <span className="text-sm font-sans font-medium text-slate-400">Loading...</span> : (stats?.returnedItems ?? '0')}
                 </div>
-                <p className="text-xs text-brand-ink2 font-bold uppercase tracking-wider mt-1.5">
+                <p className="text-xs text-brand-ink2 dark:text-slate-400 font-bold uppercase tracking-wider mt-1.5">
                   Returned Items
                 </p>
-                <p className="text-[11px] font-medium text-slate-500 mt-1">
+                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">
                   Successfully matched &amp; returned
                 </p>
               </div>
@@ -1735,25 +1736,25 @@ export default function AdminPage({
                 tabIndex={0}
                 onClick={() => setActiveSubTab('Users')}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveSubTab('Users'); } }}
-                className="bg-white border border-brand-border p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer hover:border-teal-400/60 group active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer hover:border-teal-400/60 dark:hover:border-teal-500/50 group active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-teal-500"
                 title="Click to view Active Users in User Registry"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-teal-50 border border-teal-200/80 text-teal-700 flex items-center justify-center group-hover:bg-teal-600 group-hover:text-white transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950/40 border border-teal-200/80 dark:border-teal-900/50 text-teal-700 dark:text-teal-400 flex items-center justify-center group-hover:bg-teal-600 group-hover:text-white transition-colors">
                     <TrendingUp className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-bold text-teal-600 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
+                  <span className="text-[10px] font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
                     View &rarr;
                   </span>
                 </div>
-                <div className="font-serif text-3xl font-black text-teal-700 tracking-tight transition-colors">
+                <div className="font-serif text-3xl font-black text-teal-700 dark:text-teal-400 tracking-tight transition-colors">
                   {loadingStats ? <span className="text-sm font-sans font-medium text-slate-400">Loading...</span> : (stats?.activeUsers ?? '0')}
                 </div>
-                <p className="text-xs text-brand-ink2 font-bold uppercase tracking-wider mt-1.5">
+                <p className="text-xs text-brand-ink2 dark:text-slate-400 font-bold uppercase tracking-wider mt-1.5">
                   Active Users
                 </p>
                 {stats?.activeStudents !== undefined && (
-                  <p className="text-[11px] font-medium text-teal-700/80 mt-1">
+                  <p className="text-[11px] font-medium text-teal-700/80 dark:text-teal-400/80 mt-1">
                     {stats.activeStudents || 0} Active Students
                   </p>
                 )}
@@ -1764,24 +1765,24 @@ export default function AdminPage({
                 tabIndex={0}
                 onClick={() => setActiveSubTab('Users')}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveSubTab('Users'); } }}
-                className="bg-white border border-brand-border p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer hover:border-amber-400/60 group active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer hover:border-amber-400/60 dark:hover:border-amber-500/50 group active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-amber-500"
                 title="Click to view Suspended Users in User Registry"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-700 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-900/50 text-amber-700 dark:text-amber-400 flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition-colors">
                     <ShieldAlert className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-bold text-amber-700 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
+                  <span className="text-[10px] font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
                     View &rarr;
                   </span>
                 </div>
-                <div className="font-serif text-3xl font-black text-amber-700 tracking-tight transition-colors">
+                <div className="font-serif text-3xl font-black text-amber-700 dark:text-amber-400 tracking-tight transition-colors">
                   {loadingStats ? <span className="text-sm font-sans font-medium text-slate-400">Loading...</span> : (stats?.suspendedUsers ?? '0')}
                 </div>
-                <p className="text-xs text-brand-ink2 font-bold uppercase tracking-wider mt-1.5">
+                <p className="text-xs text-brand-ink2 dark:text-slate-400 font-bold uppercase tracking-wider mt-1.5">
                   Suspended Users
                 </p>
-                <p className="text-[11px] font-medium text-slate-500 mt-1">
+                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">
                   Access restricted accounts
                 </p>
               </div>
@@ -1791,24 +1792,24 @@ export default function AdminPage({
                 tabIndex={0}
                 onClick={() => setActiveSubTab('Deleted')}
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveSubTab('Deleted'); } }}
-                className="bg-white border border-brand-border p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer hover:border-rose-400/60 group active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="bg-white dark:bg-[#0C1322] border border-brand-border dark:border-slate-800 p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-200 cursor-pointer hover:border-rose-400/60 dark:hover:border-rose-500/50 group active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-rose-500"
                 title="Click to view Deleted Listings archive"
               >
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-rose-50 border border-rose-200/80 text-rose-700 flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200/80 dark:border-rose-900/50 text-rose-700 dark:text-rose-400 flex items-center justify-center group-hover:bg-rose-600 group-hover:text-white transition-colors">
                     <Trash2 className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-bold text-rose-600 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
+                  <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5">
                     Archive &rarr;
                   </span>
                 </div>
-                <div className="font-serif text-3xl font-black text-rose-600 tracking-tight transition-colors">
+                <div className="font-serif text-3xl font-black text-rose-600 dark:text-rose-400 tracking-tight transition-colors">
                   {loadingStats ? <span className="text-sm font-sans font-medium text-slate-400">Loading...</span> : (stats?.deletedListings ?? '0')}
                 </div>
-                <p className="text-xs text-brand-ink2 font-bold uppercase tracking-wider mt-1.5">
+                <p className="text-xs text-brand-ink2 dark:text-slate-400 font-bold uppercase tracking-wider mt-1.5">
                   Deleted Listings
                 </p>
-                <p className="text-[11px] font-medium text-slate-500 mt-1">
+                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 mt-1">
                   Archived removal history
                 </p>
               </div>
@@ -3839,8 +3840,8 @@ export default function AdminPage({
                     {reports.map((report: any) => (
                       <tr key={report.reportId} className="hover:bg-brand-cream/30 transition-colors">
                         <td className="p-3.5 font-mono text-xs text-brand-navy font-bold">
-                          <span className="bg-brand-cream px-2 py-0.5 rounded border border-brand-border">
-                            REP-{report.reportId}
+                          <span className="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md border border-slate-200 font-mono text-[11px]">
+                            {formatCaseId(report.reportId)}
                           </span>
                         </td>
                         <td className="p-3.5">
@@ -4165,180 +4166,402 @@ export default function AdminPage({
               </p>
             </div>
           ) : (
-            <div className="bg-white border border-brand-border rounded-2xl shadow-sm p-6 sm:p-8 animate-in fade-in duration-200 max-w-3xl">
-              <h3 className="font-serif text-lg font-bold text-brand-navy mb-4 flex items-center gap-2 pb-3 border-b border-brand-border/40">
-                <Settings className="w-5 h-5 text-brand-gold" />
-                Coordinator Admin Panel Settings
-              </h3>
+            <div className="space-y-6 max-w-5xl animate-in fade-in duration-200">
+              {/* Header Card */}
+              <div className="bg-white border border-brand-border rounded-2xl p-5 sm:p-7 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-11 h-11 rounded-xl bg-brand-navy text-brand-gold flex items-center justify-center shrink-0 shadow-sm border border-brand-gold/20">
+                      <SlidersHorizontal className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2.5 flex-wrap">
+                        <h3 className="font-serif text-lg sm:text-xl font-bold text-brand-navy">
+                          Platform Administration &amp; Engine Settings
+                        </h3>
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-brand-gold/20 text-brand-gold-mid border border-brand-gold/30">
+                          <ShieldCheck className="w-3 h-3" />
+                          Master Controls
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm text-brand-ink2 font-light mt-0.5">
+                        Manage automated moderation queues, safety heuristics, storage quotas, and MongoDB cluster diagnostics.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 self-start sm:self-center">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-brand-cream/60 text-slate-700 border border-brand-border/60 shadow-2xs">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                      System Live
+                    </span>
+                  </div>
+                </div>
+              </div>
 
               {loadingSettings ? (
-                <div className="flex flex-col items-center justify-center py-12">
-                  <RefreshCw className="w-8 h-8 text-brand-gold animate-spin mb-2" />
-                  <p className="text-xs text-brand-ink3">Loading system settings...</p>
+                <div className="bg-white border border-brand-border rounded-2xl p-12 text-center shadow-xs">
+                  <RefreshCw className="w-8 h-8 text-brand-gold animate-spin mb-3 mx-auto" />
+                  <p className="text-xs font-bold text-brand-navy">Loading platform settings...</p>
+                  <p className="text-[11px] text-brand-ink3 mt-0.5">Synchronizing environment state</p>
                 </div>
               ) : (
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="text-xs font-black uppercase text-brand-ink3 tracking-widest mb-3">Moderation Automation</h4>
-                    <div className="space-y-3.5">
-                      <label className="flex items-center justify-between p-4 bg-brand-cream/40 border border-brand-border/20 rounded-xl cursor-pointer hover:bg-brand-cream/80 transition-all">
-                        <div>
-                          <span className="block text-sm font-bold text-brand-navy">Auto-Approve Community Member Posts</span>
-                          <span className="block text-xs text-brand-ink2 mt-0.5">Posts from verified users with verified email addresses bypassing coordinator waiting queue</span>
+                <>
+                  {/* Top 2-Column Grid */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Card 1: Moderation Automation */}
+                    <div className="bg-white border border-brand-border rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+                      <div>
+                        <div className="flex items-center justify-between pb-3.5 border-b border-brand-border/30 mb-4">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-700 flex items-center justify-center">
+                              <ShieldAlert className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <h4 className="text-xs font-black uppercase text-brand-navy tracking-wider">Moderation Automation</h4>
+                              <p className="text-[11px] text-brand-ink3">Algorithmic and rule-based posting policies</p>
+                            </div>
+                          </div>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-brand-cream text-brand-ink2 border border-brand-border/40">
+                            2 Rules Active
+                          </span>
                         </div>
-                        <input 
-                          type="checkbox" 
-                          checked={autoApprovePosts}
-                          onChange={(e) => setAutoApprovePosts(e.target.checked)}
-                          className="rounded border-brand-border text-brand-gold focus:ring-brand-gold/20 cursor-pointer" 
-                        />
-                      </label>
 
-                      <label className="flex items-center justify-between p-4 bg-brand-cream/40 border border-brand-border/20 rounded-xl cursor-pointer hover:bg-brand-cream/80 transition-all">
-                        <div>
-                          <span className="block text-sm font-bold text-brand-navy">Automatic Spam Content Filtering</span>
-                          <span className="block text-xs text-brand-ink2 mt-0.5">Scrapes for phone, email, and profanity flags inside item titles and descriptions</span>
+                        <div className="space-y-3.5">
+                          {/* Toggle 1: Auto-Approve */}
+                          <div 
+                            onClick={() => setAutoApprovePosts(!autoApprovePosts)}
+                            className={`p-4 rounded-xl border transition-all cursor-pointer select-none flex items-start justify-between gap-4 ${
+                              autoApprovePosts 
+                                ? 'bg-amber-500/5 border-amber-500/30' 
+                                : 'bg-brand-cream/30 border-brand-border/30 hover:bg-brand-cream/60'
+                            }`}
+                          >
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-bold text-brand-navy">Auto-Approve Verified Member Posts</span>
+                                <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${
+                                  autoApprovePosts 
+                                    ? 'bg-emerald-100 text-emerald-800' 
+                                    : 'bg-slate-200 text-slate-700'
+                                }`}>
+                                  {autoApprovePosts ? 'Instant Publish' : 'Queued for Review'}
+                                </span>
+                              </div>
+                              <p className="text-xs text-brand-ink2 font-light leading-relaxed">
+                                Posts submitted by ID-verified student profiles bypass coordinator approval and publish live immediately.
+                              </p>
+                            </div>
+                            <button
+                              type="button"
+                              role="switch"
+                              aria-checked={autoApprovePosts}
+                              onClick={(e) => { e.stopPropagation(); setAutoApprovePosts(!autoApprovePosts); }}
+                              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 ${
+                                autoApprovePosts ? 'bg-brand-navy' : 'bg-slate-300'
+                              }`}
+                            >
+                              <span
+                                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                                  autoApprovePosts ? 'translate-x-5' : 'translate-x-0'
+                                }`}
+                              />
+                            </button>
+                          </div>
+
+                          {/* Toggle 2: Spam Content Filter */}
+                          <div 
+                            onClick={() => setAutoSpamFilter(!autoSpamFilter)}
+                            className={`p-4 rounded-xl border transition-all cursor-pointer select-none flex items-start justify-between gap-4 ${
+                              autoSpamFilter 
+                                ? 'bg-amber-500/5 border-amber-500/30' 
+                                : 'bg-brand-cream/30 border-brand-border/30 hover:bg-brand-cream/60'
+                            }`}
+                          >
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-bold text-brand-navy">Automatic Spam Content Filtering</span>
+                                <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full ${
+                                  autoSpamFilter 
+                                    ? 'bg-emerald-100 text-emerald-800' 
+                                    : 'bg-slate-200 text-slate-700'
+                                }`}>
+                                  {autoSpamFilter ? 'AI Protected' : 'Disabled'}
+                                </span>
+                              </div>
+                              <p className="text-xs text-brand-ink2 font-light leading-relaxed">
+                                Scans item titles, descriptions, and chats for prohibited content, unauthorized ads, and spam phone patterns.
+                              </p>
+                            </div>
+                            <button
+                              type="button"
+                              role="switch"
+                              aria-checked={autoSpamFilter}
+                              onClick={(e) => { e.stopPropagation(); setAutoSpamFilter(!autoSpamFilter); }}
+                              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 ${
+                                autoSpamFilter ? 'bg-brand-navy' : 'bg-slate-300'
+                              }`}
+                            >
+                              <span
+                                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                                  autoSpamFilter ? 'translate-x-5' : 'translate-x-0'
+                                }`}
+                              />
+                            </button>
+                          </div>
                         </div>
-                        <input 
-                          type="checkbox" 
-                          checked={autoSpamFilter}
-                          onChange={(e) => setAutoSpamFilter(e.target.checked)}
-                          className="rounded border-brand-border text-brand-gold focus:ring-brand-gold/20 cursor-pointer" 
-                        />
-                      </label>
+                      </div>
+                    </div>
+
+                    {/* Card 2: System & Storage Thresholds */}
+                    <div className="bg-white border border-brand-border rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow">
+                      <div>
+                        <div className="flex items-center justify-between pb-3.5 border-b border-brand-border/30 mb-4">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-700 flex items-center justify-center">
+                              <HardDrive className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <h4 className="text-xs font-black uppercase text-brand-navy tracking-wider">Storage &amp; Lifecycle Thresholds</h4>
+                              <p className="text-[11px] text-brand-ink3">Image quotas and automatic archival cycles</p>
+                            </div>
+                          </div>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-brand-cream text-brand-ink2 border border-brand-border/40">
+                            Enforced
+                          </span>
+                        </div>
+
+                        <div className="space-y-4">
+                          {/* Select 1: Max Image Size */}
+                          <div className="p-3.5 bg-brand-cream/30 border border-brand-border/30 rounded-xl space-y-2">
+                            <div className="flex items-center justify-between">
+                              <label className="text-xs font-bold text-brand-navy flex items-center gap-1.5">
+                                <HardDrive className="w-3.5 h-3.5 text-brand-gold" />
+                                Maximum Image Upload Limit
+                              </label>
+                              <span className="text-[10px] text-brand-ink3">Per Photo</span>
+                            </div>
+                            <div className="relative">
+                              <select
+                                value={maxImageSize}
+                                onChange={(e) => setMaxImageSize(e.target.value)}
+                                className="w-full pl-3.5 pr-8 py-2.5 bg-white border border-brand-border rounded-xl text-xs font-bold text-brand-navy outline-none focus:ring-2 focus:ring-brand-gold/30 cursor-pointer shadow-2xs"
+                              >
+                                <option value="5 MB per image">5 MB per image (Recommended for high speed)</option>
+                                <option value="10 MB per image">10 MB per image (High quality)</option>
+                                <option value="Unlimited">Unlimited (Uncompressed Original)</option>
+                              </select>
+                            </div>
+                            <p className="text-[11px] text-brand-ink3 font-light">
+                              Higher limits require more bandwidth during CDN image compression and mobile preview rendering.
+                            </p>
+                          </div>
+
+                          {/* Select 2: Auto Archive Duration */}
+                          <div className="p-3.5 bg-brand-cream/30 border border-brand-border/30 rounded-xl space-y-2">
+                            <div className="flex items-center justify-between">
+                              <label className="text-xs font-bold text-brand-navy flex items-center gap-1.5">
+                                <Clock className="w-3.5 h-3.5 text-brand-gold" />
+                                Auto-Archive Inactive Duration
+                              </label>
+                              <span className="text-[10px] text-brand-ink3">Lifecycle</span>
+                            </div>
+                            <div className="relative">
+                              <select
+                                value={archiveDuration}
+                                onChange={(e) => setArchiveDuration(e.target.value)}
+                                className="w-full pl-3.5 pr-8 py-2.5 bg-white border border-brand-border rounded-xl text-xs font-bold text-brand-navy outline-none focus:ring-2 focus:ring-brand-gold/30 cursor-pointer shadow-2xs"
+                              >
+                                <option value="30 Days Active">30 Days Active (Campus Standard)</option>
+                                <option value="60 Days Active">60 Days Active (Extended Semester)</option>
+                                <option value="90 Days Active">90 Days Active (Full Academic Term)</option>
+                              </select>
+                            </div>
+                            <p className="text-[11px] text-brand-ink3 font-light">
+                              Items past this duration are automatically moved to historical logs while remaining searchable by staff.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-brand-border/40">
-                    <h4 className="text-xs font-black uppercase text-brand-ink3 tracking-widest mb-3">System Thresholds</h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-brand-navy">
-                      <div>
-                        <label className="block font-bold mb-1.5">Max Image Upload Limit</label>
-                        <select 
-                          value={maxImageSize}
-                          onChange={(e) => setMaxImageSize(e.target.value)}
-                          className="w-full p-2.5 bg-brand-cream border border-brand-border rounded-lg outline-none font-medium cursor-pointer"
-                        >
-                          <option value="5 MB per image">5 MB per image</option>
-                          <option value="10 MB per image">10 MB per image</option>
-                          <option value="Unlimited">Unlimited</option>
-                        </select>
+                  {/* Card 3: Full-Width MongoDB Diagnostics */}
+                  <div className="bg-white border border-brand-border rounded-2xl p-5 sm:p-7 shadow-xs hover:shadow-md transition-shadow">
+                    {/* Diagnostic Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-brand-border/40">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center shrink-0">
+                          <Database className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-bold text-brand-navy flex items-center gap-2">
+                            MongoDB Cluster Telemetry &amp; Diagnostics
+                          </h4>
+                          <p className="text-xs text-brand-ink2 font-light">
+                            Real-time cluster connectivity verification of <code className="text-[11px] font-mono bg-brand-cream px-1.5 py-0.5 rounded text-brand-navy font-semibold">process.env.MONGODB_URI</code>
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <label className="block font-bold mb-1.5">Auto-Archive After Duration</label>
-                        <select 
-                          value={archiveDuration}
-                          onChange={(e) => setArchiveDuration(e.target.value)}
-                          className="w-full p-2.5 bg-brand-cream border border-brand-border rounded-lg outline-none font-medium cursor-pointer"
+
+                      <div className="flex items-center gap-2.5 self-start sm:self-center">
+                        {checkingMongo ? (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                            Testing Connectivity...
+                          </span>
+                        ) : mongoStatus?.connected ? (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                            Connected &amp; Operational
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                            <span className="w-2 h-2 rounded-full bg-rose-500"></span>
+                            Disconnected (JSON Failover)
+                          </span>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={handleCheckMongoStatus}
+                          disabled={checkingMongo}
+                          className="px-3.5 py-1.5 bg-brand-navy hover:bg-brand-navy/90 text-brand-gold hover:text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
                         >
-                          <option value="30 Days Active">30 Days Active</option>
-                          <option value="60 Days Active">60 Days Active</option>
-                          <option value="90 Days Active">90 Days Active</option>
-                        </select>
+                          <RefreshCw className={`w-3.5 h-3.5 ${checkingMongo ? 'animate-spin' : ''}`} />
+                          <span>{checkingMongo ? 'Diagnosing...' : 'Check Cluster'}</span>
+                        </button>
                       </div>
+                    </div>
+
+                    {/* 4 Metric Tiles Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mt-5">
+                      {/* Metric 1 */}
+                      <div className="p-3.5 rounded-xl bg-brand-cream/30 border border-brand-border/30 flex flex-col justify-between">
+                        <div className="flex items-center justify-between text-brand-ink3 mb-2">
+                          <span className="text-[10px] font-black uppercase tracking-wider">Catalog Name</span>
+                          <Database className="w-3.5 h-3.5 text-brand-gold" />
+                        </div>
+                        <div className="font-bold text-sm text-brand-navy truncate" title={mongoStatus?.databaseName || 'nazrul_retrievers'}>
+                          {mongoStatus?.databaseName || 'nazrul_retrievers'}
+                        </div>
+                        <div className="text-[10px] text-emerald-700 font-semibold mt-1 flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                          Primary Database
+                        </div>
+                      </div>
+
+                      {/* Metric 2 */}
+                      <div className="p-3.5 rounded-xl bg-brand-cream/30 border border-brand-border/30 flex flex-col justify-between">
+                        <div className="flex items-center justify-between text-brand-ink3 mb-2">
+                          <span className="text-[10px] font-black uppercase tracking-wider">Cluster Endpoint</span>
+                          <Server className="w-3.5 h-3.5 text-brand-gold" />
+                        </div>
+                        <div className="font-mono text-xs font-bold text-brand-navy truncate" title={mongoStatus ? mongoStatus.mongodb_uri : 'Localhost/Atlas'}>
+                          {mongoStatus ? mongoStatus.mongodb_uri : 'Configured via ENV'}
+                        </div>
+                        <div className="text-[10px] text-brand-ink2 font-medium mt-1">
+                          {mongoStatus?.connected ? 'TLS/SSL Handshake Valid' : 'Failover Ready'}
+                        </div>
+                      </div>
+
+                      {/* Metric 3 */}
+                      <div className="p-3.5 rounded-xl bg-brand-cream/30 border border-brand-border/30 flex flex-col justify-between">
+                        <div className="flex items-center justify-between text-brand-ink3 mb-2">
+                          <span className="text-[10px] font-black uppercase tracking-wider">Mongoose Driver</span>
+                          <Activity className="w-3.5 h-3.5 text-brand-gold" />
+                        </div>
+                        <div className="font-bold text-xs text-brand-navy">
+                          {mongoStatus ? (
+                            <span className="inline-flex items-center gap-1.5">
+                              <span className={`w-2 h-2 rounded-full ${
+                                mongoStatus.readyState === 1 ? 'bg-emerald-500' :
+                                mongoStatus.readyState === 2 ? 'bg-blue-500' : 'bg-rose-500'
+                              }`} />
+                              {mongoStatus.readyState === 1 ? 'State 1 (Connected)' :
+                               mongoStatus.readyState === 2 ? 'State 2 (Connecting)' :
+                               mongoStatus.readyState === 3 ? 'State 3 (Disconnecting)' : 'State 0 (Disconnected)'}
+                            </span>
+                          ) : 'State 1 (Ready)'}
+                        </div>
+                        <div className="text-[10px] text-brand-ink2 font-medium mt-1">
+                          Pool connection driver
+                        </div>
+                      </div>
+
+                      {/* Metric 4 */}
+                      <div className="p-3.5 rounded-xl bg-brand-cream/30 border border-brand-border/30 flex flex-col justify-between">
+                        <div className="flex items-center justify-between text-brand-ink3 mb-2">
+                          <span className="text-[10px] font-black uppercase tracking-wider">Last Health Sync</span>
+                          <Clock className="w-3.5 h-3.5 text-brand-gold" />
+                        </div>
+                        <div className="font-bold text-xs text-brand-navy">
+                          {mongoStatus?.timestamp ? new Date(mongoStatus.timestamp).toLocaleTimeString() : 'Auto-Verified'}
+                        </div>
+                        <div className="text-[10px] text-brand-ink2 font-medium mt-1">
+                          Telemetry Heartbeat
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* If error logs exist */}
+                    {mongoStatus && !mongoStatus.connected && mongoStatus.error && (
+                      <div className="mt-4 p-4 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-800 font-mono space-y-1">
+                        <div className="flex items-center gap-2 font-bold text-rose-900 text-xs">
+                          <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+                          Cluster Connection Diagnostic Output:
+                        </div>
+                        <p className="whitespace-pre-wrap text-[11px] bg-white/80 p-2.5 rounded-lg border border-rose-200/60 overflow-x-auto">
+                          {mongoStatus.error}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Failover Note */}
+                    <div className="mt-4 pt-3 border-t border-brand-border/30 flex items-center gap-2 text-[11px] text-brand-ink2 font-light">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span>
+                        <strong>Institutional Resilience Guarantee:</strong> In case of remote cluster downtime or IP restriction, Nazrul Retrievers automatically routes transactions to atomic local JSON storage without user downtime.
+                      </span>
                     </div>
                   </div>
 
-                  <div className="pt-6 border-t border-brand-border/40">
-                    <h4 className="text-xs font-black uppercase text-brand-ink3 tracking-widest mb-3 flex items-center justify-between">
-                      <span>MongoDB Database Diagnostics</span>
-                      <button
+                  {/* Action Footer Card */}
+                  <div className="bg-white border border-brand-border rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="flex items-center gap-2 text-xs text-brand-ink2">
+                      <Info className="w-4 h-4 text-brand-gold shrink-0" />
+                      <span>Configuration updates take effect platform-wide across all active student &amp; moderator sessions immediately.</span>
+                    </div>
+                    <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+                      <button 
                         type="button"
-                        onClick={handleCheckMongoStatus}
-                        disabled={checkingMongo}
-                        className="text-[10px] bg-brand-navy hover:bg-brand-navy/90 text-brand-gold-mid hover:text-white px-2.5 py-1 rounded-md font-bold uppercase transition-colors flex items-center gap-1 cursor-pointer"
+                        disabled={savingSettings}
+                        onClick={handleResetSettings} 
+                        className="px-4 py-2.5 border border-brand-border hover:border-brand-navy text-xs font-bold rounded-xl text-brand-navy hover:bg-brand-cream/40 transition-all disabled:opacity-50 cursor-pointer flex items-center gap-2"
                       >
-                        <RefreshCw className={`w-3.5 h-3.5 ${checkingMongo ? 'animate-spin' : ''}`} />
-                        {checkingMongo ? 'Checking...' : 'Check Now'}
+                        <RotateCcw className="w-3.5 h-3.5 text-brand-ink3" />
+                        <span>Reset Defaults</span>
                       </button>
-                    </h4>
-
-                    <div className="p-4 bg-brand-cream/40 border border-brand-border/20 rounded-xl space-y-3.5">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-                        <div>
-                          <span className="block text-sm font-bold text-brand-navy">Connection Status</span>
-                          <span className="block text-xs text-brand-ink2 mt-0.5">Real-time connection verification of process.env.MONGODB_URI</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {checkingMongo ? (
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-                              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                              Testing connectivity...
-                            </span>
-                          ) : mongoStatus?.connected ? (
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                              Successfully Connected
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
-                              <span className="w-2 h-2 rounded-full bg-rose-500"></span>
-                              Disconnected (JSON Failover Active)
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-brand-border/20 text-xs text-brand-navy font-mono">
-                        <div className="bg-white/60 p-2.5 rounded-lg border border-brand-border/10 space-y-1">
-                          <span className="text-[10px] text-brand-ink3 block uppercase tracking-wider">Database URI</span>
-                          <span className="font-semibold break-all text-brand-navy">
-                            {mongoStatus ? mongoStatus.mongodb_uri : 'Unknown'}
-                          </span>
-                        </div>
-                        <div className="bg-white/60 p-2.5 rounded-lg border border-brand-border/10 space-y-1">
-                          <span className="text-[10px] text-brand-ink3 block uppercase tracking-wider">Active Database Name</span>
-                          <span className="font-semibold text-brand-navy">
-                            {mongoStatus ? mongoStatus.databaseName : 'N/A'}
-                          </span>
-                        </div>
-                        <div className="bg-white/60 p-2.5 rounded-lg border border-brand-border/10 space-y-1">
-                          <span className="text-[10px] text-brand-ink3 block uppercase tracking-wider">Mongoose ReadyState</span>
-                          <span className="font-semibold text-brand-navy">
-                            {mongoStatus ? `${mongoStatus.readyState} (${
-                              mongoStatus.readyState === 0 ? 'disconnected' :
-                              mongoStatus.readyState === 1 ? 'connected' :
-                              mongoStatus.readyState === 2 ? 'connecting' :
-                              mongoStatus.readyState === 3 ? 'disconnecting' : 'unknown'
-                            })` : 'N/A'}
-                          </span>
-                        </div>
-                        <div className="bg-white/60 p-2.5 rounded-lg border border-brand-border/10 space-y-1">
-                          <span className="text-[10px] text-brand-ink3 block uppercase tracking-wider">Last Sync Check</span>
-                          <span className="font-semibold text-brand-navy">
-                            {mongoStatus ? new Date(mongoStatus.timestamp).toLocaleTimeString() : 'Never checked'}
-                          </span>
-                        </div>
-                      </div>
-
-                      {mongoStatus && !mongoStatus.connected && mongoStatus.error && (
-                        <div className="p-3 bg-red-50 border border-red-100 rounded-lg text-xs text-red-700 font-mono space-y-1">
-                          <strong className="block text-[10px] uppercase tracking-wider text-red-800">Connection Error Logs:</strong>
-                          <p className="whitespace-pre-wrap">{mongoStatus.error}</p>
-                        </div>
-                      )}
+                      <button 
+                        type="button"
+                        disabled={savingSettings}
+                        onClick={handleSaveSettings} 
+                        className="px-5 py-2.5 bg-brand-navy hover:bg-brand-navy/95 text-brand-gold hover:text-white text-xs font-black rounded-xl transition-all shadow-md shadow-brand-navy/20 disabled:opacity-50 cursor-pointer flex items-center gap-2 active:scale-95"
+                      >
+                        {savingSettings ? (
+                          <>
+                            <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                            <span>Saving Changes...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Save className="w-3.5 h-3.5 text-brand-gold" />
+                            <span>Save Admin Settings</span>
+                          </>
+                        )}
+                      </button>
                     </div>
                   </div>
-
-                  <div className="pt-6 border-t border-brand-border/40 flex justify-end gap-3">
-                    <button 
-                      type="button"
-                      disabled={savingSettings}
-                      onClick={handleResetSettings} 
-                      className="px-4 py-2 border border-brand-border hover:border-brand-navy text-xs font-bold rounded-lg text-brand-navy transition-colors disabled:opacity-50 cursor-pointer"
-                    >
-                      Reset Defaults
-                    </button>
-                    <button 
-                      type="button"
-                      disabled={savingSettings}
-                      onClick={handleSaveSettings} 
-                      className="px-4 py-2 bg-brand-navy hover:bg-brand-navy/90 text-brand-gold hover:text-white text-xs font-black rounded-lg transition-colors disabled:opacity-50 cursor-pointer"
-                    >
-                      {savingSettings ? 'Saving...' : 'Save Admin Settings'}
-                    </button>
-                  </div>
-                </div>
+                </>
               )}
             </div>
           )

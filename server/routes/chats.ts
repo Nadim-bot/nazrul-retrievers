@@ -172,23 +172,25 @@ router.post('/upload', authenticateToken, chatUpload.single('file'), async (req:
 
 // Helper to format a thread for a specific user viewing it
 function formatThreadForUser(t: any, userId: string, store: any, currentUser?: any): ChatThread {
-  const otherId = (t.participants || []).find((pId: string) => String(pId) !== String(userId));
-  const otherUser = store.users ? store.users.find((u: any) => String(u.id) === String(otherId)) : undefined;
+  const currentUserIdStr = String(userId || '');
+  const participants = (t.participants || []).map(String);
+  const otherId = participants.find((pId: string) => pId !== currentUserIdStr && pId !== 'me') || (t.otherUserId && String(t.otherUserId) !== currentUserIdStr ? String(t.otherUserId) : undefined);
+  const otherUser = store.users ? store.users.find((u: any) => String(u.id || u.user_id || u._id) === String(otherId)) : undefined;
   
-  const otherName = otherUser?.full_name || otherUser?.fullName || t.name || 'Campus User';
+  const otherName = otherUser?.full_name || otherUser?.fullName || t.name || 'Campus Member';
   const otherAvatar = otherUser?.avatar || t.avatar || '';
-  const otherInitials = otherAvatar || otherName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'U';
+  const otherInitials = otherAvatar || (otherName ? otherName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'U');
 
   const validRawMessages = (t.messages || []).filter((m: any) =>
-    !(m.deletedForUsers || []).map(String).includes(String(userId))
+    !(m.deletedForUsers || []).map(String).includes(currentUserIdStr)
   );
 
   const threadUnreadCount = validRawMessages.filter((m: any) => {
-    const isMe = String(m.senderId) === String(userId) || m.senderId === 'me';
+    const isMe = String(m.senderId) === currentUserIdStr;
     if (isMe) return false;
     if (m.isDeleted || m.deletedForEveryone) return false;
     if (m.readBy && Array.isArray(m.readBy)) {
-      return !m.readBy.map(String).includes(String(userId));
+      return !m.readBy.map(String).includes(currentUserIdStr);
     }
     if (m.isRead !== undefined) {
       return !m.isRead;
@@ -197,12 +199,12 @@ function formatThreadForUser(t: any, userId: string, store: any, currentUser?: a
   }).length;
 
   const messages: Message[] = validRawMessages.map((m: any) => {
-    const isMe = String(m.senderId) === String(userId) || m.senderId === 'me';
-    const senderUser = store.users ? store.users.find((u: any) => String(u.id) === String(m.senderId)) : undefined;
-    const sName = isMe ? (currentUser?.fullName || 'Me') : (senderUser?.full_name || senderUser?.fullName || m.senderName || otherName);
+    const isMe = String(m.senderId) === currentUserIdStr;
+    const senderUser = store.users ? store.users.find((u: any) => String(u.id || u.user_id || u._id) === String(m.senderId)) : undefined;
+    const sName = isMe ? (currentUser?.fullName || currentUser?.full_name || 'Me') : (senderUser?.full_name || senderUser?.fullName || m.senderName || otherName);
     const sInitials = isMe 
-      ? (currentUser?.avatar || (currentUser?.fullName || 'Me').split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase())
-      : (senderUser?.avatar || m.senderInitials || sName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || otherInitials);
+      ? (currentUser?.avatar || (currentUser?.fullName || currentUser?.full_name || 'Me').split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase())
+      : (senderUser?.avatar || m.senderInitials || (sName ? sName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'U') || otherInitials);
 
     const isDeleted = !!(m.isDeleted || m.deletedForEveryone);
 
@@ -249,6 +251,7 @@ function formatThreadForUser(t: any, userId: string, store: any, currentUser?: a
     id: String(t.id),
     name: otherName,
     initials: otherInitials,
+    avatar: otherAvatar,
     preview: lastMsg 
       ? (lastMsg.isDeleted ? 'This message was deleted' : (lastMsg.attachment ? (lastMsg.attachment.type === 'image' ? '📷 Photo' : `📎 ${lastMsg.attachment.name}`) : lastMsg.text)) 
       : (t.preview || 'No messages yet'),
@@ -257,26 +260,30 @@ function formatThreadForUser(t: any, userId: string, store: any, currentUser?: a
     itemTitle: t.itemTitle || 'General Inquiry',
     online: true,
     otherUserId: otherId ? String(otherId) : undefined,
-    participants: t.participants ? t.participants.map(String) : [],
+    participants: participants,
     messages
   };
 }
 
 // 1. GET ALL CHAT THREADS FOR LOGGED IN USER
 router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
-  const userId = req.user?.id;
+  const userId = String(req.user?.id || '');
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized: User ID missing.' });
+  }
 
   try {
     const { store } = getFallbackData();
     
-    // Filter threads where logged-in user is one of the participants and thread is not deleted for user
+    // Filter threads where logged-in user is strictly one of the participants and thread is not deleted for user
     const userThreads = (store.threads || []).filter((t: any) => 
-      t && t.participants && t.participants.map(String).includes(String(userId)) &&
-      !(t.deletedForUsers || []).map(String).includes(String(userId))
+      t && t.participants && Array.isArray(t.participants) &&
+      t.participants.map(String).includes(userId) &&
+      !(t.deletedForUsers || []).map(String).includes(userId)
     );
 
     const mappedThreads: ChatThread[] = userThreads.map((t: any) => 
-      formatThreadForUser(t, String(userId), store, req.user)
+      formatThreadForUser(t, userId, store, req.user)
     );
     
     return res.json({ threads: mappedThreads });
@@ -288,7 +295,11 @@ router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Respon
 
 // 1B. INITIATE OR LOCATE A PERSISTENT CHAT THREAD (CALLED ON "SEND MESSAGE" FROM LISTING)
 router.post('/initiate', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
-  const senderId = String(req.user?.id);
+  const senderId = String(req.user?.id || '');
+  if (!senderId) {
+    return res.status(401).json({ error: 'Unauthorized: Sender ID missing.' });
+  }
+
   const { 
     itemId, 
     itemTitle, 
@@ -304,22 +315,33 @@ router.post('/initiate', authenticateToken, async (req: AuthenticatedRequest, re
   try {
     const { store, save } = getFallbackData();
 
-    // 1. Resolve recipient user
+    // 1. Resolve recipient user strictly
     let recipientUser: any = undefined;
-    if (rawRecipientId) {
-      recipientUser = store.users.find((u: any) => String(u.id) === String(rawRecipientId));
+    const cleanRawRecipientId = rawRecipientId && rawRecipientId !== 'undefined' && rawRecipientId !== 'null' && rawRecipientId !== 'me' ? String(rawRecipientId).trim() : '';
+
+    if (cleanRawRecipientId && !cleanRawRecipientId.startsWith('user-')) {
+      recipientUser = store.users.find((u: any) => String(u.id || u.user_id || u._id) === cleanRawRecipientId);
     }
-    if (!recipientUser && recipientEmail) {
-      recipientUser = store.users.find((u: any) => (u.email || '').toLowerCase() === String(recipientEmail).toLowerCase());
+    if (!recipientUser && recipientEmail && String(recipientEmail).trim()) {
+      recipientUser = store.users.find((u: any) => (u.email || '').toLowerCase().trim() === String(recipientEmail).toLowerCase().trim());
     }
-    if (!recipientUser && rawRecipientName) {
-      recipientUser = store.users.find((u: any) => 
-        (u.full_name || u.fullName || '').toLowerCase() === String(rawRecipientName).toLowerCase()
-      );
+    if (!recipientUser && rawRecipientName && String(rawRecipientName).trim().length >= 3) {
+      const targetNameTrim = String(rawRecipientName).trim().toLowerCase();
+      if (!['admin', 'super admin', 'student', 'poster', 'campus member', 'anonymous'].includes(targetNameTrim)) {
+        recipientUser = store.users.find((u: any) => 
+          (u.full_name || u.fullName || '').trim().toLowerCase() === targetNameTrim
+        );
+      }
     }
 
-    let finalRecipientId = recipientUser ? String(recipientUser.id) : String(rawRecipientId || `user-${String(rawRecipientName || 'poster').toLowerCase().replace(/[^a-z0-9]/g, '-')}`);
-    let finalRecipientName = recipientUser ? (recipientUser.full_name || recipientUser.fullName) : (rawRecipientName || 'Campus User');
+    let finalRecipientId = recipientUser 
+      ? String(recipientUser.id || recipientUser.user_id || recipientUser._id) 
+      : (cleanRawRecipientId || `user-${String(rawRecipientName || recipientEmail || 'poster').toLowerCase().replace(/[^a-z0-9]/g, '-')}`);
+    
+    let finalRecipientName = recipientUser 
+      ? (recipientUser.full_name || recipientUser.fullName) 
+      : (rawRecipientName || 'Campus Member');
+    
     let finalRecipientAvatar = recipientUser?.avatar || recipientAvatar || '';
 
     // If sender and recipient are the same
@@ -329,23 +351,23 @@ router.post('/initiate', authenticateToken, async (req: AuthenticatedRequest, re
 
     // 2. Check if a thread between these two already exists
     let targetThread = store.threads.find((t: any) => 
-      t && t.participants &&
-      t.participants.map(String).includes(String(senderId)) &&
-      t.participants.map(String).includes(String(finalRecipientId)) &&
+      t && t.participants && Array.isArray(t.participants) &&
+      t.participants.map(String).includes(senderId) &&
+      t.participants.map(String).includes(finalRecipientId) &&
       (!itemTitle || (t.itemTitle && t.itemTitle.trim().toLowerCase() === String(itemTitle).trim().toLowerCase()))
     );
 
     if (!targetThread) {
       targetThread = store.threads.find((t: any) => 
-        t && t.participants &&
-        t.participants.map(String).includes(String(senderId)) &&
-        t.participants.map(String).includes(String(finalRecipientId))
+        t && t.participants && Array.isArray(t.participants) &&
+        t.participants.map(String).includes(senderId) &&
+        t.participants.map(String).includes(finalRecipientId)
       );
     }
 
     if (targetThread) {
       // Un-delete for sender if it was hidden
-      targetThread.deletedForUsers = (targetThread.deletedForUsers || []).filter((uId: any) => String(uId) !== String(senderId));
+      targetThread.deletedForUsers = (targetThread.deletedForUsers || []).filter((uId: any) => String(uId) !== senderId);
       if (itemTitle && (!targetThread.itemTitle || targetThread.itemTitle === 'General Inquiry')) {
         targetThread.itemTitle = itemTitle;
       }
@@ -353,26 +375,36 @@ router.post('/initiate', authenticateToken, async (req: AuthenticatedRequest, re
       return res.json({ thread: formatThreadForUser(targetThread, senderId, store, req.user) });
     }
 
-    // 3. Create new persisted thread
+    // 3. Create new persisted thread with clean participant IDs
     const newThreadId = clientThreadId || `thread-${Date.now()}`;
     const newThread: any = {
       id: newThreadId,
       name: finalRecipientName,
-      initials: finalRecipientAvatar || finalRecipientName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'U',
+      initials: finalRecipientAvatar || (finalRecipientName ? finalRecipientName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'U'),
       avatar: finalRecipientAvatar,
+      itemId: itemId || undefined,
       itemTitle: itemTitle || 'Campus Listing',
       preview: draftMessage || 'Inquiry regarding listing',
       time: 'Just now',
       unreadCount: 0,
       online: true,
       otherUserId: finalRecipientId,
-      participants: [String(senderId), String(finalRecipientId)],
+      participants: [senderId, finalRecipientId],
       messages: [],
       deletedForUsers: [],
       createdAt: new Date().toISOString()
     };
 
     store.threads.unshift(newThread);
+
+    if (isMongoDBActive()) {
+      try {
+        await MChatThread.create(newThread);
+      } catch (mErr: any) {
+        console.warn('⚠️ MChatThread.create error:', mErr.message);
+      }
+    }
+
     save();
 
     return res.json({ thread: formatThreadForUser(newThread, senderId, store, req.user) });
@@ -384,10 +416,14 @@ router.post('/initiate', authenticateToken, async (req: AuthenticatedRequest, re
 
 // 2. SEND NEW MESSAGE TO A THREAD (OR START NEW THREAD)
 router.post('/messages', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
-  let { recipientName, itemTitle, messageText, threadId, attachment, imageUrl, fileUrl, fileName, fileType, fileSize } = req.body;
-  const senderId = req.user?.id;
-  const senderName = req.user?.fullName || 'Anonymous';
-  const senderInitials = req.user?.avatar || 'U';
+  let { recipientName, itemTitle, messageText, threadId, recipientId, otherUserId, recipientEmail, attachment, imageUrl, fileUrl, fileName, fileType, fileSize } = req.body;
+  const senderId = String(req.user?.id || '');
+  const senderName = req.user?.fullName || req.user?.full_name || 'Campus Member';
+  const senderInitials = req.user?.avatar || (senderName ? senderName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'ST');
+
+  if (!senderId) {
+    return res.status(401).json({ error: 'Unauthorized: Sender identity missing.' });
+  }
 
   // Handle normalize attachment from body if provided
   let normalizedAttachment: MessageAttachment | undefined = undefined;
@@ -433,94 +469,103 @@ router.post('/messages', authenticateToken, async (req: AuthenticatedRequest, re
     const { store, save } = getFallbackData();
 
     let targetThread: any = undefined;
-    let recipientId: string | null = null;
+    let finalRecipientId: string | null = null;
     let realRecipientName = recipientName;
     let recipientAvatar = '';
 
+    // 1. If threadId is provided, look it up and verify user authorization
     if (threadId) {
-      targetThread = store.threads.find((t: any) => String(t.id) === String(threadId));
-      if (targetThread && targetThread.participants) {
-        const otherId = targetThread.participants.find((pId: string) => String(pId) !== String(senderId));
-        if (otherId) {
-          recipientId = String(otherId);
-          const foundRecipient = store.users.find(u => String(u.id) === String(otherId));
-          if (foundRecipient) {
-            realRecipientName = foundRecipient.full_name || foundRecipient.fullName;
-            recipientAvatar = foundRecipient.avatar || '';
+      const foundThread = store.threads.find((t: any) => String(t.id) === String(threadId));
+      if (foundThread && foundThread.participants && Array.isArray(foundThread.participants)) {
+        // SECURITY CHECK: Verify logged-in sender is an authorized participant
+        if (foundThread.participants.map(String).includes(senderId)) {
+          targetThread = foundThread;
+          const otherId = foundThread.participants.find((pId: string) => String(pId) !== senderId);
+          if (otherId) {
+            finalRecipientId = String(otherId);
+            const foundRecipient = store.users.find(u => String(u.id || u.user_id || u._id) === String(otherId));
+            if (foundRecipient) {
+              realRecipientName = foundRecipient.full_name || foundRecipient.fullName;
+              recipientAvatar = foundRecipient.avatar || '';
+            }
           }
         }
       }
     }
 
-    if (!recipientId && (req.body.recipientId || req.body.otherUserId)) {
-      const idToTry = String(req.body.recipientId || req.body.otherUserId);
-      const foundRecipient = store.users.find(u => String(u.id) === idToTry);
-      if (foundRecipient) {
-        recipientId = String(foundRecipient.id);
-        realRecipientName = foundRecipient.full_name || foundRecipient.fullName;
-        recipientAvatar = foundRecipient.avatar || '';
-      } else {
-        recipientId = idToTry;
-        realRecipientName = recipientName || 'Poster';
+    // 2. If targetThread was not authorized or not found, resolve recipientId strictly
+    if (!finalRecipientId && (recipientId || otherUserId)) {
+      const idToTry = String(recipientId || otherUserId).trim();
+      if (idToTry && idToTry !== 'undefined' && idToTry !== 'null' && idToTry !== 'me' && idToTry !== senderId) {
+        const foundRecipient = store.users.find(u => String(u.id || u.user_id || u._id) === idToTry);
+        if (foundRecipient) {
+          finalRecipientId = String(foundRecipient.id || foundRecipient.user_id || foundRecipient._id);
+          realRecipientName = foundRecipient.full_name || foundRecipient.fullName;
+          recipientAvatar = foundRecipient.avatar || '';
+        } else {
+          finalRecipientId = idToTry;
+        }
       }
     }
 
-    if (!recipientId && req.body.recipientEmail) {
-      const foundRecipient = store.users.find(u => (u.email || '').toLowerCase() === String(req.body.recipientEmail).toLowerCase());
-      if (foundRecipient) {
-        recipientId = String(foundRecipient.id);
+    if (!finalRecipientId && recipientEmail && String(recipientEmail).trim()) {
+      const foundRecipient = store.users.find(u => (u.email || '').toLowerCase().trim() === String(recipientEmail).toLowerCase().trim());
+      if (foundRecipient && String(foundRecipient.id) !== senderId) {
+        finalRecipientId = String(foundRecipient.id || foundRecipient.user_id || foundRecipient._id);
         realRecipientName = foundRecipient.full_name || foundRecipient.fullName;
         recipientAvatar = foundRecipient.avatar || '';
       }
     }
 
-    if (!recipientId && recipientName) {
-      const foundRecipient = store.users.find(u => 
-        (u.full_name || u.fullName || '').toLowerCase() === recipientName.toLowerCase() ||
-        (u.full_name || u.fullName || '').toLowerCase().includes(recipientName.toLowerCase()) ||
-        recipientName.toLowerCase().includes((u.full_name || u.fullName || '').toLowerCase())
-      );
-      if (foundRecipient) {
-        recipientId = String(foundRecipient.id);
-        realRecipientName = foundRecipient.full_name || foundRecipient.fullName;
-        recipientAvatar = foundRecipient.avatar || '';
-      } else {
-        recipientId = `user-${recipientName.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
-        realRecipientName = recipientName;
+    if (!finalRecipientId && recipientName && String(recipientName).trim().length >= 3) {
+      const targetNameTrim = String(recipientName).trim().toLowerCase();
+      if (!['admin', 'super admin', 'student', 'poster', 'campus member', 'anonymous'].includes(targetNameTrim)) {
+        const foundRecipient = store.users.find(u => 
+          (u.full_name || u.fullName || '').trim().toLowerCase() === targetNameTrim
+        );
+        if (foundRecipient && String(foundRecipient.id) !== senderId) {
+          finalRecipientId = String(foundRecipient.id || foundRecipient.user_id || foundRecipient._id);
+          realRecipientName = foundRecipient.full_name || foundRecipient.fullName;
+          recipientAvatar = foundRecipient.avatar || '';
+        }
       }
     }
 
-    if (recipientId && String(senderId) === String(recipientId)) {
+    if (!finalRecipientId && !targetThread) {
+      finalRecipientId = `user-${String(recipientName || recipientEmail || 'poster').toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+    }
+
+    if (finalRecipientId && senderId === finalRecipientId) {
       return res.status(400).json({ error: 'You cannot send a message to yourself.' });
     }
 
-    if (!targetThread && recipientId) {
-      // Find existing thread between these two participants matching itemTitle if possible
+    // 3. Locate existing thread between sender and recipient if targetThread was not selected
+    if (!targetThread && finalRecipientId) {
       targetThread = store.threads.find((t: any) => 
-        t.participants && 
-        t.participants.map(String).includes(String(senderId)) && 
-        t.participants.map(String).includes(String(recipientId)) &&
-        (!itemTitle || (t.itemTitle && t.itemTitle.toLowerCase() === itemTitle.toLowerCase()))
+        t && t.participants && Array.isArray(t.participants) &&
+        t.participants.map(String).includes(senderId) && 
+        t.participants.map(String).includes(finalRecipientId) &&
+        (!itemTitle || (t.itemTitle && t.itemTitle.trim().toLowerCase() === itemTitle.trim().toLowerCase()))
       );
 
       if (!targetThread) {
         targetThread = store.threads.find((t: any) => 
-          t.participants && 
-          t.participants.map(String).includes(String(senderId)) && 
-          t.participants.map(String).includes(String(recipientId))
+          t && t.participants && Array.isArray(t.participants) &&
+          t.participants.map(String).includes(senderId) && 
+          t.participants.map(String).includes(finalRecipientId)
         );
       }
     }
 
     const newMessage: any = {
-      id: `m-${Date.now()}-${Math.random()}`,
-      senderId: String(senderId),
+      id: `m-${Date.now()}-${Math.round(Math.random() * 1e6)}`,
+      senderId: senderId,
       senderName,
       senderInitials,
       text: messageText,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       createdAt: new Date().toISOString(),
-      readBy: [String(senderId)],
+      readBy: [senderId],
       isRead: false,
       attachment: normalizedAttachment,
       imageUrl: normalizedAttachment?.type === 'image' ? normalizedAttachment.url : undefined,
@@ -540,23 +585,30 @@ router.post('/messages', authenticateToken, async (req: AuthenticatedRequest, re
       targetThread.preview = threadPreview;
       targetThread.time = 'Just now';
       targetThread.deletedForUsers = [];
+      
+      // Ensure participants array is strictly [senderId, finalRecipientId]
+      if (finalRecipientId && !targetThread.participants.map(String).includes(finalRecipientId)) {
+        targetThread.participants = [senderId, finalRecipientId];
+      }
     } else {
-      if (!recipientId) {
-        return res.status(404).json({ error: 'Recipient user not found in local user registry.' });
+      if (!finalRecipientId) {
+        return res.status(404).json({ error: 'Recipient user could not be determined.' });
       }
 
       // Create new thread
       const newThread: any = {
         id: threadId || `thread-${Date.now()}`,
-        name: realRecipientName || recipientName || 'Anonymous',
-        initials: (realRecipientName || recipientName || 'Anonymous').split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'U',
-        participants: [String(senderId), String(recipientId)],
+        name: realRecipientName || recipientName || 'Campus Member',
+        initials: (realRecipientName || recipientName || 'Campus Member').split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'U',
+        avatar: recipientAvatar || '',
+        participants: [senderId, finalRecipientId],
         preview: threadPreview,
         time: 'Just now',
         unreadCount: 0,
         itemTitle: itemTitle || 'General Listing',
         online: true,
         messages: [newMessage],
+        deletedForUsers: [],
         createdAt: new Date().toISOString()
       };
       store.threads.unshift(newThread);
@@ -564,13 +616,13 @@ router.post('/messages', authenticateToken, async (req: AuthenticatedRequest, re
     }
 
     // Add in-app notification for the recipient about the incoming message
-    if (recipientId && String(recipientId) !== String(senderId)) {
+    if (finalRecipientId && finalRecipientId !== senderId) {
       const notifSnippet = normalizedAttachment 
         ? (normalizedAttachment.type === 'image' ? 'sent you a photo 📷' : `sent you a document (${normalizedAttachment.name}) 📎`)
         : (messageText.length > 50 ? `${messageText.substring(0, 47)}...` : messageText);
 
       await createUserNotification({
-        userId: String(recipientId),
+        userId: finalRecipientId,
         title: `Message from ${senderName}`,
         message: `${senderName}: ${notifSnippet}`,
         text: `💬 <strong>${senderName}</strong> sent you a message regarding <em>"${targetThread.itemTitle || 'Item'}"</em>: "${notifSnippet}"`,
@@ -578,10 +630,30 @@ router.post('/messages', authenticateToken, async (req: AuthenticatedRequest, re
       });
     }
 
+    // Sync with MongoDB if active
+    if (isMongoDBActive()) {
+      try {
+        await MChatThread.findOneAndUpdate(
+          { id: String(targetThread.id) },
+          { 
+            $set: {
+              preview: targetThread.preview,
+              time: 'Just now',
+              updatedAt: new Date().toISOString()
+            },
+            $push: { messages: newMessage }
+          },
+          { upsert: true }
+        );
+      } catch (mErr: any) {
+        console.warn('⚠️ MChatThread sync error on message send:', mErr.message);
+      }
+    }
+
     save();
     
     // Return formatted thread using unified helper
-    const responseThread = formatThreadForUser(targetThread, String(senderId), store, req.user);
+    const responseThread = formatThreadForUser(targetThread, senderId, store, req.user);
     return res.status(201).json({ message: 'Message sent successfully!', thread: responseThread });
   } catch (err: any) {
     console.error('Error sending message:', err);

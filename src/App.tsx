@@ -514,8 +514,8 @@ export default function App() {
       if (fromAdminSubTab === 'Deleted') return 'Back to Deleted Listings';
       if (fromAdminSubTab === 'Users') return 'Back to User Registry';
       if (fromAdminSubTab === 'Verification') return 'Back to ID Verification';
-      if (fromAdminSubTab === 'Overview') return 'Back to Admin Overview';
-      return 'Back to Admin Dashboard';
+      if (fromAdminSubTab === 'Overview') return user?.role === 'moderator' ? 'Back to Moderator Overview' : 'Back to Admin Overview';
+      return user?.role === 'moderator' ? 'Back to Moderator Dashboard' : 'Back to Admin Dashboard';
     }
     if (fromTab === 'dashboard') return 'Back to Dashboard';
     if (fromTab === 'landing') return 'Back to Home';
@@ -541,7 +541,7 @@ export default function App() {
       return;
     }
     if (tab === 'admin' && user?.role !== 'admin' && user?.role !== 'moderator') {
-      handleShowToast('Access denied. You do not have permission to view the Admin Dashboard.', 'error');
+      handleShowToast('Access denied. You do not have permission to view this Dashboard.', 'error');
       return;
     }
 
@@ -869,16 +869,15 @@ export default function App() {
       return;
     }
 
-    const userFullName = (user?.fullName || (user as any)?.full_name || '').toLowerCase();
-    const userIdStr = user ? String(user.id) : '';
+    const userIdStr = user ? String((user as any).id || (user as any)._id || '') : '';
     const posterUserIdStr = item.userId 
       ? String(item.userId) 
       : ((item.postedBy as any)?.userId || (item.postedBy as any)?.id ? String((item.postedBy as any).userId || (item.postedBy as any).id) : '');
-    const posterName = item?.postedBy?.name || 'Poster';
+    const posterName = item?.postedBy?.name || 'Campus Member';
     const posterNameLower = posterName.toLowerCase();
 
-    const posterEmail = (item.email || (item.postedBy as any)?.email || '').toLowerCase();
-    const userEmail = (user?.email || '').toLowerCase();
+    const posterEmail = (item.email || (item.postedBy as any)?.email || '').toLowerCase().trim();
+    const userEmail = (user?.email || '').toLowerCase().trim();
 
     if (user && (
       (userIdStr && posterUserIdStr && userIdStr === posterUserIdStr) ||
@@ -892,25 +891,25 @@ export default function App() {
     const draftText = `Hi ${posterFirstName}, is this listing still active?`;
 
     // Calculate a unique identifier for this recipient
-    const targetOtherUserId = posterUserIdStr || `user-${String(posterNameLower || 'user').replace(/[^a-z0-9]/g, '-')}`;
+    const targetOtherUserId = posterUserIdStr || (posterEmail ? `user-${posterEmail.replace(/[^a-z0-9]/g, '-')}` : `user-${String(posterNameLower || 'user').replace(/[^a-z0-9]/g, '-')}`);
     let targetThreadId = '';
 
     // Check if conversation with this poster or about this listing already exists
     const existingThread = threads.find(t => {
+      const participants = (t?.participants || []).map(String);
+      const isParticipant = userIdStr && participants.includes(userIdStr) && participants.includes(targetOtherUserId);
       const otherId = t?.otherUserId ? String(t.otherUserId) : '';
-      const participantsMatch = t.participants && userIdStr && targetOtherUserId && t.participants.map(String).includes(String(targetOtherUserId));
-      const isSameOtherUser = otherId && targetOtherUserId && otherId === String(targetOtherUserId);
+      const isSameOtherUser = otherId && otherId === targetOtherUserId;
       const isSameItemTitle = t.itemTitle && item.title && t.itemTitle.trim().toLowerCase() === item.title.trim().toLowerCase();
 
-      return (isSameOtherUser || participantsMatch) && isSameItemTitle;
+      return (isParticipant || isSameOtherUser) && isSameItemTitle;
     }) || threads.find(t => {
-      const threadName = (t?.name || '').toLowerCase();
+      const participants = (t?.participants || []).map(String);
+      const isParticipant = userIdStr && participants.includes(userIdStr) && participants.includes(targetOtherUserId);
       const otherId = t?.otherUserId ? String(t.otherUserId) : '';
-      const participantsMatch = t.participants && userIdStr && targetOtherUserId && t.participants.map(String).includes(String(targetOtherUserId));
-      const isSameOtherUser = otherId && targetOtherUserId && otherId === String(targetOtherUserId);
-      const isSamePosterName = threadName && posterNameLower && threadName === posterNameLower;
+      const isSameOtherUser = otherId && otherId === targetOtherUserId;
 
-      return isSameOtherUser || participantsMatch || isSamePosterName;
+      return isParticipant || isSameOtherUser;
     });
 
     const posterAvatar = item.postedBy?.avatar || '';
@@ -939,7 +938,7 @@ export default function App() {
         unreadCount: 0,
         online: true,
         otherUserId: targetOtherUserId,
-        participants: [userIdStr || 'me', targetOtherUserId],
+        participants: [userIdStr, targetOtherUserId],
         messages: []
       };
 
@@ -954,7 +953,7 @@ export default function App() {
         itemId: item.id,
         itemTitle: item.title,
         itemType: item.type,
-        recipientId: posterUserIdStr,
+        recipientId: posterUserIdStr || targetOtherUserId,
         recipientName: posterName,
         recipientAvatar: posterAvatar,
         recipientEmail: posterEmail,
@@ -1010,10 +1009,10 @@ export default function App() {
 
     const targetUserIdStr = targetUser ? String(targetUser.id || targetUser._id || '') : '';
     const targetEmail = (targetUser?.email || '').toLowerCase().trim();
-    const targetName = targetUser?.fullName || targetUser?.full_name || targetUser?.name || 'Campus User';
+    const targetName = targetUser?.fullName || targetUser?.full_name || targetUser?.name || 'Campus Member';
     const targetNameLower = targetName.toLowerCase();
     const targetAvatar = targetUser?.avatar || '';
-    const targetInitials = targetAvatar || targetName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() || 'U';
+    const targetInitials = targetAvatar || (targetName ? targetName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase() : 'U');
 
     if (
       (myUserIdStr && targetUserIdStr && myUserIdStr === targetUserIdStr) ||
@@ -1023,19 +1022,18 @@ export default function App() {
       return;
     }
 
-    const targetFullName = (targetUser?.fullName || targetUser?.full_name || targetUser?.name || 'Campus User').trim();
-    const targetOtherUserId = targetUserIdStr || `user-${String(targetNameLower || 'user').replace(/[^a-z0-9]/g, '-')}`;
+    const targetFullName = (targetUser?.fullName || targetUser?.full_name || targetUser?.name || 'Campus Member').trim();
+    const targetOtherUserId = targetUserIdStr || (targetEmail ? `user-${targetEmail.replace(/[^a-z0-9]/g, '-')}` : `user-${String(targetNameLower || 'user').replace(/[^a-z0-9]/g, '-')}`);
     let targetThreadId = '';
 
     // Check if conversation with this user already exists
     const existingThread = threads.find(t => {
+      const participants = (t?.participants || []).map(String);
+      const isParticipant = myUserIdStr && participants.includes(myUserIdStr) && participants.includes(targetOtherUserId);
       const otherId = t?.otherUserId ? String(t.otherUserId) : '';
-      const participantsMatch = t.participants && myUserIdStr && targetOtherUserId && t.participants.map(String).includes(String(targetOtherUserId));
-      const isSameOtherUser = otherId && targetOtherUserId && otherId === String(targetOtherUserId);
-      const threadName = (t?.name || '').toLowerCase();
-      const isSameName = threadName && targetNameLower && threadName === targetNameLower;
+      const isSameOtherUser = otherId && otherId === targetOtherUserId;
 
-      return isSameOtherUser || participantsMatch || isSameName;
+      return isParticipant || isSameOtherUser;
     });
 
     const hasPreviousMessages = Boolean(
@@ -1066,7 +1064,7 @@ export default function App() {
         unreadCount: 0,
         online: true,
         otherUserId: targetOtherUserId,
-        participants: [myUserIdStr || 'me', targetOtherUserId],
+        participants: [myUserIdStr, targetOtherUserId],
         messages: []
       };
 
@@ -1078,7 +1076,7 @@ export default function App() {
     apiFetch('/chats/initiate', {
       method: 'POST',
       bodyData: {
-        recipientId: targetUserIdStr,
+        recipientId: targetUserIdStr || targetOtherUserId,
         recipientName: targetFullName,
         recipientAvatar: targetAvatar,
         recipientEmail: targetEmail,
@@ -1270,6 +1268,42 @@ export default function App() {
       }
     } catch (err: any) {
       console.warn('Failed to persist marking notifications as read:', err);
+    }
+  };
+
+  const handleDeleteNotification = async (notifId: string | number) => {
+    if (!notifId) return;
+    const notifIdStr = String(notifId);
+    // Optimistic local state update
+    setNotifications(prev => prev.filter(n => String(n.id) !== notifIdStr && String((n as any)._id) !== notifIdStr));
+    handleShowToast('Notification deleted.', 'info');
+
+    try {
+      if (notifIdStr.startsWith('admin-')) {
+        const realAdminId = notifIdStr.replace(/^admin-/, '');
+        await apiFetch(`/admin/notifications/${realAdminId}`, { method: 'DELETE' });
+      } else {
+        await apiFetch(`/notifications/${notifIdStr}`, { method: 'DELETE' });
+      }
+    } catch (err: any) {
+      console.warn('Failed to persist single notification deletion:', err);
+    }
+  };
+
+  const handleClearAllNotifications = async () => {
+    if (notifications.length === 0) return;
+    // Optimistic local state update
+    setNotifications([]);
+    handleShowToast('All notifications cleared.', 'success');
+
+    try {
+      await apiFetch('/notifications/clear-all', { method: 'DELETE' });
+      const isAdminOrMod = user?.role === 'admin' || user?.role === 'moderator';
+      if (isAdminOrMod) {
+        await apiFetch('/admin/notifications/clear-all', { method: 'DELETE' }).catch(() => {});
+      }
+    } catch (err: any) {
+      console.warn('Failed to persist clear all notifications:', err);
     }
   };
 
@@ -1521,6 +1555,8 @@ export default function App() {
         notifications={notifications}
         onMarkAllNotificationsRead={handleMarkAllNotificationsRead}
         onMarkNotificationRead={handleMarkNotificationRead}
+        onDeleteNotification={handleDeleteNotification}
+        onClearAllNotifications={handleClearAllNotifications}
         onShowNotificationToast={(msg) => handleShowToast(msg, 'info')}
         isLoggedIn={isLoggedIn}
         onLogout={handleLogout}
@@ -1670,6 +1706,8 @@ export default function App() {
         notifications={notifications}
         onMarkAllNotificationsRead={handleMarkAllNotificationsRead}
         onMarkNotificationRead={handleMarkNotificationRead}
+        onDeleteNotification={handleDeleteNotification}
+        onClearAllNotifications={handleClearAllNotifications}
       />
     </div>
   );

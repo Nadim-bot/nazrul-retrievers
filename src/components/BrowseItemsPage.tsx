@@ -810,13 +810,13 @@ export default function BrowseItemsPage({
             </div>
           </div>
 
-          <div className="flex items-center justify-between sm:justify-end gap-3 w-full md:w-auto self-end md:self-center flex-wrap sm:flex-nowrap">
-            <span className="text-xs font-semibold text-brand-ink2 dark:text-slate-400 whitespace-nowrap">{sortedItems.length} listings found</span>
-            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between sm:justify-end gap-3 w-full lg:w-auto self-stretch lg:self-center">
+            <span className="text-xs font-semibold text-brand-ink2 dark:text-slate-400 whitespace-nowrap self-start sm:self-auto">{sortedItems.length} listings found</span>
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
               <select 
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="flex-1 sm:flex-none px-3 py-2 bg-white dark:bg-[#162232] border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-white text-xs sm:text-sm outline-none focus:border-amber-500 cursor-pointer shadow-xs font-medium"
+                className="flex-1 sm:flex-none px-3 py-2 bg-white dark:bg-[#162232] border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-white text-xs sm:text-sm outline-none focus:border-amber-500 cursor-pointer shadow-xs font-medium min-w-0"
               >
                 <option value="Newest First">Newest First (Posted)</option>
                 <option value="Oldest First">Oldest First (Posted)</option>
@@ -828,7 +828,7 @@ export default function BrowseItemsPage({
               </select>
               <button 
                 onClick={() => onTabChange('post')}
-                className="inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 bg-gradient-to-r from-brand-gold to-brand-gold-mid text-[#0D1B2A] font-bold rounded-xl text-xs sm:text-sm cursor-pointer shadow-md hover:brightness-105 active:scale-[0.98] transition-all whitespace-nowrap shrink-0"
+                className="inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4.5 py-2.5 bg-gradient-to-r from-brand-gold to-brand-gold-mid text-[#0D1B2A] font-bold rounded-xl text-xs sm:text-sm cursor-pointer shadow-md hover:brightness-105 active:scale-[0.98] transition-all whitespace-nowrap shrink-0"
               >
                 <Plus className="w-4 h-4" />
                 <span>Post Item</span>

@@ -66,6 +66,8 @@ interface UserProfileMenuModalsProps {
   notifications: NotificationItem[];
   onMarkAllNotificationsRead: () => void;
   onMarkNotificationRead?: (id: string) => void;
+  onDeleteNotification?: (id: string | number) => void;
+  onClearAllNotifications?: () => void;
 }
 
 export default function UserProfileMenuModals({
@@ -85,7 +87,9 @@ export default function UserProfileMenuModals({
   onLogout,
   notifications,
   onMarkAllNotificationsRead,
-  onMarkNotificationRead
+  onMarkNotificationRead,
+  onDeleteNotification,
+  onClearAllNotifications
 }: UserProfileMenuModalsProps) {
 
   const isStaff = user?.role === 'admin' || user?.role === 'moderator' || (user as any)?.role === 'coordinator';
@@ -3223,7 +3227,7 @@ export default function UserProfileMenuModals({
             {/* 5. NOTIFICATIONS PANEL */}
             {activeTab === 'notifications' && (
               <div className="animate-in fade-in duration-150 space-y-4 max-w-3xl">
-                <div className="flex justify-between items-center pb-3 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
                   <div>
                     <span className="text-xs sm:text-sm font-black text-slate-950 dark:text-white uppercase tracking-wider flex items-center gap-2">
                       <Bell className="w-4 h-4 text-amber-600 dark:text-amber-400" />
@@ -3233,15 +3237,30 @@ export default function UserProfileMenuModals({
                       Direct alerts, potential matches, and status updates
                     </p>
                   </div>
-                  {notifications.some(n => n.unread || n.isRead === false) && (
-                    <button 
-                      type="button"
-                      onClick={onMarkAllNotificationsRead}
-                      className="text-xs font-black text-amber-700 dark:text-amber-400 hover:underline cursor-pointer flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50"
-                    >
-                      <CheckSquare className="w-3.5 h-3.5" />
-                      <span>Mark all as read</span>
-                    </button>
+                  
+                  {notifications.length > 0 && (
+                    <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
+                      {notifications.some(n => n.unread || n.isRead === false) && (
+                        <button 
+                          type="button"
+                          onClick={onMarkAllNotificationsRead}
+                          className="text-xs font-bold text-amber-700 dark:text-amber-400 hover:bg-amber-100/70 dark:hover:bg-amber-950/60 cursor-pointer flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 transition-all shadow-2xs"
+                        >
+                          <CheckSquare className="w-3.5 h-3.5" />
+                          <span>Mark all read</span>
+                        </button>
+                      )}
+
+                      <button 
+                        type="button"
+                        onClick={onClearAllNotifications}
+                        className="text-xs font-bold text-rose-700 dark:text-rose-400 hover:bg-rose-100/70 dark:hover:bg-rose-950/60 cursor-pointer flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 transition-all shadow-2xs"
+                        title="Clear all alerts"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        <span>Clear all</span>
+                      </button>
+                    </div>
                   )}
                 </div>
 
@@ -3275,30 +3294,45 @@ export default function UserProfileMenuModals({
                               onMarkRead: (id) => onMarkNotificationRead?.(id)
                             });
                           }}
-                          className={`p-4 rounded-2xl border flex items-start gap-3.5 transition-all cursor-pointer shadow-xs ${
+                          className={`group p-4 rounded-2xl border flex items-start justify-between gap-3.5 transition-all cursor-pointer shadow-xs hover:shadow-sm ${
                             isUnread 
-                              ? 'bg-amber-50/70 dark:bg-[#1A283B] border-amber-300 dark:border-amber-700/70' 
+                              ? 'bg-amber-50/70 dark:bg-[#1A283B] border-amber-300 dark:border-amber-700/70 hover:border-amber-400' 
                               : 'bg-white dark:bg-[#15202D] border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
                           }`}
                         >
-                          <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${colorClass}`}>
-                            <NotifIcon className="w-4 h-4 stroke-[2.5]" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p 
-                              className="text-xs sm:text-sm text-slate-950 dark:text-white font-bold leading-relaxed"
-                              dangerouslySetInnerHTML={{ __html: formatted.html }}
-                            />
-                            <div className="flex items-center gap-2 mt-1.5">
-                              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold flex items-center gap-1">
-                                <Clock className="w-3 h-3" />
-                                {formatted.time}
-                              </span>
-                              {isUnread && (
-                                <span className="inline-block w-2 h-2 rounded-full bg-amber-500" />
-                              )}
+                          <div className="flex items-start gap-3.5 flex-1 min-w-0">
+                            <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5 ${colorClass}`}>
+                              <NotifIcon className="w-4 h-4 stroke-[2.5]" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p 
+                                className="text-xs sm:text-sm text-slate-950 dark:text-white font-bold leading-relaxed"
+                                dangerouslySetInnerHTML={{ __html: formatted.html }}
+                              />
+                              <div className="flex items-center gap-2 mt-1.5">
+                                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-bold flex items-center gap-1">
+                                  <Clock className="w-3 h-3" />
+                                  {formatted.time}
+                                </span>
+                                {isUnread && (
+                                  <span className="inline-block w-2 h-2 rounded-full bg-amber-500 shadow-xs" />
+                                )}
+                              </div>
                             </div>
                           </div>
+
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onDeleteNotification?.(String(notif.id));
+                            }}
+                            className="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-transparent hover:border-rose-200 dark:hover:border-rose-900/50 transition-all cursor-pointer shrink-0"
+                            title="Delete notification"
+                            aria-label="Delete notification"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
                         </div>
                       );
                     })}

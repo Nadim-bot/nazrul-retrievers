@@ -25,7 +25,7 @@ export default function MultiImageUpload({
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Compress and resize image using HTML5 Canvas
+  // Compress and resize image using HTML5 Canvas (high-speed & lightweight)
   const compressImage = (file: File): Promise<{ base64: string; width: number; height: number; size: number }> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -38,9 +38,9 @@ export default function MultiImageUpload({
           let width = img.width;
           let height = img.height;
 
-          // Target a max boundary of 1200px
-          const MAX_WIDTH = 1200;
-          const MAX_HEIGHT = 1200;
+          // Target max boundary of 1080px for instant mobile/desktop crisp rendering
+          const MAX_WIDTH = 1080;
+          const MAX_HEIGHT = 1080;
           if (width > MAX_WIDTH || height > MAX_HEIGHT) {
             if (width > height) {
               height = Math.round((height * MAX_WIDTH) / width);
@@ -53,11 +53,14 @@ export default function MultiImageUpload({
 
           canvas.width = width;
           canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx?.drawImage(img, 0, 0, width, height);
+          const ctx = canvas.getContext('2d', { alpha: false });
+          if (ctx) {
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'medium';
+            ctx.drawImage(img, 0, 0, width, height);
+          }
 
-          const base64 = canvas.toDataURL('image/jpeg', 0.85);
-          // Calculate approx size in bytes
+          const base64 = canvas.toDataURL('image/jpeg', 0.82);
           const approxSize = Math.round((base64.length - 814) / 1.37);
           resolve({ base64, width, height, size: approxSize });
         };
@@ -72,10 +75,10 @@ export default function MultiImageUpload({
     return await uploadImageToStorage(base64);
   };
 
-  // Handle selected files
+  // Handle selected files with high-speed parallel compression and upload
   const handleFiles = async (files: FileList) => {
     const validFiles = Array.from(files).filter(file => 
-      ['image/jpeg', 'image/png', 'image/webp'].includes(file.type)
+      ['image/jpeg', 'image/png', 'image/webp', 'image/jpg', 'image/gif'].includes(file.type) || file.type.startsWith('image/')
     );
 
     if (validFiles.length === 0) {
@@ -95,36 +98,42 @@ export default function MultiImageUpload({
     }
 
     setIsUploading(true);
-    const updatedImages = [...images];
+    setUploadProgress(filesToUpload.length === 1 ? 'Processing photo...' : `Optimizing ${filesToUpload.length} photos...`);
 
     try {
-      for (let i = 0; i < filesToUpload.length; i++) {
-        const file = filesToUpload[i];
-        setUploadProgress(`Compressing and uploading image ${i + 1} of ${filesToUpload.length}...`);
+      // 1. Parallel local compression
+      const compressedList = await Promise.all(filesToUpload.map(f => compressImage(f)));
 
-        // 1. Compress
-        const compressed = await compressImage(file);
+      setUploadProgress(filesToUpload.length === 1 ? 'Uploading photo...' : `Uploading ${filesToUpload.length} photos in parallel...`);
 
-        // 2. Upload
-        const url = await uploadSingleImage(compressed.base64);
+      // 2. Parallel upload
+      const uploadedRecords = await Promise.all(
+        compressedList.map(async (compressed, idx) => {
+          const url = await uploadSingleImage(compressed.base64);
+          const itemOrder = images.length + idx + 1;
+          const newImg: ImageMetadata = {
+            url,
+            storagePath: url.startsWith('/server-uploads/') ? url : '',
+            order: itemOrder,
+            isCover: images.length === 0 && idx === 0,
+            uploadedBy: userId,
+            uploadedAt: new Date().toISOString(),
+            fileSize: compressed.size,
+            width: compressed.width,
+            height: compressed.height
+          };
+          return newImg;
+        })
+      );
 
-        // 3. Create image record
-        const newImg: ImageMetadata = {
-          url,
-          storagePath: url.startsWith('/server-uploads/') ? url : '',
-          order: updatedImages.length + 1,
-          isCover: updatedImages.length === 0, // Set first image as cover automatically
-          uploadedBy: userId,
-          uploadedAt: new Date().toISOString(),
-          fileSize: compressed.size,
-          width: compressed.width,
-          height: compressed.height
-        };
-
-        updatedImages.push(newImg);
-        onChange([...updatedImages]);
+      const combined = [...images, ...uploadedRecords];
+      // Ensure at least 1 cover image is set
+      if (combined.length > 0 && !combined.some(i => i.isCover)) {
+        combined[0].isCover = true;
       }
-      onShowToast('Images uploaded and processed successfully!', 'success');
+
+      onChange(combined);
+      onShowToast(uploadedRecords.length === 1 ? 'Photo attached successfully!' : `${uploadedRecords.length} photos attached successfully!`, 'success');
     } catch (err: any) {
       console.error('Multi-image upload error:', err);
       onShowToast(`Failed to upload images: ${err.message || err}`, 'error');

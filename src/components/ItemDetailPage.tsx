@@ -187,13 +187,13 @@ export default function ItemDetailPage({
 
       const res = await apiFetch('/chats/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        bodyData: {
           itemId: item.id,
-          recipientId: item.userId,
+          itemTitle: item.title,
+          recipientId: item.userId || (item.postedBy as any)?.userId,
           recipientName: item.postedBy?.name || 'Reporter',
-          text: msgText
-        })
+          messageText: msgText
+        }
       });
 
       if (res && !res.error) {

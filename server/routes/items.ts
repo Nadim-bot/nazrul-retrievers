@@ -394,179 +394,220 @@ router.post('/', authenticateToken, upload.single('image'), async (req: Authenti
     // Verify if poster has verified student ID card approved by admin
     const userRole = (req.user?.role as any) || '';
     const isStaffRole = userRole === 'admin' || userRole === 'moderator' || userRole === 'coordinator' || String(req.user?.email || '').toLowerCase().trim() === 'nazrulretrievers@gmail.com';
-    const isUserVerifiedStudent = !isStaffRole && (
-      (req.user as any)?.idVerificationStatus === 'verified' ||
-      ((req.user as any)?.isVerified === true && (req.user as any)?.idVerificationStatus === 'verified')
+    const { store, save } = getFallbackData();
+    
+    let dbUser: any = null;
+    if (isMongoDBActive()) {
+      try {
+        dbUser = await MUser.findOne({ 
+          $or: [
+            { id: String(userId) },
+            ...(req.user?.studentId ? [{ studentId: String(req.user.studentId).trim() }] : []),
+            ...(req.user?.email ? [{ email: String(req.user.email).toLowerCase().trim() }] : [])
+          ]
+        }).lean();
+      } catch (err) {}
+    }
+
+    const targetUser = dbUser || store.users?.find(u => 
+      String(u.id) === String(userId) || 
+      (u.studentId && req.user?.studentId && String(u.studentId).trim() === String(req.user.studentId).trim()) ||
+      (u.email && req.user?.email && u.email.toLowerCase().trim() === req.user.email.toLowerCase().trim())
     );
 
-    
-      const { store, save } = getFallbackData();
+    const isUserVerifiedMember = Boolean(
+      req.user?.isVerified === true ||
+      req.user?.is_verified === true ||
+      (req.user as any)?.idVerificationStatus === 'verified' ||
+      (req.user as any)?.verified === true ||
+      (targetUser && (
+        targetUser.isVerified === true ||
+        (targetUser as any).is_verified === true ||
+        (targetUser as any).idVerificationStatus === 'verified' ||
+        (targetUser as any).verified === true
+      ))
+    );
 
-      const existingIds = store.items.map(i => parseInt(String(i.id), 10)).filter(n => !isNaN(n));
-      const maxId = existingIds.length > 0 ? Math.max(...existingIds) : 0;
-      const newId = String(maxId + 1);
-      const nowIso = new Date().toISOString();
-      const newItem: Item = {
-        id: newId,
-        emoji: emoji || (type === 'lost' ? 'Ì†ºÌæí' : 'üîë'),
-        title,
-        location,
-        specificSpot,
-        date: nowIso,
-        type: type as 'lost' | 'found',
-        category,
-        subcategory: subcategory || 'Other',
-        description,
-        secretNotes: secretNotes || secret_notes || '',
-        status: isStaffRole ? 'active' : 'pending', // Auto-approved directly for Admin and Moderator staff
-        approvalStatus: isStaffRole ? 'approved' : 'pending', // Instant approval for staff
-        views: 1,
-        postedBy: {
-          name: posterName,
-          department: posterDept,
-          verified: isStaffRole ? true : !!isUserVerifiedStudent,
-          initials: posterInitials,
-          avatar: posterInitials,
-          email: req.user?.email || '',
-          userId: userId || ''
-        },
-        rewardOffered: (() => {
-          if (type !== 'lost') return '';
-          const text = (rewardAmount || (typeof rewardOffered === 'string' ? rewardOffered : '') || '').toString().trim();
-          if (!text || text === 'true' || text === 'false' || text === 'null' || text === 'undefined') return '';
-          return text;
-        })(),
-        rewardAmount: (() => {
-          if (type !== 'lost') return '';
-          const text = (rewardAmount || (typeof rewardOffered === 'string' ? rewardOffered : '') || '').toString().trim();
-          if (!text || text === 'true' || text === 'false' || text === 'null' || text === 'undefined') return '';
-          return text;
-        })(),
-        createdAt: nowIso
-      };
+    // Dynamic administrative setting from Admin Panel (Default: true)
+    const isAutoApproveSettingEnabled = store.system_settings?.autoApprovePosts !== false;
 
-      (newItem as any).created_at = nowIso;
-      // Set audit fields for Firebase Auth tracking & soft deletes
-      (newItem as any).isApproved = isStaffRole ? true : false;
-      (newItem as any).isRejected = false;
-      (newItem as any).isDeleted = false;
-      (newItem as any).approvedAt = isStaffRole ? nowIso : undefined;
-      (newItem as any).approvedBy = isStaffRole ? (req.user?.fullName || userRole || 'Staff Authority') : undefined;
-      (newItem as any).firebaseUid = userId || '';
-      (newItem as any).userId = userId || '';
-      (newItem as any).email = req.user?.email || '';
-      (newItem as any).displayName = req.user?.fullName || '';
-      (newItem as any).photoURL = req.user?.avatar || '';
+    // Staff are always auto-approved; verified student members are auto-approved if and only if autoApprovePosts is enabled
+    const shouldAutoApprove = isStaffRole || (isAutoApproveSettingEnabled && isUserVerifiedMember);
 
-      // Support multi-image arrays and coverImage from body
-      let parsedImages = [];
-      if (req.body.images) {
-        try {
-          parsedImages = typeof req.body.images === 'string' ? JSON.parse(req.body.images) : req.body.images;
-        } catch (e) {
-          parsedImages = [];
-        }
+    const existingIds = store.items.map(i => parseInt(String(i.id), 10)).filter(n => !isNaN(n));
+    const maxId = existingIds.length > 0 ? Math.max(...existingIds) : 0;
+    const newId = String(maxId + 1);
+    const nowIso = new Date().toISOString();
+    const newItem: Item = {
+      id: newId,
+      emoji: emoji || (type === 'lost' ? 'üîç' : 'üîë'),
+      title,
+      location,
+      specificSpot,
+      date: nowIso,
+      type: type as 'lost' | 'found',
+      category,
+      subcategory: subcategory || 'Other',
+      description,
+      secretNotes: secretNotes || secret_notes || '',
+      status: shouldAutoApprove ? 'active' : 'pending', // Auto-approved directly for Staff & Verified Community Members
+      approvalStatus: shouldAutoApprove ? 'approved' : 'pending', // Instant approval when auto-approve rule applies
+      views: 1,
+      isDeleted: false,
+      isResolved: false,
+      resolvedAt: undefined,
+      verified: isStaffRole ? true : !!isUserVerifiedMember,
+      posterName: req.user?.fullName || req.body.posterName || 'Campus Member',
+      user: {
+        name: req.user?.fullName || req.body.posterName || 'Campus Member',
+        phone: req.body.phone || req.user?.phone || 'Contact via message',
+        email: req.user?.email || '',
+        department: req.user?.department || '',
+        studentId: req.user?.studentId || '',
+        avatar: req.user?.avatar || '',
+        verified: isStaffRole ? true : !!isUserVerifiedMember,
+        idVerificationStatus: (req.user as any)?.idVerificationStatus || (isStaffRole ? 'verified' : (isUserVerifiedMember ? 'verified' : 'unverified'))
+      },
+      rewardOffered: (() => {
+        if (type !== 'lost') return '';
+        const text = (rewardAmount || (typeof rewardOffered === 'string' ? rewardOffered : '') || '').toString().trim();
+        if (!text || text === 'true' || text === 'false' || text === 'null' || text === 'undefined') return '';
+        return text;
+      })(),
+      rewardAmount: (() => {
+        if (type !== 'lost') return '';
+        const text = (rewardAmount || (typeof rewardOffered === 'string' ? rewardOffered : '') || '').toString().trim();
+        if (!text || text === 'true' || text === 'false' || text === 'null' || text === 'undefined') return '';
+        return text;
+      })(),
+      createdAt: nowIso
+    };
+
+    (newItem as any).created_at = nowIso;
+    // Set audit fields for tracking & soft deletes
+    (newItem as any).isApproved = shouldAutoApprove;
+    (newItem as any).approval_status = shouldAutoApprove ? 'approved' : 'pending';
+    (newItem as any).isRejected = false;
+    (newItem as any).isDeleted = false;
+    (newItem as any).approvedAt = shouldAutoApprove ? nowIso : undefined;
+    (newItem as any).approvedBy = shouldAutoApprove ? (isStaffRole ? (req.user?.fullName || userRole || 'Staff Authority') : 'System (Verified Auto-Approve)') : undefined;
+    (newItem as any).firebaseUid = userId || '';
+    (newItem as any).userId = userId || '';
+    (newItem as any).email = req.user?.email || '';
+    (newItem as any).displayName = req.user?.fullName || '';
+    (newItem as any).photoURL = req.user?.avatar || '';
+
+    // Support multi-image arrays and coverImage from body
+    let parsedImages = [];
+    if (req.body.images) {
+      try {
+        parsedImages = typeof req.body.images === 'string' ? JSON.parse(req.body.images) : req.body.images;
+      } catch (e) {
+        parsedImages = [];
       }
+    }
 
-      // Add custom imageUrl and image if present and no parsedImages exist
-      if (imageUrl && (!parsedImages || parsedImages.length === 0)) {
-        parsedImages = [{
-          url: imageUrl,
-          storagePath: '',
-          order: 1,
-          isCover: true,
-          width: 800,
-          height: 600,
-          uploadedAt: new Date().toISOString(),
-          uploadedBy: userId || 'anonymous',
-          fileSize: 0
-        }];
+    // Add custom imageUrl and image if present and no parsedImages exist
+    if (imageUrl && (!parsedImages || parsedImages.length === 0)) {
+      parsedImages = [{
+        url: imageUrl,
+        storagePath: '',
+        order: 1,
+        isCover: true,
+        width: 800,
+        height: 600,
+        uploadedAt: new Date().toISOString(),
+        uploadedBy: userId || 'anonymous',
+        fileSize: 0
+      }];
+    }
+
+    if (!parsedImages || parsedImages.length === 0) {
+      return res.status(400).json({ error: 'At least one image is required.' });
+    }
+
+    if (parsedImages.length > 5) {
+      return res.status(400).json({ error: 'You can upload a maximum of 5 images.' });
+    }
+
+    newItem.images = parsedImages;
+    newItem.coverImage = req.body.coverImage || (parsedImages[0] ? parsedImages[0].url : imageUrl || '');
+    newItem.image = newItem.coverImage;
+    (newItem as any).imageUrl = newItem.coverImage;
+    newItem.revision = 1;
+    newItem.ownerUid = userId || '';
+
+    if (capturedViaCamera === 'true' || capturedViaCamera === true) {
+      newItem.capturedViaCamera = true;
+      newItem.capturedImage = capturedImage || imageUrl || newItem.image;
+    }
+
+    store.items.unshift(newItem);
+
+    if (isMongoDBActive()) {
+      try {
+        const mongoItem = { ...newItem };
+        delete (mongoItem as any)._id;
+        await MItem.create(mongoItem as any);
+      } catch (mErr: any) {
+        console.warn('‚ö†Ô∏è Direct MItem.create failed:', mErr.message);
       }
+    }
 
-      if (!parsedImages || parsedImages.length === 0) {
-        return res.status(400).json({ error: 'At least one image is required.' });
-      }
+    save();
 
-      if (parsedImages.length > 5) {
-        return res.status(400).json({ error: 'You can upload a maximum of 5 images.' });
-      }
-
-      newItem.images = parsedImages;
-      newItem.coverImage = req.body.coverImage || (parsedImages[0] ? parsedImages[0].url : imageUrl || '');
-      newItem.image = newItem.coverImage;
-      (newItem as any).imageUrl = newItem.coverImage;
-      newItem.revision = 1;
-      newItem.ownerUid = userId || '';
-
-      if (capturedViaCamera === 'true' || capturedViaCamera === true) {
-        newItem.capturedViaCamera = true;
-        newItem.capturedImage = capturedImage || imageUrl || newItem.image;
-      }
-
-      store.items.unshift(newItem);
-
-      if (isMongoDBActive()) {
-        try {
-          const mongoItem = { ...newItem };
-          delete (mongoItem as any)._id;
-          await MItem.create(mongoItem as any);
-        } catch (mErr: any) {
-          console.warn('‚ö†Ô∏è Direct MItem.create failed:', mErr.message);
-        }
-      }
-
-      // Create a notification for the posting user
-      if (isStaffRole) {
-        await createUserNotification({
-          userId: userId,
-          title: 'Listing Published Instantly',
-          message: `Your listing "${title}" has been auto-approved as staff and is now live on the public feed!`,
-          text: `Your listing <strong>"${title}"</strong> has been auto-approved as staff (${userRole || 'Staff'}) and is now live on the public feed!`,
-          type: 'item_approved'
-        });
-      } else {
-        await createUserNotification({
-          userId: userId,
-          title: 'Listing Submitted',
-          message: `Your listing "${title}" has been successfully submitted and is awaiting administrator approval!`,
-          text: `Your listing <strong>"${title}"</strong> has been successfully submitted and is awaiting administrator approval!`,
-          type: 'item_posted'
-        });
-      }
-
-      save();
-
-      // Create an Admin Notification
-      if (isStaffRole) {
-        await createAdminNotification({
-          title: `‚ö° Staff Listing Published: ${title}`,
-          message: `A new ${type} item listing "${title}" was published directly by ${userRole || 'Staff'} ${posterName}.`,
-          type: 'item_posted',
-          category: type === 'lost' ? 'Lost Items' : 'Found Items',
-          priority: 'low',
-          relatedUserId: userId,
-          relatedItemId: newItem.id
-        });
-      } else {
-        await createAdminNotification({
-          title: `üÜï New Listing Posted: ${title}`,
-          message: `A new ${type} item listing "${title}" was submitted by ${posterName} (${posterDept}) and requires review.`,
-          type: 'item_posted',
-          category: type === 'lost' ? 'Lost Items' : 'Found Items',
-          priority: 'medium',
-          relatedUserId: userId,
-          relatedItemId: newItem.id
-        });
-      }
-
-      return res.status(201).json({
+    // Create notifications based on approval outcome
+    if (shouldAutoApprove) {
+      await createUserNotification({
+        userId: userId || '1',
+        type: 'item_approved',
+        title: isStaffRole ? 'Listing Published Instantly' : 'Listing Auto-Approved & Published',
         message: isStaffRole 
-          ? 'Listing published directly and is now live (Auto-Approved for Staff)!' 
-          : 'Listing submitted successfully! Awaiting review.',
-        item: mapItemResponse(newItem),
-        autoApproved: isStaffRole
+          ? `Your official staff listing "${newItem.title}" has been verified and published live immediately.`
+          : `Your verified student profile allowed your ${newItem.type === 'lost' ? 'Lost' : 'Found'} report "${newItem.title}" to be published live immediately on the campus feed!`,
+        text: isStaffRole
+          ? `Your official staff listing <strong>"${newItem.title}"</strong> has been verified and published live immediately.`
+          : `Your verified student profile allowed your ${newItem.type === 'lost' ? 'Lost' : 'Found'} report <strong>"${newItem.title}"</strong> to be published live immediately on the campus feed!`,
+        relatedItemId: newItem.id
       });
-    
+
+      await createAdminNotification({
+        type: 'item_approved',
+        title: isStaffRole ? 'Official Item Published' : 'Verified Member Post Auto-Approved',
+        message: isStaffRole
+          ? `Staff member ${req.user?.fullName || 'Admin'} published "${newItem.title}".`
+          : `Verified member ${req.user?.fullName || 'Student'} posted "${newItem.title}" (Auto-Approved).`,
+        relatedItemId: newItem.id
+      });
+    } else {
+      await createUserNotification({
+        userId: userId || '1',
+        type: 'item_posted',
+        title: 'Listing Submitted for Review',
+        message: isUserVerifiedMember && !isAutoApproveSettingEnabled
+          ? `Your ${newItem.type === 'lost' ? 'Lost' : 'Found'} report "${newItem.title}" was submitted and is in the review queue (Instant auto-approval is currently paused by administrator).`
+          : `Your report "${newItem.title}" has been submitted successfully and is currently in the review queue awaiting administrator/moderator approval.`,
+        text: isUserVerifiedMember && !isAutoApproveSettingEnabled
+          ? `Your ${newItem.type === 'lost' ? 'Lost' : 'Found'} report <strong>"${newItem.title}"</strong> was submitted and is in the review queue (Instant auto-approval is currently paused by administrator).`
+          : `Your report <strong>"${newItem.title}"</strong> has been submitted successfully and is currently in the review queue awaiting administrator/moderator approval.`,
+        relatedItemId: newItem.id
+      });
+
+      await createAdminNotification({
+        type: 'pending_item',
+        title: 'New Item Awaiting Approval',
+        message: `New item "${newItem.title}" posted by ${req.user?.fullName || 'a campus member'} is waiting in the review queue.`,
+        relatedItemId: newItem.id
+      });
+    }
+
+    return res.status(201).json({
+      message: shouldAutoApprove 
+        ? (isStaffRole ? 'Official campus listing published live.' : 'Listing auto-approved and published live.')
+        : 'Item report submitted successfully. Awaiting coordinator review.',
+      item: mapItemResponse(newItem),
+      autoApproved: shouldAutoApprove
+    });
   } catch (err: any) {
     console.error('Error submitting post:', err);
     return res.status(500).json({ error: 'Internal server error: ' + err.message });

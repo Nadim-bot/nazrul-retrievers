@@ -92,6 +92,19 @@ export default function AdminNotificationsPanel({ onShowToast, onRefreshCount }:
     }
   };
 
+  const handleClearAllNotifications = async () => {
+    if (notifications.length === 0) return;
+    setNotifications([]);
+    onShowToast('All admin notifications cleared.', 'success');
+    if (onRefreshCount) onRefreshCount();
+
+    try {
+      await apiFetch('/admin/notifications/clear-all', { method: 'DELETE' });
+    } catch (e) {
+      console.warn('Clear all sync note:', e);
+    }
+  };
+
   const getCategoryIcon = (cat?: string) => {
     switch (cat) {
       case 'User': return <User className="w-4 h-4 text-sky-700" />;
@@ -160,16 +173,30 @@ export default function AdminNotificationsPanel({ onShowToast, onRefreshCount }:
           </div>
         </div>
 
-        {totalUnreadCount > 0 && (
-          <button 
-            id="btn-mark-all-read"
-            onClick={handleMarkAllRead}
-            className="px-4 py-2 bg-brand-navy hover:bg-brand-navy/90 text-brand-gold font-bold text-xs rounded-xl transition-all shadow-xs flex items-center gap-2 cursor-pointer active:scale-95 shrink-0 border border-brand-gold/30"
-          >
-            <CheckCheck className="w-4 h-4 text-brand-gold" />
-            Mark All as Read
-          </button>
-        )}
+        <div className="flex items-center gap-2 flex-wrap self-start sm:self-auto">
+          {totalUnreadCount > 0 && (
+            <button 
+              id="btn-mark-all-read"
+              onClick={handleMarkAllRead}
+              className="px-3.5 py-2 bg-brand-navy hover:bg-brand-navy/90 text-brand-gold font-bold text-xs rounded-xl transition-all shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0 border border-brand-gold/30"
+            >
+              <CheckCheck className="w-4 h-4 text-brand-gold" />
+              <span>Mark All Read</span>
+            </button>
+          )}
+
+          {notifications.length > 0 && (
+            <button 
+              id="btn-clear-all-admin-notifs"
+              onClick={handleClearAllNotifications}
+              className="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs rounded-xl transition-all shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95 shrink-0 border border-rose-200"
+              title="Clear all alerts"
+            >
+              <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+              <span>Clear All</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Category Tabs & Status Filters */}
