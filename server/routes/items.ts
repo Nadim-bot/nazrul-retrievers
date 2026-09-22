@@ -5,7 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import { getFallbackData, createAdminNotification, createUserNotification, generateUniqueId } from '../db';
-import { isMongoDBActive, MItemView, MItem, MClaim, MNotification } from '../db/mongodb';
+import { isMongoDBActive, MItemView, MItem, MClaim, MNotification, MUser } from '../db/mongodb';
 import { authenticateToken, authorizeModOrAdmin, AuthenticatedRequest } from '../middleware/auth';
 import { Item } from '../../src/types';
 import { 
@@ -458,6 +458,15 @@ router.post('/', authenticateToken, upload.single('image'), async (req: Authenti
       resolvedAt: undefined,
       verified: isStaffRole ? true : !!isUserVerifiedMember,
       posterName: req.user?.fullName || req.body.posterName || 'Campus Member',
+      postedBy: {
+        name: req.user?.fullName || req.body.posterName || 'Campus Member',
+        department: req.user?.department || '',
+        verified: isStaffRole ? true : !!isUserVerifiedMember,
+        initials: (req.user?.fullName || 'CM').substring(0, 2).toUpperCase(),
+        avatar: req.user?.avatar || '',
+        email: req.user?.email || '',
+        userId: userId || ''
+      },
       user: {
         name: req.user?.fullName || req.body.posterName || 'Campus Member',
         phone: req.body.phone || req.user?.phone || 'Contact via message',
@@ -573,6 +582,7 @@ router.post('/', authenticateToken, upload.single('image'), async (req: Authenti
 
       await createAdminNotification({
         type: 'item_approved',
+        category: newItem.type === 'lost' ? 'Lost Items' : 'Found Items',
         title: isStaffRole ? 'Official Item Published' : 'Verified Member Post Auto-Approved',
         message: isStaffRole
           ? `Staff member ${req.user?.fullName || 'Admin'} published "${newItem.title}".`
@@ -595,6 +605,7 @@ router.post('/', authenticateToken, upload.single('image'), async (req: Authenti
 
       await createAdminNotification({
         type: 'pending_item',
+        category: newItem.type === 'lost' ? 'Lost Items' : 'Found Items',
         title: 'New Item Awaiting Approval',
         message: `New item "${newItem.title}" posted by ${req.user?.fullName || 'a campus member'} is waiting in the review queue.`,
         relatedItemId: newItem.id

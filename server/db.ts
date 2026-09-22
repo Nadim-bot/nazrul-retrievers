@@ -1310,6 +1310,8 @@ export async function createUserNotification(notif: {
   message?: string;
   text?: string;
   type?: string;
+  relatedItemId?: string | number;
+  [key: string]: any;
 }) {
   try {
     const { store, save } = getFallbackData();
@@ -1386,11 +1388,12 @@ export async function createAdminNotification(notif: {
   title: string;
   message: string;
   type: string;
-  category: 'User' | 'Lost Items' | 'Found Items' | 'Claims' | 'Messages' | 'Security' | 'System';
+  category?: 'User' | 'Lost Items' | 'Found Items' | 'Claims' | 'Messages' | 'Security' | 'System' | string;
   priority?: 'low' | 'medium' | 'high';
   relatedUserId?: string | number;
   relatedItemId?: string | number;
   relatedConversationId?: string | number;
+  [key: string]: any;
 }) {
   const priority = notif.priority || 'medium';
   try {

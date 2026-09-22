@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   X, User, Mail, Phone, Calendar, Award, BookOpen, Facebook, 
-  Linkedin, Globe, MapPin, Compass, Shield, CheckCircle2,
+  Linkedin, Globe, MapPin, Compass, Shield, ShieldCheck, CheckCircle2,
   Heart, Landmark, Info, AlertTriangle, MessageSquare, MessageCircle, Copy
 } from 'lucide-react';
 import { User as UserType } from '../types';

@@ -9,13 +9,23 @@ export interface AuthenticatedRequest extends Request {
   user?: {
     id: string;
     fullName: string;
+    full_name?: string;
+    name?: string;
     email: string;
-    role: 'student' | 'admin' | 'moderator';
+    role: 'student' | 'admin' | 'moderator' | string;
     studentId?: string;
+    student_id?: string;
+    registrationNumber?: string;
     department?: string;
     phone?: string;
     sessionYear?: string;
+    academicSession?: string;
     avatar?: string;
+    isVerified?: boolean;
+    is_verified?: boolean;
+    verified?: boolean;
+    idVerificationStatus?: string;
+    [key: string]: any;
   };
 }
 

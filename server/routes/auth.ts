@@ -17,6 +17,7 @@ import {
   validatePhone, 
   validateSession, 
   validateRegistrationNumber, 
+  validateRollNumber,
   validateFacultyAndDepartment, 
   validateSupportContact,
   sanitizeInput 

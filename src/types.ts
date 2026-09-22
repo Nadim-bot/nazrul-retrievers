@@ -45,6 +45,9 @@ export interface User {
   profileCompleted?: number;
   classRoll?: string;
   rollNumber?: string;
+  roll?: string;
+  provider?: string;
+  firebaseUid?: string;
   profileVisibility?: 'public' | 'private';
   hidePhone?: boolean;
   isPhonePrivate?: boolean;
@@ -100,7 +103,7 @@ export interface Item {
   image?: string;
   capturedViaCamera?: boolean;
   capturedImage?: string;
-  postedBy: {
+  postedBy?: {
     name: string;
     department: string;
     verified: boolean;
@@ -116,6 +119,21 @@ export interface Item {
   isApproved?: boolean;
   isRejected?: boolean;
   isDeleted?: boolean;
+  isResolved?: boolean;
+  resolvedAt?: string | Date;
+  verified?: boolean;
+  posterName?: string;
+  user?: {
+    name?: string;
+    phone?: string;
+    email?: string;
+    department?: string;
+    studentId?: string;
+    avatar?: string;
+    verified?: boolean;
+    idVerificationStatus?: string;
+    [key: string]: any;
+  };
   firebaseUid?: string;
   userId?: string;
   user_id?: string;
@@ -141,6 +159,7 @@ export interface Item {
   claimedBy?: string;
   returnedAt?: string | Date;
   handoverLocation?: string;
+  [key: string]: any;
 }
 
 export interface Claim {
